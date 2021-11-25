@@ -1,4 +1,4 @@
-dofile("./JLib/Class/class.lua")
+require("Class.class")
 
 ScreenText = class()
 
