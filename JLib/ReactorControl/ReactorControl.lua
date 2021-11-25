@@ -60,14 +60,12 @@ function ReactorControl:Control(dt)
     self._I = math.min( 50, self._I)
 
     -- calc input u
-    print(e,self._PGain * e,dt * self._PGain * e,self._I)
     self._last_u = dt * self._PGain * e + self._I
     -- Saturate input u to thresholds
     self._last_u = math.max(self._minimumThrottle, self._last_u)
     self._last_u = math.min(self._maximumThrottle, self._last_u)
 
     self._reactorProxy.setAllControlRodLevels(math.floor((100 - self._last_u) + 0.5))
-    -- print("asdafd:"..math.floor((100 - self._last_u) + 0.5))
     
     return r, y, self._last_u
 end
