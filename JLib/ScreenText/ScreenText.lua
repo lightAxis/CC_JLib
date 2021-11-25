@@ -1,22 +1,22 @@
-require("Class.class")
+local class = require("Class.middleclass")
 
-ScreenText = class()
 
---properties
-ScreenText:set{
-    _curHorizontalAlignMode = nil,
-    _curVerticalAlignMode = nil,
-    _monitor = nil,
-    _textLines = {},
-    _textColors = {},
+-- public class ScreenText
+local ScreenText = class("ScreenText")
 
-}
 
---constructor
-function ScreenText:init(monitor)
-    self._monitor = monitor
+-- namespace JLib
+JLib = JLib or {}
+JLib.ScreenText = ScreenText
+
+
+-- constructor
+function ScreenText:initialize(monitor)
+    self._monitor = monitor or nil
     self._curHorizontalAlignMode = "Center"
     self._curVerticalAlignMode = "Center"
+    self._textLines = {}
+    self._textColors = {}
 end
 
 

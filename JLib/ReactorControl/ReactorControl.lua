@@ -1,28 +1,26 @@
-require("Class.class")
+local class = require("Class.middleclass")
 
 -- public class ReactorControl
-local ReactorControl = class()
+local ReactorControl = class("ReactorControl")
 
 -- namespace JLib
 JLib = JLib or {}
 JLib.ReactorControl = ReactorControl
 
 --properties
-ReactorControl:set{
-    -- private:
-    _reactorProxy = nil,
-    _targetEnergyThreshold = 0.5,
-    _minimumThrottle = 0.0,
-    _maximumThrottle = 0.5,
-    _pGain = 2.0,
-    _IGain = 1.0,
-    _I = 0.0,
-    _last_u = 0.0,
-}
+
 
 -- constructor
-function ReactorControl:init(reactorProxy)
-    self._reactorProxy = reactorProxy
+function ReactorControl:initialize(reactorProxy)
+    -- private:
+    self._reactorProxy = reactorProxy or nil
+    self._targetEnergyThreshold = 0.5
+    self._minimumThrottle = 0.0
+    self._maximumThrottle = 0.5
+    self._pGain = 2.0
+    self._IGain = 1.0
+    self._I = 0.0
+    self._last_u = 0.0
 end 
 
 -- functions
@@ -62,7 +60,8 @@ function ReactorControl:Control(dt)
     self._I = math.min( 50, self._I)
 
     -- calc input u
-    self._last_u = self._PGain * e + self._I
+    print(e,self._PGain * e,dt * self._PGain * e,self._I)
+    self._last_u = dt * self._PGain * e + self._I
     -- Saturate input u to thresholds
     self._last_u = math.max(self._minimumThrottle, self._last_u)
     self._last_u = math.min(self._maximumThrottle, self._last_u)
