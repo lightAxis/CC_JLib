@@ -1,4 +1,4 @@
-dofile("JLib/Class/class.lua")
+require("Class.class")
 
 test = class()
 
@@ -19,5 +19,4 @@ end
 function test:PrintAll()
     print("prop1:"..self.prop1.."/prop2:"..self.prop2.."/_prop3:"..self._prop3)
 end
-
 
