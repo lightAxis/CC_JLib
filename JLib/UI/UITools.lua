@@ -70,9 +70,6 @@ end
 -- @param offset:JLib.Vector2
 -- @return JLib.Vector2
 function UITools.calcRelativeOffset(origin, offset)
-    print(origin:toString())
-    print("aaaaaaaa")
-    print(offset:toString())
     return origin + offset - JLib.Vector2:new(1, 1)
 
 end

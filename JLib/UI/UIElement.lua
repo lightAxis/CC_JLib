@@ -26,8 +26,7 @@ function UIElement:initialize(parent, screen, x, y, xlen, ylen, bg, fg)
     if (self.Parent == nil) then -- coordinate of Global position in screen
         self.Pos = self.PosRel
     else
-        print(self.Parent, self.PosRel)
-        self.Pos = JLib.UITools.calcRelativeOffset(self.Parent, self.PosRel)
+        self.Pos = JLib.UITools.calcRelativeOffset(self.Parent.Pos, self.PosRel)
     end
 
     self.Len = JLib.Vector2:new(xlen or 1, ylen or 1) -- length of w,h

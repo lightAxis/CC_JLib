@@ -1,4 +1,4 @@
-dofile("init.lua")
+require("init")
 
 require("UI.Border")
 

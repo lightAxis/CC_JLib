@@ -14,7 +14,7 @@ Enums_CC.VerticalAlignmentMode = {
     ["center"] = "center"
 }
 
-Enums_CC.self.HorizontalAlignmentMode = {
+Enums_CC.HorizontalAlignmentMode = {
     ["left"] = "left",
     ["right"] = "right",
     ["center"] = "center"
