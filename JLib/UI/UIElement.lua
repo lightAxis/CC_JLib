@@ -20,7 +20,7 @@ function UIElement:initialize(parent, screen, x, y, xlen, ylen, bg, fg)
     -- private:
     self._screen = screen -- owner screen handle
     -- public:
-    self.Parent = parent or nil
+    self.Parent = self:setParent(parent or nil)
     self.PosRel = JLib.Vector2:new(x or 1, y or 1) -- coordinate of Position Relavent to parent obj
 
     if (self.Parent == nil) then -- coordinate of Global position in screen
@@ -40,7 +40,13 @@ end
 
 -- @brief set Parent of this element
 -- @param parent:UIElement
-function UIElement:setParent(parent) self.Parent = parent end
+function UIElement:setParent(parent) 
+    self.Parent = parent
+    if(parent ~= nil) then
+        table.insert(self.Parent.Children, self)
+    end
+    return parent
+end
 
 -- @brief add Child element to this element
 -- @param child:UIElement
@@ -80,18 +86,18 @@ end
 -- spread to childs
 function UIElement:_updatePos()
     if (self.Parent == nil) then
-
+        self.Pos = self.PosRel:Copy()
     else
         self.Pos = JLib.UITools.calcRelativeOffset(self.Parent.Pos, self.PosRel)
-        for key, child in pairs(self.Children) do child:updatePos() end
     end
+    for key, child in pairs(self.Children) do child:_updatePos() end
 end
 
 -- @brief abstrct Position Set function.
 -- @param posRel:JLib.Vector2
 function UIElement:setPosRel(posRel)
     -- error("This is abstrct function! UIElement:setPosRel(posRel)")
-    self.Pos = posRel:Copy() -- TODO: vector2 deep copy operator
+    self.PosRel = posRel:Copy() -- TODO: vector2 deep copy operator
     self:_updatePos()
 end
 
