@@ -1,5 +1,9 @@
 local class = require("Class.middleclass")
 
+-- #includes
+require("UI.Enums")
+require("MathLib.Vector2")
+
 -- public class Tools
 local UITools = class("UITools")
 
@@ -141,5 +145,12 @@ function UITools.drawLine_y(screen, startPos, len, bg)
     for i = 1, len, 1 do
         screen:write(" ")
         startPos_.y = startPos_.y + 1
+        screen:setCursorPos(startPos_)
     end
+end
+
+function UITools.clearScreen(screen)
+    print(JLib.Enums.Colors.black)
+    screen:setBackgroundColor(JLib.Enums.Colors.black)
+    screen:clear()
 end

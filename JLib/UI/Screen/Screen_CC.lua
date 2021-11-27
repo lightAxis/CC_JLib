@@ -43,7 +43,7 @@ end
 function Screen_Lua:getCursorPos_Raw() return self._screen.getCursorPos() end
 
 -- @brief Sets the cursor's position.
-function Screen_Lua:setCursorPos(pos) Screen_Lua:setCursorPos_Raw(pos.x, pos.y) end
+function Screen_Lua:setCursorPos(pos) self:setCursorPos_Raw(pos.x, pos.y) end
 
 -- @brief Sets the cursor's position. use only lua
 function Screen_Lua:setCursorPos_Raw(x, y) self._screen.setCursorPos(x, y) end
@@ -65,7 +65,7 @@ function Screen_Lua:getSize_Raw() return self._screen.getSize() end
 -- (Good for if you're making something to be compatible with both Turtles and Computers.)
 -- @return JLib.Vector2
 function Screen_Lua:getSize()
-    local x, y = Screen_Lua:getSize_Raw()
+    local x, y = self:getSize_Raw()
     return JLib.Vector2:new(x, y)
 end
 

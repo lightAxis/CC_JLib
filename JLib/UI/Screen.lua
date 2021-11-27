@@ -3,10 +3,10 @@ require("LibVariables.LibVariables")
 
 if (JLib.LibVariables.static.ENVIRONMENT ==
     JLib.LibVariables.static.eENVIRONMENT.Lua) then
-    require("JLib.UI.Screen.Screen_Lua")
+    require("UI.Screen.Screen_Lua")
 
 elseif (JLib.LibVariables.static.ENVIRONMENT ==
     JLib.LibVariables.static.eENVIRONMENT.CC) then
-    require("JLib.UI.Screen.Screen_CC")
-
+    require("UI.Screen.Screen_CC")
+    
 end

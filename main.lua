@@ -22,4 +22,3 @@ b:setPosRel(JLib.Vector2:new(5, 6))
 b.Len = JLib.Vector2:new(8, 4)
 
 a:render()
-
