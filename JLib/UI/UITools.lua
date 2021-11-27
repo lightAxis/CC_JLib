@@ -150,7 +150,6 @@ function UITools.drawLine_y(screen, startPos, len, bg)
 end
 
 function UITools.clearScreen(screen)
-    print(JLib.Enums.Colors.black)
     screen:setBackgroundColor(JLib.Enums.Colors.black)
     screen:clear()
 end
