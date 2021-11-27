@@ -13,7 +13,7 @@ JLib = JLib or {}
 JLib.UIElement = UIElement
 
 -- [constructor]
-function UIElement:initialize(parent, screen, x, y, xlen, ylen, bg, fg)
+function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
     if (screen == nil) then
         error("UIElement cannot be initialized without owner:screen")
     end
@@ -33,6 +33,8 @@ function UIElement:initialize(parent, screen, x, y, xlen, ylen, bg, fg)
     self.BG = bg or JLib.Enums.Colors.black -- background color of element
     self.FG = fg or JLib.Enums.Colors.white -- foregraoud color or element
     self.Children = {}
+
+    self.Name = name or ""
 
 end
 

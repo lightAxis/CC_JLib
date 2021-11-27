@@ -12,8 +12,8 @@ JLib = JLib or {}
 JLib.Border = Border
 
 -- [constructor]
-function Border:initialize(parent, screen, BorderThickness, BorderColor)
-    JLib.UIElement.initialize(self, parent, screen) -- TODO check superclass constructor
+function Border:initialize(parent, screen, name, BorderThickness, BorderColor)
+    JLib.UIElement.initialize(self, parent, screen, name) -- TODO check superclass constructor
     self.BorderThickness = BorderThickness or 1
     self.BorderColor = BorderColor or JLib.Enums.Colors.gray
 end
@@ -25,8 +25,8 @@ end
 function Border:render(renderOffset)
     local renderOffset_ = renderOffset or JLib.Vector2:new(1, 1)
     local pos_ = JLib.UITools.calcRelativeOffset(self.Pos, renderOffset_)
-    print("global render pos:" .. pos_:toString())
-    self._screen.write("testttt")
+    -- print("global render pos:" .. pos_:toString())
+    -- self._screen.write("testttt")
 end
 
 function Border:render_Raw(x, y)
