@@ -42,11 +42,9 @@ end
 
 -- @brief set Parent of this element
 -- @param parent:UIElement
-function UIElement:setParent(parent) 
+function UIElement:setParent(parent)
     self.Parent = parent
-    if(parent ~= nil) then
-        table.insert(self.Parent.Children, self)
-    end
+    if (parent ~= nil) then table.insert(self.Parent.Children, self) end
     return parent
 end
 
@@ -102,6 +100,11 @@ function UIElement:setPosRel(posRel)
     self.PosRel = posRel:Copy() -- TODO: vector2 deep copy operator
     self:_updatePos()
 end
+
+-- @brief abstrct Position Set function.
+-- @param x:num
+-- @param y:num
+function UIElement:setPosRel_Raw(x, y) self:setPosRel(JLib.Vector2:new(x, y)) end
 
 -- @brief abstrct lengths set function
 -- @param len:JLib.Vector2

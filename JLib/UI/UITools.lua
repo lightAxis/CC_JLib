@@ -74,6 +74,22 @@ function UITools.calcRelativeOffset(origin, offset)
 
 end
 
+-- @brief calc relative position, move only x axis, as pos(1,1) is origin of offset
+-- @param origin:JLib.Vector2
+-- @param offset_x:num
+-- return JLib.Vector2
+function UITools.calcRelativeOffset_X(origin, offset_x)
+    return UITools.calcRelativeOffset(origin, JLib.Vector2:new(offset_x, 1))
+end
+
+-- @brief calc relative position, move only y axis, as pos(1,1) is origin of offset
+-- @param origin:JLib.Vector2
+-- @param offset_y:num
+-- return JLib.Vector2
+function UITools.calcRelativeOffset_Y(origin, offset_y)
+    return UITools.calcRelativeOffset(origin, JLib.Vector2:new(1, offset_y))
+end
+
 -- @brief calc if point in square area
 -- @param pos:JLib.Vector2
 -- @param len:JLib.Vector2
@@ -102,4 +118,28 @@ function UITools.isInsideSquare_Raw(pos_x, pos_y, len_x, len_y, checkpos_x,
         if ((y1 <= checkpos_y) and (checkpos_y <= y2)) then return true end
     end
     return false
+end
+
+-- @brief get empth string to write 
+function UITools.getEmptyString(len)
+    local r = ""
+    for i = 1, len, 1 do r = r .. " " end
+    return r
+end
+
+function UITools.drawLine_x(screen, startPos, len, bg)
+    local str = UITools.getEmptyString(len)
+    screen:setCursorPos(startPos)
+    screen:setBackgroundColor(bg)
+    screen:write(str)
+end
+
+function UITools.drawLine_y(screen, startPos, len, bg)
+    local startPos_ = startPos:Copy()
+    screen:setCursorPos(startPos)
+    screen:setBackgroundColor(bg)
+    for i = 1, len, 1 do
+        screen:write(" ")
+        startPos_.y = startPos_.y + 1
+    end
 end
