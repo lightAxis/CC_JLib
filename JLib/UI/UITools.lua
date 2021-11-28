@@ -38,7 +38,7 @@ function UITools.Len2Pos_FromEnd(endAt, len) return endAt - len + 1, endAt end
 -- @param max:num
 -- @param len:num
 -- @param mode:JLib.Enums.eHorizontalAlignmentMode
-function UITools.calchorizontalAlignPos(min, max, len, mode)
+function UITools.calcHorizontalAlignPos(min, max, len, mode)
     local x;
     local xlen = UITools.Pos2Len(min, max)
 
@@ -49,6 +49,8 @@ function UITools.calchorizontalAlignPos(min, max, len, mode)
     elseif (mode == JLib.Enums.HorizontalAlignmentMode.center) then
         x = math.floor((xlen - len) / 2) + 1
     end
+
+    return x
 end
 
 -- @brief calc vertical Align positions
@@ -67,6 +69,8 @@ function UITools.calcVerticalAlignPos(min, max, len, mode)
     elseif (mode == JLib.Enums.VerticalAlignmentMode.center) then
         y = math.floor((ylen - len) / 2) + 1
     end
+
+    return y
 end
 
 -- @brief calc relative position. as pos(1,1) is origin of offset
