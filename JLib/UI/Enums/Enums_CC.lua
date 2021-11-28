@@ -36,7 +36,7 @@ Enums_CC.Colors = {
     ["brown"] = colors.brown,
     ["green"] = colors.green,
     ["red"] = colors.red,
-    ["black"] = colors.blac
+    ["black"] = colors.black
 }
 
 Enums_CC.Side = {

@@ -1,6 +1,6 @@
 -- select your environment
 -- 0 : jasuk500, 1 : CC, 2 : replit.com
-local environment = 0
+local environment = 1
 
 if (environment == 0) then
     -- in another env
@@ -26,4 +26,3 @@ elseif (environment == 2) then
     JLib.LibVariables.static.ENVIRONMENT =
         JLib.LibVariables.static.eENVIRONMENT.Lua
 end
-
