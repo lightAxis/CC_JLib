@@ -80,8 +80,12 @@ function TextBlock:render()
     local renderPos = JLib.UITools.calcRelativeOffset(parent_, self.PosRel)
 
     local i = 1
+    local superBreak = false
     for index, value in ipairs(self._TextSplited) do
+        if(superBreak == true) then break end
         for index2, value2 in ipairs(value.wrapped_text) do
+            if(superBreak == true) then break end
+
             -- table.insert(tempTextSplited,
             --              {['text'] = value2.text, ['align'] = value2.align})
             self._screen:setCursorPos(JLib.UITools.calcRelativeOffset_X(
@@ -90,18 +94,18 @@ function TextBlock:render()
 
             renderPos.y = renderPos.y + 1
             i = i + 1
-            if (i > maxScrol) then goto end_ end
+            if (i > maxScrol) then superBreak = true end
         end
     end
-    ::end_::
+    
 
     self._isTextChanged = false
 end
--- 렌더
+-- ??
 
--- 텍스트 인풋
+-- ??? ??
 
--- 텍스트 잘라서 표시
+-- ??? ??? ??
 function TextBlock:_getTextSplited()
     local text_ = self._Text
 
@@ -126,12 +130,15 @@ function TextBlock:_getTextSplited()
         local textline = v.text
         local textline_spliited = ""
         local textline_anchor = 1
+
+        local superContinue = false
         if (textline == "") then
             local temp = {['index'] = 1, ['text'] = "", ['align'] = 1}
             table.insert(v.wrapped_text, temp)
-            goto continue
+            superContinue = true
         end
 
+        if(superContinue == false) then
         while (#textline >= self.Len.x) do
             textline_spliited = string.sub(textline, 1, self.Len.x)
 
@@ -157,9 +164,8 @@ function TextBlock:_getTextSplited()
             }
             table.insert(v.wrapped_text, temp)
         end
-        ::continue::
+        end
     end
 end
 
--- 텍스트 정렬모드 설정
-
+-- ??? ???? ??
