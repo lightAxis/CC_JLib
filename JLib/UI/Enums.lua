@@ -1,5 +1,5 @@
 -- selection build
-require("LibVariables.LibVariables")
+require("LibGlobal.LibVariables")
 
 if (JLib.LibVariables.static.ENVIRONMENT ==
     JLib.LibVariables.static.eENVIRONMENT.Lua) then

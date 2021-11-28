@@ -1,5 +1,5 @@
 -- selection build
-require("LibVariables.LibVariables")
+require("LibGlobal.LibVariables")
 
 if (JLib.LibVariables.static.ENVIRONMENT ==
     JLib.LibVariables.static.eENVIRONMENT.Lua) then
@@ -8,5 +8,5 @@ if (JLib.LibVariables.static.ENVIRONMENT ==
 elseif (JLib.LibVariables.static.ENVIRONMENT ==
     JLib.LibVariables.static.eENVIRONMENT.CC) then
     require("UI.Screen.Screen_CC")
-    
+
 end
