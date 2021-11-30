@@ -1,6 +1,6 @@
 -- select your environment
 -- 0 : jasuk500, 1 : CC, 2 : replit.com
-local environment = 1
+local environment = 2
 
 if (environment == 0) then
     -- in another env
@@ -18,6 +18,7 @@ elseif (environment == 1) then
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
         JLib.LibVariables.static.eENVIRONMENT.CC
+
 elseif (environment == 2) then
     -- replit env
     package.path = package.path .. ";/home/runner/CCsource/JLib/?.lua"
@@ -25,4 +26,5 @@ elseif (environment == 2) then
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
         JLib.LibVariables.static.eENVIRONMENT.Lua
+
 end

@@ -2,170 +2,105 @@ local class = require("Class.middleclass")
 
 -- #includes
 require("UI.UIElement")
-require("UI.Enums")
 require("UI.UITools")
-
-require("LibGlobal.StaticMethods")
+require("UI.Border")
+require("UI.Margin")
+require("UI.TextArea")
 
 -- public class TextBlock : UIElement
 local TextBlock = class("TextBlock", JLib.UIElement)
 
--- namespace JLib
+-- namespace JLib 
 JLib = JLib or {}
 JLib.TextBlock = TextBlock
 
--- [constructor]
-function TextBlock:initialize(parent, screen, name, text)
-    JLib.UIElement.initialize(self, parent, screen, name)
+-- constructor
+function TextBlock:initialize(parent, screen, name, PosRel, Len, bg, fg, text)
 
-    self._HorizontalAlignmentMode = JLib.Enums.HorizontalAlignmentMode.left
-    self._VerticalAlignmentMode = JLib.Enums.VerticalAlignmentMode.top
+    local PosRel_ = PosRel or JLib.Vector2:new(1, 1)
+    local Len_ = Len or JLib.Vector2:new(1, 1)
+    local bg_ = bg or JLib.Enums.Colors.gray
+    local fg_ = fg or JLib.Enums.Colors.white
 
-    self._TextSplited = {}
+    JLib.UIElement.initialize(self, parent, screen, name, PosRel_.x, PosRel_.y,
+                              Len_.x, Len_.y, bg_, fg_)
 
-    self._Text = text or ""
-    self._isTextChanged = false
+    self._Border = JLib.Border:new(self, screen, name .. "/Border")
+    self._Border.BorderThickness = 0
 
-    self:setText(self._Text)
+    self._Margin = JLib.Margin:new(self._Border, screen, name .. "/Margin")
+    self._Margin:setMarginAll(0)
 
-    self._scroll = 1
+    self._TextArea = JLib.TextArea:new(self._Margin, screen,
+                                       name .. "/TextArea", text or "")
+    self._TextArea.BG = self.BG
+    self._TextArea.FG = self.FG
 end
--- [functions]
 
-function TextBlock:setText(text)
-    if (text == nil) then
-        error("TextBlock:setText(text) : text must be string")
+-- functions
+function TextBlock:setBorderThickness(thickness)
+    self._Border.BorderThickness = thickness
+end
+
+function TextBlock:setBorderColor(color) self._Border.BorderColor = color end
+
+function TextBlock:setMarginAll(margin) self._Margin:setMarginAll(margin) end
+
+function TextBlock:setMarginLeft(marginLeft) self._Margin.MarginLeft =
+    marginLeft end
+
+function TextBlock:setMarginRight(marginRight)
+    self._Margin.MarginRight = marginRight
+end
+
+function TextBlock:setMarginTop(marginTop) self._Margin.MarginTop = marginTop end
+
+function TextBlock:setMarginBottom(marginBottom)
+    self._Margin.MarginBottom = marginBottom
+end
+
+function TextBlock:setTextHorizontalAlignment(align)
+    self._TextArea:setHorizontalAlignment(align)
+end
+
+function TextBlock:setTextVerticalAlignment(align)
+    self._TextArea:setVerticalAlignment(align)
+end
+
+function TextBlock:setText(text) self._TextArea:setText(text) end
+
+function TextBlock:setTextColor(color) self._TextArea.FG = color end
+
+function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end
+
+function TextBlock:getScroll() return self._TextArea:getScroll() end
+
+function TextBlock:_fillWithBG()
+    self._screen:setBackgroundColor(self.BG)
+
+    local str = JLib.UITools.getEmptyString(self.Len.x)
+    local renderPos = self.Pos:Copy()
+    for i = 1, self.Len.y, 1 do
+        self._screen:setCursorPos(renderPos)
+        self._screen:write(str)
+        renderPos.y = renderPos.y + 1
     end
-    self._Text = text
-    -- self:_getTextSplited()
-
-    self._isTextChanged = true
 end
 
--- @brief set vertical alignment mode of textblock
--- @param align:JLib.Enums.VerticalAlignmentMode
-function TextBlock:setVerticalAlignment(align)
-    self._VerticalAlignmentMode = align
-    self._isTextChanged = true
-end
-
--- @brief set horizontal alignment mode of textblock
--- @param align:JLib.Enums.HorizontalAlignmentMode
-function TextBlock:setHorizontalAlignment(align)
-    self._HorizontalAlignmentMode = align
-    self._isTextChanged = true
-end
-
-function TextBlock:getText() return self._Text end
+-- override functions
 
 function TextBlock:render()
-    if (self._isTextChanged == false) then return end
+    -- update global pos
+    self:_updatePos()
 
-    self:_getTextSplited()
+    -- fill inside the textblock with background color
+    self:_fillWithBG()
 
-    local maxScrol = self._scroll + self.Len.y - 1
-    local tempTextSplited = {}
+    -- sync bg of textarea same with textblock
+    self._TextArea.BG = self.BG
 
-    local parent_ = nil
+    -- render children components
+    self:renderChildren()
 
-    if (self.Parent ~= nil) then
-        parent_ = self.Parent.Pos
-    else
-        parent_ = JLib.Vector2:new(1, 1)
-    end
-
-    self._screen:setBackgroundColor(self.BG)
-    self._screen:setTextColor(self.FG)
-
-    local renderPos = JLib.UITools.calcRelativeOffset(parent_, self.PosRel)
-
-    local i = 1
-    local superBreak = false
-    for index, value in ipairs(self._TextSplited) do
-        if(superBreak == true) then break end
-        for index2, value2 in ipairs(value.wrapped_text) do
-            if(superBreak == true) then break end
-
-            -- table.insert(tempTextSplited,
-            --              {['text'] = value2.text, ['align'] = value2.align})
-            self._screen:setCursorPos(JLib.UITools.calcRelativeOffset_X(
-                                          renderPos, value2.align))
-            self._screen:write(value2.text)
-
-            renderPos.y = renderPos.y + 1
-            i = i + 1
-            if (i > maxScrol) then superBreak = true end
-        end
-    end
-    
-
-    self._isTextChanged = false
-end
--- ??
-
--- ??? ??
-
--- ??? ??? ??
-function TextBlock:_getTextSplited()
-    local text_ = self._Text
-
-    -- split text with '\n'
-    local textSplitted_ = self._Text:split("\n")
-
-    -- split by text with \n
-    local lengthSum = 1
-    self._TextSplited = {}
-    for index, value in ipairs(textSplitted_) do
-        local TextSplitted_node = {
-            ['index'] = lengthSum,
-            ['text'] = value,
-            ['wrapped_text'] = {}
-        }
-        table.insert(self._TextSplited, TextSplitted_node)
-        lengthSum = lengthSum + #value + 1
-    end
-
-    -- split text by length of element
-    for i, v in ipairs(self._TextSplited) do
-        local textline = v.text
-        local textline_spliited = ""
-        local textline_anchor = 1
-
-        local superContinue = false
-        if (textline == "") then
-            local temp = {['index'] = 1, ['text'] = "", ['align'] = 1}
-            table.insert(v.wrapped_text, temp)
-            superContinue = true
-        end
-
-        if(superContinue == false) then
-        while (#textline >= self.Len.x) do
-            textline_spliited = string.sub(textline, 1, self.Len.x)
-
-            local temp = {
-                ['index'] = textline_anchor,
-                ['text'] = textline_spliited,
-                ['align'] = 1
-            }
-            table.insert(v.wrapped_text, temp)
-
-            textline_anchor = textline_anchor + self.Len.x
-            textline = string.sub(textline, self.Len.x + 1, #textline)
-        end
-
-        if (textline ~= "") then
-            textline_spliited = textline
-            local temp = {
-                ['index'] = textline_anchor,
-                ['text'] = textline,
-                ['align'] = JLib.UITools.calcHorizontalAlignPos(1, self.Len.x,
-                                                                #textline_spliited,
-                                                                self._HorizontalAlignmentMode)
-            }
-            table.insert(v.wrapped_text, temp)
-        end
-        end
-    end
 end
 
--- ??? ???? ??

@@ -72,11 +72,6 @@ end
 
 -- [abstract functions]
 
--- @brief abstrct render function. use only lua
--- @param x:num
--- @param y:num
-function UIElement:render_Raw(x, y) UIElement:render(JLib.Vector2:new(x, y)) end
-
 -- @brief abstrcat render function.
 -- @param pos:JLib.Vector2
 function UIElement:render(pos)
@@ -90,24 +85,12 @@ function UIElement:_updatePos()
     else
         self.Pos = JLib.UITools.calcRelativeOffset(self.Parent.Pos, self.PosRel)
     end
-    for key, child in pairs(self.Children) do child:_updatePos() end
+    -- for key, child in pairs(self.Children) do child:_updatePos() end
 end
 
--- @brief abstrct Position Set function.
--- @param posRel:JLib.Vector2
-function UIElement:setPosRel(posRel)
-    -- error("This is abstrct function! UIElement:setPosRel(posRel)")
-    self.PosRel = posRel:Copy() -- TODO: vector2 deep copy operator
-    self:_updatePos()
-end
-
--- @brief abstrct Position Set function.
--- @param x:num
--- @param y:num
-function UIElement:setPosRel_Raw(x, y) self:setPosRel(JLib.Vector2:new(x, y)) end
-
--- @brief abstrct lengths set function
--- @param len:JLib.Vector2
-function UIElement:setLen(len)
-    error("This is abstrct function! UIElement:setLen(len)")
+function UIElement:_updateLengthFromParent()
+    self.Len.x = self.Parent.Len.x
+    self.Len.x = math.max(1, self.Len.x)
+    self.Len.y = self.Parent.Len.y
+    self.Len.y = math.max(1, self.Len.y)
 end
