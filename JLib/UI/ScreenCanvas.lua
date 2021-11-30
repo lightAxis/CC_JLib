@@ -32,4 +32,3 @@ function ScreenCanvas:render()
     -- render children
     self:renderChildren()
 end
-
