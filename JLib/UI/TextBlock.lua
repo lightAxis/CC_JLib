@@ -59,6 +59,10 @@ function TextBlock:setMarginBottom(marginBottom)
     self._Margin.MarginBottom = marginBottom
 end
 
+function TextBlock:getMargin()
+    return self._Margin.MarginLeft, self._Margin.MarginRight, self._Margin.MarginTop, self._Margin.MarginBottom 
+end
+
 function TextBlock:setTextHorizontalAlignment(align)
     self._TextArea:setHorizontalAlignment(align)
 end
@@ -103,4 +107,3 @@ function TextBlock:render()
     self:renderChildren()
 
 end
-

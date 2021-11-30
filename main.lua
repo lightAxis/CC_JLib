@@ -10,14 +10,16 @@ require("UI.Includes")
 -- require("UI.Margin")
 -- require("MathLib.Vector2")
 
-local screen = JLib.Screen:new({})
-
+-- local screen = JLib.Screen:new(peripheral.wrap("top"))
+local screen = JLib.Screen:new(term)
+JLib.UITools.clearScreen(screen)
 local posrel = JLib.Vector2:new(2, 3)
-local len = JLib.Vector2:new(15, 9)
+local len = JLib.Vector2:new(20, 9)
 local bg = JLib.Enums.Colors.lightBlue
 local fg = JLib.Enums.Colors.cyan
 
-local text = "123456789\n123\n456\n789\n1234\n\n56789\n\n\n."
+local text =
+    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna tortor.\nNam malesuada justo nec nulla molestie posuere.\nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus.\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
 local textcolor = JLib.Enums.Colors.black
 
 local margin = 2

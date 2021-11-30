@@ -19,7 +19,7 @@ function UITools:initialize() end
 -- @brief position 2 value to length
 -- @param pmin:num
 -- @param pmax:num
-function UITools.Pos2Len(pmin, pmax) return pmin - pmax + 1 end
+function UITools.Pos2Len(pmin, pmax) return pmax - pmin + 1 end
 
 -- @brief length to position 2 value, based on start 
 -- @param startAt:num
