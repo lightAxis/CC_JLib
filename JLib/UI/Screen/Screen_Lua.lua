@@ -66,7 +66,7 @@ function Screen_CC:isColor() error("Screen_CC:isColor!") end
 -- (Good for if you're making something to be compatible with both Turtles and Computers.)
 -- use only lua
 -- @return num, num
-function Screen_CC:getSize_Raw() error("Screen_CC:getSize_Raw!") end
+function Screen_CC:getSize_Raw() return 40, 24 end
 
 -- @brief Returns two arguments containing the x and the y values stating the size of the screen. 
 -- (Good for if you're making something to be compatible with both Turtles and Computers.)

@@ -13,7 +13,8 @@ JLib.Border = Border
 
 -- [constructor]
 function Border:initialize(parent, screen, name, BorderThickness, BorderColor)
-    JLib.UIElement.initialize(self, parent, screen, name) -- TODO check superclass constructor
+    if (parent == nil) then error("border must have a parent UIElement!") end
+    JLib.UIElement.initialize(self, parent, screen, name)
     self.BorderThickness = BorderThickness or 1
     self.BorderColor = BorderColor or JLib.Enums.Colors.gray
 end
@@ -23,19 +24,26 @@ end
 -- [overriding functions]
 
 function Border:render() -- renderOffset)
-    -- get render offset
-    -- local renderOffset_ = renderOffset or JLib.Vector2:new(1, 1)
-    -- local pos_ = JLib.UITools.calcRelativeOffset(self.Pos, renderOffset_)
+    -- cannot change border PosRel
+    self.PosRel.x = 1
+    self.PosRel.y = 1
+
+    -- update global pos
+    self:_updatePos()
+
+    -- update length from parent
+    self:_updateLengthFromParent()
+
+    -- get four anchor pos
     local pos_ = self.Pos:Copy()
-    -- print("global render pos:" .. pos_:toString())
-    -- self._screen.write("testttt")
     local pos_leftUP1 = pos_:Copy()
     local pos_leftUP2 = pos_:Copy()
     local pos_leftDown = JLib.UITools.calcRelativeOffset_Y(pos_leftUP1,
                                                            self.Len.y)
-    local pos_rightUp = JLib.UITools
-                            .calcRelativeOffset_X(pos_leftUP1, self.Len.x)
+    local pos_rightUp = JLib.UITools.calcRelativeOffset_X(pos_leftUP1,
+                                                          self.Len.x)
 
+    -- draw lines
     for i = 1, self.BorderThickness, 1 do
 
         JLib.UITools.drawLine_x(self._screen, pos_leftUP1, self.Len.x,
@@ -53,14 +61,7 @@ function Border:render() -- renderOffset)
         pos_rightUp.x = pos_rightUp.x - 1
     end
 
+    -- render children
     self:renderChildren()
 
-end
-
-function Border:render_Raw(x, y)
-    if ((x == nil) or (y == nil)) then
-        Border:render()
-    else
-        Border:render(JLib.Vector2:new(x, y))
-    end
 end
