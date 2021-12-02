@@ -45,5 +45,7 @@ Enums_Lua.Side = {
     ["bottom"] = "bottom"
 }
 
+Enums_Lua.MouseButton = {["left"] = 1, ["right"] = 2, ["center"] = 3}
+
 -- constructor
 function Enums_Lua:initialize() end

@@ -48,5 +48,7 @@ Enums_CC.Side = {
     ["bottom"] = "bottom"
 }
 
+Enums_CC.MouseButton = {["left"] = 1, ["right"] = 2, ["center"] = 3}
+
 -- constructor 
 function Enums_CC:initialize() end
