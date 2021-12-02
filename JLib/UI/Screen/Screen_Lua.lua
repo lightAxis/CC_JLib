@@ -12,8 +12,14 @@ JLib.Screen = Screen_Lua
 
 -- [constructor]
 function Screen_Lua:initialize(screenObj, side)
-    self._screen = screenObj or nil
-    self._side = side or nil
+    if (screenObj == nil) then
+        error("screenObj cannot be nil! Screen_Lua:initialize(screenObj, side)")
+    end
+    if (side == nil) then
+        error("side cannot be nil! Screen_Lua:initialize(screenObj, side)")
+    end
+    self._screen = screenObj
+    self._side = side
     self._renderHistory = {}
 end
 

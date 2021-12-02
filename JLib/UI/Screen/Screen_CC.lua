@@ -12,8 +12,14 @@ JLib.Screen = Screen_CC
 
 -- [constructor]
 function Screen_CC:initialize(screenObj, side)
-    self._screen = screenObj or nil
-    self._side = side or nil
+    if (screenObj == nil) then
+        error("screenObj cannot be nil! Screen_CC:initialize(screenObj, side)")
+    end
+    if (side == nil) then
+        error("side cannot be nil! Screen_CC:initialize(screenObj, side)")
+    end
+    self._screen = screenObj
+    self._side = side
     self._renderHistory = {}
 end
 
@@ -109,7 +115,7 @@ function Screen_CC:clearScreen()
 end
 
 function Screen_CC:getUIAtPos(pos)
-    for i = #(self._renderStack), 1, -1 do
+    for i = #(self._renderHistory), 1, -1 do
         if (self._renderHistory[i]:isPositionOver(pos) == true) then
             return self._renderHistory[i]
         end
