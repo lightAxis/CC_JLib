@@ -7,19 +7,6 @@ local Enums_CC = class("Enums")
 JLib = JLib or {}
 JLib.Enums = Enums_CC
 
--- set default Enums
-Enums_CC.VerticalAlignmentMode = {
-    ["top"] = "top",
-    ["bottom"] = "bottom",
-    ["center"] = "center"
-}
-
-Enums_CC.HorizontalAlignmentMode = {
-    ["left"] = "left",
-    ["right"] = "right",
-    ["center"] = "center"
-}
-
 Enums_CC.Colors = {
     ["white"] = colors.white,
     ["orange"] = colors.oranage,
@@ -37,15 +24,6 @@ Enums_CC.Colors = {
     ["green"] = colors.green,
     ["red"] = colors.red,
     ["black"] = colors.black
-}
-
-Enums_CC.Side = {
-    ["front"] = "front",
-    ["back"] = "back",
-    ["left"] = "left",
-    ["right"] = "right",
-    ["top"] = "top",
-    ["bottom"] = "bottom"
 }
 
 -- constructor 

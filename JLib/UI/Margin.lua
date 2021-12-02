@@ -35,7 +35,7 @@ function Margin:setMarginAll(margin)
     self.MarginBottom = margin;
 end
 
--- overridiong functions
+-- overriding functions
 
 function Margin:render()
     -- update self length from parent and margin
@@ -46,6 +46,9 @@ function Margin:render()
 
     -- update global position
     self:_updatePos()
+
+    -- render history add
+    self:_addThisToRenderHistory()
 
     -- render children
     self:renderChildren()
@@ -63,3 +66,9 @@ function Margin:_updatePosRelFromMargin()
     self.PosRel.x = self.MarginLeft + 1
     self.PosRel.y = self.MarginTop + 1
 end
+
+function Margin:_ClickEvent(e) end
+
+function Margin:_ScrollEvent(e)end
+
+function Margin:_KeyInputEvent(e) end

@@ -152,8 +152,3 @@ function UITools.drawLine_y(screen, startPos, len, bg)
         screen:setCursorPos(startPos_)
     end
 end
-
-function UITools.clearScreen(screen)
-    screen:setBackgroundColor(JLib.Enums.Colors.black)
-    screen:clear()
-end

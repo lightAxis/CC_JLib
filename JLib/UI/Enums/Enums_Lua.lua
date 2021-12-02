@@ -8,16 +8,6 @@ JLib = JLib or {}
 JLib.Enums = Enums_Lua
 
 -- set default Enums
-Enums_Lua.VerticalAlignmentMode = {
-    ["top"] = "top",
-    ["bottom"] = "bottom",
-    ["center"] = "center"
-}
-Enums_Lua.HorizontalAlignmentMode = {
-    ["left"] = "left",
-    ["right"] = "right",
-    ["center"] = "center"
-}
 Enums_Lua.Colors = {
     ["white"] = "white",
     ["orange"] = "oranage",
@@ -35,14 +25,6 @@ Enums_Lua.Colors = {
     ["green"] = "green",
     ["red"] = "red",
     ["black"] = "black"
-}
-Enums_Lua.Side = {
-    ["front"] = "front",
-    ["back"] = "back",
-    ["left"] = "left",
-    ["right"] = "right",
-    ["top"] = "top",
-    ["bottom"] = "bottom"
 }
 
 -- constructor

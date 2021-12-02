@@ -64,33 +64,6 @@ function TextArea:setScroll(scroll) self._scroll = math.max(1, scroll) end
 
 function TextArea:getScroll() return self._scroll end
 
-function TextArea:render()
-    -- textarea cannot have pos rel
-    self.PosRel.x = 1
-    self.PosRel.y = 1
-
-    -- update global position
-    self:_updatePos()
-
-    -- textarea must follow the length of parent
-    self:_updateLengthFromParent()
-
-    -- update wrap of splitted string with \n
-    self:_updateTextSplitedViewport()
-
-    -- check if scroll index is avilable
-    local minScroll, maxScroll = self:_wrapScroll()
-
-    -- update text splitted lines with black " "
-    self:_updateTextSplitedLines(minScroll, maxScroll)
-
-    -- print text splitted lines
-    self:_printTextLines()
-
-    -- render children
-    self:renderChildren()
-end
-
 function TextArea:_updateTextSplited()
     local text_ = self._Text
 
@@ -220,3 +193,41 @@ function TextArea:_printTextLines()
         renderPos.y = renderPos.y + 1
     end
 end
+
+-- overridin functions
+
+function TextArea:render()
+    -- textarea cannot have pos rel
+    self.PosRel.x = 1
+    self.PosRel.y = 1
+
+    -- update global position
+    self:_updatePos()
+
+    -- textarea must follow the length of parent
+    self:_updateLengthFromParent()
+
+    -- update wrap of splitted string with \n
+    self:_updateTextSplitedViewport()
+
+    -- check if scroll index is avilable
+    local minScroll, maxScroll = self:_wrapScroll()
+
+    -- update text splitted lines with black " "
+    self:_updateTextSplitedLines(minScroll, maxScroll)
+
+    -- print text splitted lines
+    self:_printTextLines()
+
+    -- render history add
+    self:_addThisToRenderHistory()
+
+    -- render children
+    self:renderChildren()
+end
+
+function TextArea:_ClickEvent(e) end
+
+function TextArea:_ScrollEvent(e) end
+
+function TextArea:_KeyInputEvent(e) end

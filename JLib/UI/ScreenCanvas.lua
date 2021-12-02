@@ -29,6 +29,15 @@ function ScreenCanvas:render()
     self.Pos.x = 1
     self.Pos.y = 1
 
+    -- render history add
+    self:_addThisToRenderHistory()
+
     -- render children
     self:renderChildren()
 end
+
+function ScreenCanvas:_ClickEvent(e) end
+
+function ScreenCanvas:_ScrollEvent(e) end
+
+function ScreenCanvas:_KeyInputEvent(e) end
