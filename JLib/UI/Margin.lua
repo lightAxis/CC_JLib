@@ -69,6 +69,6 @@ end
 
 function Margin:_ClickEvent(e) end
 
-function Margin:_ScrollEvent(e) end
+function Margin:_ScrollEvent(e)end
 
 function Margin:_KeyInputEvent(e) end
