@@ -111,3 +111,9 @@ function TextBlock:render()
     self:renderChildren()
 
 end
+
+function TextBlock:_ClickEvent(e) end
+
+function TextBlock:_ScrollEvent(e) end
+
+function TextBlock:_KeyInputEvent(e) end

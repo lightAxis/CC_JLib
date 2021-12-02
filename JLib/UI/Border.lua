@@ -78,3 +78,4 @@ function Border:_ClickEvent(e) end
 
 function Border:_ScrollEvent(e) end
 
+function Border:_KeyInputEvent(e) end

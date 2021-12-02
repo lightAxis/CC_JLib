@@ -4,6 +4,7 @@ local class = require("Class.middleclass")
 require("MathLib.Vector2")
 require("UI.Enums")
 require("UI.UITools")
+require("UI.UIEvent")
 
 -- public class UIElement
 local UIElement = class("UIElement")
@@ -70,13 +71,6 @@ function UIElement:isPositionOver_Raw(x, y)
     return UIElement:isPositionOver(JLib.Vector2:new(x, y))
 end
 
--- [abstract functions]
-
--- @brief abstrcat render function.
--- @param pos:JLib.Vector2
-function UIElement:render(pos)
-    error("This is abstrct function! UIElement:render(pos)")
-end
 -- @brief update global Position of element based on Parent or nil
 -- spread to childs
 function UIElement:_updatePos()
@@ -88,6 +82,7 @@ function UIElement:_updatePos()
     -- for key, child in pairs(self.Children) do child:_updatePos() end
 end
 
+-- @brief update length sync with parent's Len
 function UIElement:_updateLengthFromParent()
     self.Len.x = self.Parent.Len.x
     self.Len.x = math.max(1, self.Len.x)
@@ -95,8 +90,90 @@ function UIElement:_updateLengthFromParent()
     self.Len.y = math.max(1, self.Len.y)
 end
 
+-- @brief add this UIelement to RenderHistory of JLib.Screen class to use at UIInteraction system
 function UIElement:_addThisToRenderHistory()
     table.insert(self._screen._renderHistory, self)
 end
 
-function UIElement:_ClickEvent() end
+-- @brief trigger bubble down click event to element
+-- @param button:
+function UIElement:triggerClickEvent(button, pos)
+    local e = JLib.UIEvent.ClickEventArgs:new(button, pos)
+    self:_ClickEventBubbleDown(e)
+end
+
+-- @brief click event function for UIElement
+-- @param e:JLib.UIEvent.ClickEventArgs
+function UIElement:_ClickEventBubbleDown(e)
+    self:_ClickEvent(e)
+    if (e.Handled == true) then
+        return nil
+    else
+        if (self.Parent ~= nil) then self.Parent:_ClickEventBubbleDown(e) end
+    end
+end
+
+-- @brief scroll event function for UIElement
+-- @param direction:JLib.Enums.ScrollDirection
+-- @param pos:JLib.Vector2
+function UIElement:triggerScrollEvent(direction, pos)
+    local e = JLib.UIEvent.ScrollEventArgs:new(direction, pos)
+    self:_ScrollEventBubbleDown(e)
+end
+
+-- @brief scroll event function for UIelemnt
+-- @param e:JLib.UIEvent.ScrollEventArgs
+function UIElement:_ScrollEventBubbleDown(e)
+    self:_ScrollEvent(e)
+    if (e.Handled == true) then
+        return nil
+    else
+        if (self.Parent ~= nil) then
+            self.Parent:_ScrollEventBubbleDown(e)
+        end
+    end
+end
+
+-- @brief keyinput event function for UIElement
+-- @param key:JLib.Enums.key -- TODO:JLib.EnumsKey
+function UIElement:triggerKeyInputEvent(key)
+    local e = JLib.UIEvent.KeyInputEventArgs:new(key)
+    self:_KeyInputBubbleDown(e)
+end
+
+-- @brief keyinput event function for UIElement
+-- @parem e:JLib.UIEvent.KeyInputEventArgs
+function UIElement:_KeyInputBubbleDown(e)
+    self:_KeyInputEvent(e)
+    if (e.Handled == true) then
+        return nil
+    else
+        if (self.Parent ~= nil) then self.Parent:_KeyInputBubbleDown(e) end
+    end
+end
+
+-- [abstract functions]
+
+-- @brief abstract render function.
+-- @param pos:JLib.Vector2
+function UIElement:render(pos)
+    error("This is abstrct function! UIElement:render(pos)")
+end
+
+-- @brief abstract Click Bubble down event function
+-- @param e:JLib.UIEvent.ClickEventArgs
+function UIElement:_ClickEvent(e)
+    error("this is abstrcat function! UIElement:_ClickEvent(e)")
+end
+
+-- @brief abstract Scroll Bubble down event function
+-- @param e:JLib.UIEvent.ScrollEventArgs
+function UIElement:_ScrollEvent(e)
+    error("This is abstract function! UIelement:_ScrollEvent(e)")
+end
+
+-- @brief abstract KeyInput bubble down event function
+-- @param e:JLib.UIEvent.KeyInputEventArgs
+function UIElement:_KeyInputEvent(e)
+    error("This is abstract function!, UIElement:_KeyInputEvent(e)")
+end

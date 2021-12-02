@@ -35,3 +35,9 @@ function ScreenCanvas:render()
     -- render children
     self:renderChildren()
 end
+
+function ScreenCanvas:_ClickEvent(e) end
+
+function ScreenCanvas:_ScrollEvent(e) end
+
+function ScreenCanvas:_KeyInputEvent(e) end
