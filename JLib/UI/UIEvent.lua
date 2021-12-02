@@ -36,4 +36,7 @@ local KeyInputEventArgs = class("KeyInputEventArgs", JLib.UIEvent.EventArgs)
 -- namespace JLib.UIEvent
 JLib.UIEvent.KeyInputEventArgs = KeyInputEventArgs
 -- constructor
-function KeyInputEventArgs:initialize(key) self.Key = key end
+function KeyInputEventArgs:initialize(key, isShiftPressed)
+    self.Key = key
+    self.IsShiftPressed = isShiftPressed
+end
