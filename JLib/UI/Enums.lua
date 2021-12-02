@@ -34,3 +34,4 @@ JLib.Enums.Side = {
 
 JLib.Enums.MouseButton = {["left"] = 1, ["right"] = 2, ["center"] = 3}
 
+JLib.Enums.ScrollDirection = {["up"] = -1, ["down"] = 1}
