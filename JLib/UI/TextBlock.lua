@@ -60,7 +60,8 @@ function TextBlock:setMarginBottom(marginBottom)
 end
 
 function TextBlock:getMargin()
-    return self._Margin.MarginLeft, self._Margin.MarginRight, self._Margin.MarginTop, self._Margin.MarginBottom 
+    return self._Margin.MarginLeft, self._Margin.MarginRight,
+           self._Margin.MarginTop, self._Margin.MarginBottom
 end
 
 function TextBlock:setTextHorizontalAlignment(align)
@@ -102,6 +103,9 @@ function TextBlock:render()
 
     -- sync bg of textarea same with textblock
     self._TextArea.BG = self.BG
+
+    -- render history check
+    self:_addThisToRenderHistory()
 
     -- render children components
     self:renderChildren()

@@ -47,6 +47,9 @@ function Margin:render()
     -- update global position
     self:_updatePos()
 
+    -- render history add
+    self:_addThisToRenderHistory()
+
     -- render children
     self:renderChildren()
 

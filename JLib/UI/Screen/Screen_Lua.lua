@@ -11,7 +11,10 @@ JLib = JLib or {}
 JLib.Screen = Screen_CC
 
 -- [constructor]
-function Screen_CC:initialize(screenObj) self._screen = screenObj or nil end
+function Screen_CC:initialize(screenObj)
+    self._screen = screenObj or nil
+    self._renderHistory = {}
+end
 
 -- [functions]
 
@@ -99,3 +102,25 @@ function Screen_CC:getBackgroundColor() error("Screen_CC:getBackgroundColor!") e
 -- @brief Sets the text scale. Available only to monitor objects.
 -- @param scale:num
 function Screen_CC:setTextScale(scale) error("Screen_CC:setTextScale!") end
+
+-- custom functions
+
+function Screen_CC:addRenderElement(element)
+    table.insert(self._renderHistory, element)
+end
+
+function Screen_CC:clearScreen()
+    self:setBackgroundColor(JLib.Enums.Colors.black)
+    self:clear()
+
+    self._renderHistory = {}
+end
+
+function Screen_CC:getUIAtPos(pos)
+    for i = #(self._renderHistory), 1, -1 do
+        if (self._renderHistory[i]:isPositionOver(pos) == true) then
+            return self._renderHistory[i]
+        end
+    end
+    return nil
+end

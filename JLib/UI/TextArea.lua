@@ -87,6 +87,9 @@ function TextArea:render()
     -- print text splitted lines
     self:_printTextLines()
 
+    -- render history add
+    self:_addThisToRenderHistory()
+
     -- render children
     self:renderChildren()
 end

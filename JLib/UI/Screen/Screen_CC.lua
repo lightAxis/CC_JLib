@@ -11,7 +11,10 @@ JLib = JLib or {}
 JLib.Screen = Screen_Lua
 
 -- [constructor]
-function Screen_Lua:initialize(screenObj) self._screen = screenObj or nil end
+function Screen_Lua:initialize(screenObj)
+    self._screen = screenObj or nil
+    self._renderHistory = {}
+end
 
 -- [functions]
 
@@ -91,3 +94,25 @@ function Screen_Lua:getBackgroundColor() return
 -- @brief Sets the text scale. Available only to monitor objects.
 -- @param scale:num
 function Screen_Lua:setTextScale(scale) self._screen.setTextScale(scale) end
+
+-- custom functions
+
+function Screen_Lua:addRenderElement(element)
+    table.insert(self._renderHistory, element)
+end
+
+function Screen_Lua:clearScreen()
+    self:setBackgroundColor(JLib.Enums.Colors.black)
+    self:clear()
+
+    self._renderHistory = {}
+end
+
+function Screen_Lua:getUIAtPos(pos)
+    for i = #(self._renderStack), 1, -1 do
+        if (self._renderHistory[i]:isPositionOver(pos) == true) then
+            return self._renderHistory[i]
+        end
+    end
+    return nil
+end

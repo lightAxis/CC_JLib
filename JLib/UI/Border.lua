@@ -61,6 +61,9 @@ function Border:render() -- renderOffset)
         pos_rightUp.x = pos_rightUp.x - 1
     end
 
+    -- render history add
+    self:_addThisToRenderHistory()
+
     -- render children
     self:renderChildren()
 

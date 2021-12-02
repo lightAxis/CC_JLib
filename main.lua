@@ -12,7 +12,7 @@ require("UI.Includes")
 
 -- local screen = JLib.Screen:new(peripheral.wrap("top"))
 local screen = JLib.Screen:new(term)
-JLib.UITools.clearScreen(screen)
+screen:clearScreen()
 local posrel = JLib.Vector2:new(2, 3)
 local len = JLib.Vector2:new(20, 9)
 local bg = JLib.Enums.Colors.lightBlue
@@ -40,6 +40,9 @@ t1:setBorderThickness(borderthickness)
 t1:setScroll(scroll)
 
 sc1:render()
+
+local ee = screen:getUIAtPos(JLib.Vector2:new(10, 2))
+print(ee.Name)
 
 -- local b1 = JLib.Border:new(sc1, screen, "border_1")
 -- b1.Len = JLib.Vector2:new(15, 7)

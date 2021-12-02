@@ -94,3 +94,9 @@ function UIElement:_updateLengthFromParent()
     self.Len.y = self.Parent.Len.y
     self.Len.y = math.max(1, self.Len.y)
 end
+
+function UIElement:_addThisToRenderHistory()
+    table.insert(self._screen._renderHistory, self)
+end
+
+function UIElement:_ClickEvent() end

@@ -29,6 +29,9 @@ function ScreenCanvas:render()
     self.Pos.x = 1
     self.Pos.y = 1
 
+    -- render history add
+    self:_addThisToRenderHistory()
+
     -- render children
     self:renderChildren()
 end
