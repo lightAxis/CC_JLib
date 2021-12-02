@@ -21,19 +21,7 @@ end
 
 -- [functions]
 
--- [overriding functions]
-
-function Border:render() -- renderOffset)
-    -- cannot change border PosRel
-    self.PosRel.x = 1
-    self.PosRel.y = 1
-
-    -- update global pos
-    self:_updatePos()
-
-    -- update length from parent
-    self:_updateLengthFromParent()
-
+function Border:_drawBorder()
     -- get four anchor pos
     local pos_ = self.Pos:Copy()
     local pos_leftUP1 = pos_:Copy()
@@ -60,6 +48,23 @@ function Border:render() -- renderOffset)
         pos_leftDown.y = pos_leftDown.y - 1
         pos_rightUp.x = pos_rightUp.x - 1
     end
+end
+
+-- [overriding functions]
+
+function Border:render() -- renderOffset)
+    -- cannot change border PosRel
+    self.PosRel.x = 1
+    self.PosRel.y = 1
+
+    -- update global pos
+    self:_updatePos()
+
+    -- update length from parent
+    self:_updateLengthFromParent()
+
+    -- draw actual lines
+    self:_drawBorder()
 
     -- render history add
     self:_addThisToRenderHistory()
@@ -68,3 +73,8 @@ function Border:render() -- renderOffset)
     self:renderChildren()
 
 end
+
+function Border:_ClickEvent(e) end
+
+function Border:_ScrollEvent(e) end
+
