@@ -11,7 +11,7 @@ require("UI.Includes")
 -- require("MathLib.Vector2")
 
 -- local screen = JLib.Screen:new(peripheral.wrap("top"))
-local screen = JLib.Screen:new(term)
+local screen = JLib.Screen:new(term, JLib.Enums.Side.top)
 screen:clearScreen()
 local posrel = JLib.Vector2:new(2, 3)
 local len = JLib.Vector2:new(20, 9)

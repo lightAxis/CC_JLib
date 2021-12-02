@@ -4,15 +4,16 @@ local class = require("Class.middleclass")
 require("MathLib.Vector2")
 
 -- public class Screen
-local Screen_Lua = class("Screen")
+local Screen_CC = class("Screen")
 
 -- namespace JLib
 JLib = JLib or {}
-JLib.Screen = Screen_Lua
+JLib.Screen = Screen_CC
 
 -- [constructor]
-function Screen_Lua:initialize(screenObj)
+function Screen_CC:initialize(screenObj, side)
     self._screen = screenObj or nil
+    self._side = side or nil
     self._renderHistory = {}
 end
 
@@ -20,95 +21,94 @@ end
 
 -- @brief Writes text to the screen, using the current text and background colors.
 -- @param text:string
-function Screen_Lua:write(text) self._screen.write(text) end
+function Screen_CC:write(text) self._screen.write(text) end
 
 -- @brief Writes text to the screen using the specified text and background colors. Requires version 1.74 or newer.
 -- @param text:string
 -- @param fg:JLib.Enums.Color
 -- @param gb:JLib.Enums.Color
-function Screen_Lua:bilt(text, fg, bg) self._screen.bilt(text, fg, bg) end
+function Screen_CC:bilt(text, fg, bg) self._screen.bilt(text, fg, bg) end
 
 -- @brief Clears the entire screen.
-function Screen_Lua:clear() self._screen.clear() end
+function Screen_CC:clear() self._screen.clear() end
 
 -- @brief Clears the line the cursor is on.
-function Screen_Lua:clearLine() self._screen.clearLine() end
+function Screen_CC:clearLine() self._screen.clearLine() end
 
 -- @brief Returns two arguments containing the x and the y position of the cursor.
 -- @return JLib.Vector2
-function Screen_Lua:getCursorPos()
-    local x, y = Screen_Lua:getCursorPos_Raw()
+function Screen_CC:getCursorPos()
+    local x, y = Screen_CC:getCursorPos_Raw()
     return JLib.Vector2:new(x, y)
 end
 
 -- @brief Returns two arguments containing the x and the y position of the cursor. use only lua
 -- @return num, num
-function Screen_Lua:getCursorPos_Raw() return self._screen.getCursorPos() end
+function Screen_CC:getCursorPos_Raw() return self._screen.getCursorPos() end
 
 -- @brief Sets the cursor's position.
-function Screen_Lua:setCursorPos(pos) self:setCursorPos_Raw(pos.x, pos.y) end
+function Screen_CC:setCursorPos(pos) self:setCursorPos_Raw(pos.x, pos.y) end
 
 -- @brief Sets the cursor's position. use only lua
-function Screen_Lua:setCursorPos_Raw(x, y) self._screen.setCursorPos(x, y) end
+function Screen_CC:setCursorPos_Raw(x, y) self._screen.setCursorPos(x, y) end
 
 -- @brief Disables the blinking or turns it on.
-function Screen_Lua:setCursorBlink(bool) self._screen.setCursorBlink(bool) end
+function Screen_CC:setCursorBlink(bool) self._screen.setCursorBlink(bool) end
 
 -- @brief Returns whether the terminal supports color.
 -- @return bool
-function Screen_Lua:isColor() return self._screen.isColor() end
+function Screen_CC:isColor() return self._screen.isColor() end
 
 -- @brief Returns two arguments containing the x and the y values stating the size of the screen. 
 -- (Good for if you're making something to be compatible with both Turtles and Computers.)
 -- use only lua
 -- @return num, num
-function Screen_Lua:getSize_Raw() return self._screen.getSize() end
+function Screen_CC:getSize_Raw() return self._screen.getSize() end
 
 -- @brief Returns two arguments containing the x and the y values stating the size of the screen. 
 -- (Good for if you're making something to be compatible with both Turtles and Computers.)
 -- @return JLib.Vector2
-function Screen_Lua:getSize()
+function Screen_CC:getSize()
     local x, y = self:getSize_Raw()
     return JLib.Vector2:new(x, y)
 end
 
 -- @brief Sets the text color of the terminal. Limited functionality without an Advanced machines.
 -- @param color:JLib.Enums.Color
-function Screen_Lua:setTextColor(color) self._screen.setTextColor(color) end
+function Screen_CC:setTextColor(color) self._screen.setTextColor(color) end
 
 -- @brief Returns the current text color of the terminal. Requires version 1.74 or newer.
 -- @return JLib.Enums.Color
-function Screen_Lua:getTextColor() return self._screen.getTextColor() end
+function Screen_CC:getTextColor() return self._screen.getTextColor() end
 
 -- @brief Sets the background color of the terminal. Limited functionality without an Advanced Computer / Turtle / Monitor.
 -- @return JLib.Enums.Color
-function Screen_Lua:setBackgroundColor(color)
+function Screen_CC:setBackgroundColor(color)
     self._screen.setBackgroundColor(color)
 end
 
 -- @brief Returns the current background color of the terminal. Requires version 1.74 or newer.
 -- @return JLib.Enums.Color
-function Screen_Lua:getBackgroundColor() return
-    self._screen.getBackgroundColor() end
+function Screen_CC:getBackgroundColor() return self._screen.getBackgroundColor() end
 
 -- @brief Sets the text scale. Available only to monitor objects.
 -- @param scale:num
-function Screen_Lua:setTextScale(scale) self._screen.setTextScale(scale) end
+function Screen_CC:setTextScale(scale) self._screen.setTextScale(scale) end
 
 -- custom functions
 
-function Screen_Lua:addRenderElement(element)
+function Screen_CC:addRenderElement(element)
     table.insert(self._renderHistory, element)
 end
 
-function Screen_Lua:clearScreen()
+function Screen_CC:clearScreen()
     self:setBackgroundColor(JLib.Enums.Colors.black)
     self:clear()
 
     self._renderHistory = {}
 end
 
-function Screen_Lua:getUIAtPos(pos)
+function Screen_CC:getUIAtPos(pos)
     for i = #(self._renderStack), 1, -1 do
         if (self._renderHistory[i]:isPositionOver(pos) == true) then
             return self._renderHistory[i]
@@ -116,3 +116,5 @@ function Screen_Lua:getUIAtPos(pos)
     end
     return nil
 end
+
+function Screen_CC:getScreenSide() return self._side end
