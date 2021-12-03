@@ -1,6 +1,7 @@
 local class = require("Class.middleclass")
 
--- public class RequireSelection
+-- public class LibVariables
+---@class LibVariables
 local LibVariables = class("RequireSelection")
 
 -- namespace JLib

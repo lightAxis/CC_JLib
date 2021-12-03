@@ -7,8 +7,7 @@ local ReactorControl = class("ReactorControl")
 JLib = JLib or {}
 JLib.ReactorControl = ReactorControl
 
---properties
-
+-- properties
 
 -- constructor
 function ReactorControl:initialize(reactorProxy)
@@ -21,7 +20,7 @@ function ReactorControl:initialize(reactorProxy)
     self._IGain = 1.0
     self._I = 0.0
     self._last_u = 0.0
-end 
+end
 
 -- functions
 function ReactorControl:SetControllerTarget(targetEnergyThreshold)
@@ -33,13 +32,9 @@ function ReactorControl:SetThrottleRange(minimumThrottle, maximumThrottle)
     self._maximumThrottle = maximumThrottle
 end
 
-function ReactorControl:SetPGain(PGain)
-    self._PGain = PGain
-end
+function ReactorControl:SetPGain(PGain) self._PGain = PGain end
 
-function ReactorControl:SetIGain(IGain)
-    self._IGain = IGain
-end
+function ReactorControl:SetIGain(IGain) self._IGain = IGain end
 
 function ReactorControl:Control(dt)
     -- control reference
@@ -54,10 +49,10 @@ function ReactorControl:Control(dt)
     local e = r - y
 
     -- calc Integral term
-    self._I = self._I + dt*self._IGain*e
+    self._I = self._I + dt * self._IGain * e
     -- Integral Windup prevention
     self._I = math.max(-50, self._I)
-    self._I = math.min( 50, self._I)
+    self._I = math.min(50, self._I)
 
     -- calc input u
     self._last_u = dt * self._PGain * e + self._I
@@ -65,7 +60,8 @@ function ReactorControl:Control(dt)
     self._last_u = math.max(self._minimumThrottle, self._last_u)
     self._last_u = math.min(self._maximumThrottle, self._last_u)
 
-    self._reactorProxy.setAllControlRodLevels(math.floor((100 - self._last_u) + 0.5))
-    
+    self._reactorProxy.setAllControlRodLevels(math.floor(
+                                                  (100 - self._last_u) + 0.5))
+
     return r, y, self._last_u
 end

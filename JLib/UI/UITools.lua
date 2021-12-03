@@ -4,7 +4,12 @@ local class = require("Class.middleclass")
 require("UI.Enums")
 require("MathLib.Vector2")
 
--- public class Tools
+-- public class UITools   
+---  
+---**require** : 
+--- - Class.middleclass
+--- - UI.Enums
+--- - MathLib.Vector2
 local UITools = class("UITools")
 
 -- namespace JLib
@@ -12,32 +17,34 @@ JLib = JLib or {}
 JLib.UITools = UITools
 
 -- [constructor]
+
+---constructor
 function UITools:initialize() end
 
 -- [functions]
 
--- @brief position 2 value to length
--- @param pmin:num
--- @param pmax:num
+-- position 2 value to length
+---@param pmin number
+---@param pmax number
 function UITools.Pos2Len(pmin, pmax) return pmax - pmin + 1 end
 
--- @brief length to position 2 value, based on start 
--- @param startAt:num
--- @param len:num
+-- length to position 2 value, based on start 
+---@param startAt number
+---@param len number
 function UITools.Len2Pos_FromStart(startAt, len)
     return startAt, len + startAt - 1
 end
 
--- @brief length to position 2 value, based on end
--- @param endAt:num
--- @param len:num
+-- length to position 2 value, based on end
+---@param endAt number
+---@param len number
 function UITools.Len2Pos_FromEnd(endAt, len) return endAt - len + 1, endAt end
 
--- @brief calc horizontal Align positions
--- @param min:num
--- @param max:num
--- @param len:num
--- @param mode:JLib.Enums.eHorizontalAlignmentMode
+-- calc horizontal Align positions
+---@param min number
+---@param max number
+---@param len number
+---@param mode Enums.HorizontalAlignmentMode
 function UITools.calcHorizontalAlignPos(min, max, len, mode)
     local x;
     local xlen = UITools.Pos2Len(min, max)
@@ -53,11 +60,11 @@ function UITools.calcHorizontalAlignPos(min, max, len, mode)
     return x
 end
 
--- @brief calc vertical Align positions
--- @param min:num
--- @param max:num
--- @param len:num
--- @param mode:JLib.Enums.eVerticalAlignmentMode
+-- calc vertical Align positions
+---@param min number
+---@param max number
+---@param len number
+---@param mode Enums.VerticalAlignmentMode
 function UITools.calcVerticalAlignPos(min, max, len, mode)
     local y;
     local ylen = UITools.Pos2Len(min, max)
@@ -73,35 +80,35 @@ function UITools.calcVerticalAlignPos(min, max, len, mode)
     return y
 end
 
--- @brief calc relative position. as pos(1,1) is origin of offset
--- @param origin:JLib.Vector2
--- @param offset:JLib.Vector2
--- @return JLib.Vector2
+-- calc relative position. as pos(1,1) is origin of offset
+---@param origin Vector2
+---@param offset Vector2
+---@return Vector2
 function UITools.calcRelativeOffset(origin, offset)
     return origin + offset - JLib.Vector2:new(1, 1)
 
 end
 
--- @brief calc relative position, move only x axis, as pos(1,1) is origin of offset
--- @param origin:JLib.Vector2
--- @param offset_x:num
+-- calc relative position, move only x axis, as pos(1,1) is origin of offset
+---@param origin Vector2
+---@param offset_x number
 -- return JLib.Vector2
 function UITools.calcRelativeOffset_X(origin, offset_x)
     return UITools.calcRelativeOffset(origin, JLib.Vector2:new(offset_x, 1))
 end
 
--- @brief calc relative position, move only y axis, as pos(1,1) is origin of offset
--- @param origin:JLib.Vector2
--- @param offset_y:num
+---@brief calc relative position, move only y axis, as pos(1,1) is origin of offset
+---@param origin Vector2
+---@param offset_y number
 -- return JLib.Vector2
 function UITools.calcRelativeOffset_Y(origin, offset_y)
     return UITools.calcRelativeOffset(origin, JLib.Vector2:new(1, offset_y))
 end
 
--- @brief calc if point in square area
--- @param pos:JLib.Vector2
--- @param len:JLib.Vector2
--- @param checkpos:JLib.Vector2
+-- calc if point in square area
+---@param pos Vector2
+---@param len Vector2
+---@param checkpos Vector2
 function UITools.isInsideSquare(pos, len, checkpos)
     local x1, x2 = UITools.Len2Pos_FromStart(pos.x, len.x)
 
@@ -113,10 +120,14 @@ function UITools.isInsideSquare(pos, len, checkpos)
 
 end
 
--- @brief calc if point in square area. use only lua type
--- @param pos:JLib.Vector2
--- @param len:JLib.Vector2
--- @param checkpos:vector2
+-- calc if point in square area. use only lua type
+---@param pos_x number
+---@param pos_y number
+---@param len_x number
+---@param len_y number
+---@param checkpos_x number
+---@param checkpos_y number
+---@return boolean isInsideSquare
 function UITools.isInsideSquare_Raw(pos_x, pos_y, len_x, len_y, checkpos_x,
                                     checkpos_y)
     local x1, x2 = UITools.Len2Pos_FromStart(pos_x, len_x)
@@ -128,13 +139,20 @@ function UITools.isInsideSquare_Raw(pos_x, pos_y, len_x, len_y, checkpos_x,
     return false
 end
 
--- @brief get empth string to write 
+-- get empth string to write 
+---@param len string
+---@return string emptystring
 function UITools.getEmptyString(len)
     local r = ""
     for i = 1, len, 1 do r = r .. " " end
     return r
 end
 
+---draw line in x axis
+---@param screen Screen
+---@param startPos Vector2
+---@param len number
+---@param bg Enums.Color
 function UITools.drawLine_x(screen, startPos, len, bg)
     local str = UITools.getEmptyString(len)
     screen:setCursorPos(startPos)
@@ -142,6 +160,11 @@ function UITools.drawLine_x(screen, startPos, len, bg)
     screen:write(str)
 end
 
+---draw line in y axis
+---@param screen Screen
+---@param startPos Vector2
+---@param len number
+---@param bg Enums.Color
 function UITools.drawLine_y(screen, startPos, len, bg)
     local startPos_ = startPos:Copy()
     screen:setCursorPos(startPos)

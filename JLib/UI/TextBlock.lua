@@ -7,20 +7,36 @@ require("UI.Border")
 require("UI.Margin")
 require("UI.TextArea")
 
--- public class TextBlock : UIElement
+-- public class TextBlock : UIElement   
+---  
+---**require** :  
+--- - Class.middleclass
+--- - UI.UIElement
+--- - UI.UITools
+--- - UI.Border
+--- - UI.Margin
+--- - UI.TextArea
 local TextBlock = class("TextBlock", JLib.UIElement)
 
--- namespace JLib 
+-- namespace JLib
 JLib = JLib or {}
 JLib.TextBlock = TextBlock
 
 -- constructor
-function TextBlock:initialize(parent, screen, name, PosRel, Len, bg, fg, text)
+---@param parent UIElement
+---@param screen Screen
+---@param name string
+---@param text? string or ""
+---@param PosRel? Vector2 or (1,1)
+---@param Len? Vector2 or (1,1)
+---@param bg? Enums.Color or Enums.Color.gray
+---@param fg? Enums.Color or Enums.Color.white
+function TextBlock:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
 
     local PosRel_ = PosRel or JLib.Vector2:new(1, 1)
     local Len_ = Len or JLib.Vector2:new(1, 1)
-    local bg_ = bg or JLib.Enums.Colors.gray
-    local fg_ = fg or JLib.Enums.Colors.white
+    local bg_ = bg or JLib.Enums.Color.gray
+    local fg_ = fg or JLib.Enums.Color.white
 
     JLib.UIElement.initialize(self, parent, screen, name, PosRel_.x, PosRel_.y,
                               Len_.x, Len_.y, bg_, fg_)
@@ -37,49 +53,76 @@ function TextBlock:initialize(parent, screen, name, PosRel, Len, bg, fg, text)
     self._TextArea.FG = self.FG
 end
 
+-- priperties description
+---@class TextBlock
+---@field _Border Border
+---@field _Margin Margin
+---@field _TextArea TextArea
+---@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color)
+
 -- functions
+
+---@param thickness number
 function TextBlock:setBorderThickness(thickness)
     self._Border.BorderThickness = thickness
 end
 
+---@param color Enums.Color
 function TextBlock:setBorderColor(color) self._Border.BorderColor = color end
 
+---@param margin number
 function TextBlock:setMarginAll(margin) self._Margin:setMarginAll(margin) end
 
+---@param marginLeft number
 function TextBlock:setMarginLeft(marginLeft) self._Margin.MarginLeft =
     marginLeft end
 
+---@param marginRight number
 function TextBlock:setMarginRight(marginRight)
     self._Margin.MarginRight = marginRight
 end
 
+---@param marginTop number
 function TextBlock:setMarginTop(marginTop) self._Margin.MarginTop = marginTop end
 
+---@param marginBottom number
 function TextBlock:setMarginBottom(marginBottom)
     self._Margin.MarginBottom = marginBottom
 end
 
+---get all four margins
+---@return number left
+---@return number right
+---@return number top
+---@return number bottom
 function TextBlock:getMargin()
     return self._Margin.MarginLeft, self._Margin.MarginRight,
            self._Margin.MarginTop, self._Margin.MarginBottom
 end
 
+---@param align Enums.HorizontalAlignmentMode
 function TextBlock:setTextHorizontalAlignment(align)
     self._TextArea:setHorizontalAlignment(align)
 end
 
+---@param align Enums.VerticalAlignmentMode
 function TextBlock:setTextVerticalAlignment(align)
     self._TextArea:setVerticalAlignment(align)
 end
 
+---@param text string
 function TextBlock:setText(text) self._TextArea:setText(text) end
 
+---@param color Enums.Color
 function TextBlock:setTextColor(color) self._TextArea.FG = color end
 
+---@param scroll number
 function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end
 
+---@return number scrollIndex
 function TextBlock:getScroll() return self._TextArea:getScroll() end
 
+--- fill textarea with current BG
 function TextBlock:_fillWithBG()
     self._screen:setBackgroundColor(self.BG)
 
@@ -94,6 +137,7 @@ end
 
 -- override functions
 
+---overrided function from UIElement:render()
 function TextBlock:render()
     -- update global pos
     self:_updatePos()
@@ -112,8 +156,14 @@ function TextBlock:render()
 
 end
 
+---overrided function from UIElement:_ClickEvent
+---@param e ClickEventArgs
 function TextBlock:_ClickEvent(e) end
 
+---overrided function from UIElement:_ScrollEvent
+---@param e ScrollEventArgs
 function TextBlock:_ScrollEvent(e) end
 
+---overrided function from UIElement:_KeyInputEvent
+---@param e KeyInputEventArgs
 function TextBlock:_KeyInputEvent(e) end
