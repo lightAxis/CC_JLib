@@ -1,6 +1,7 @@
 local class = require("Class.middleclass")
 
 -- public class Enums_Lua
+---@class Enums
 local Enums_Lua = class("Enums")
 
 -- namespace JLib
@@ -8,7 +9,9 @@ JLib = JLib or {}
 JLib.Enums = Enums_Lua
 
 -- set default Enums
-Enums_Lua.Colors = {
+
+---@class Enums.Color
+Enums_Lua.Color = {
     ["white"] = "white",
     ["orange"] = "oranage",
     ["magenta"] = "magenta",

@@ -1,26 +1,48 @@
+---@module "Class.middleclass"
 local class = require("Class.middleclass")
 
 -- #includes
 require("UI.UIElement")
 require("UI.UITools")
 
--- public class Border : UIElement
+-- public class Border : UIElement  
+---  
+---**require** :   
+--- - Class.middleclass  
+--- - UI.UIElement  
+--- - UI.UITools
+---@class Border : UIElement
 local Border = class("Border", JLib.UIElement)
 
--- namespace
+-- namespace JLib
 JLib = JLib or {}
 JLib.Border = Border
 
 -- [constructor]
+
+---constructor
+---@param parent UIElement
+---@param screen Screen
+---@param name string
+---@param BorderThickness? number or 1
+---@param BorderColor? Enums.Color or Enums.Color.gray
 function Border:initialize(parent, screen, name, BorderThickness, BorderColor)
     if (parent == nil) then error("border must have a parent UIElement!") end
     JLib.UIElement.initialize(self, parent, screen, name)
-    self.BorderThickness = BorderThickness or 1
-    self.BorderColor = BorderColor or JLib.Enums.Colors.gray
+    self.BorderThickness = BorderThickness or 1 -- thickness of border. must >= 1
+    self.BorderColor = BorderColor or JLib.Enums.Color.gray -- color of border
 end
+
+-- [properties description]
+
+---@class Border
+---@field BorderThickness number
+---@field BorderColor Enums.Color
+---@field new fun(parent: UIElement, screen: Screen, name:string, BorderThickness?:number, BorderColor?:Enums.Color): Border
 
 -- [functions]
 
+---draw border in screen
 function Border:_drawBorder()
     -- get four anchor pos
     local pos_ = self.Pos:Copy()
@@ -52,6 +74,7 @@ end
 
 -- [overriding functions]
 
+---overrided function from UIElement:render()
 function Border:render() -- renderOffset)
     -- cannot change border PosRel
     self.PosRel.x = 1
@@ -74,8 +97,14 @@ function Border:render() -- renderOffset)
 
 end
 
+---overrided function from UIElement:_ClickEvent
+---@param e ClickEventArgs
 function Border:_ClickEvent(e) end
 
+---overrided function from UIElement:_ScrollEvent
+---@param e ScrollEventArgs
 function Border:_ScrollEvent(e) end
 
+---overrided function from UIElement:_KeyInputEvent
+---@param e KeyInputEventArgs
 function Border:_KeyInputEvent(e) end

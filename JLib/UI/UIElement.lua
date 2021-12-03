@@ -6,7 +6,15 @@ require("UI.Enums")
 require("UI.UITools")
 require("UI.UIEvent")
 
--- public class UIElement
+-- public class UIElement  
+---  
+---**require** :  
+--- - Class.middleclass
+--- - MathLib.Vector2
+--- - UI.Enums
+--- - UI.UITools
+--- - UI.UIEvent
+---@class UIElement
 local UIElement = class("UIElement")
 
 -- namespace JLib
@@ -14,6 +22,17 @@ JLib = JLib or {}
 JLib.UIElement = UIElement
 
 -- [constructor]
+
+---constructor
+---@param parent UIElement
+---@param screen Screen
+---@param name string
+---@param x? number or 1
+---@param y? number or 1
+---@param xlen? number or 1
+---@param ylen? number or 1
+---@param bg? Enums.Color or Enums.Color.black
+---@param fg? Enums.Color or Enums.Color.white
 function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
     if (screen == nil) then
         error("UIElement cannot be initialized without owner:screen")
@@ -31,47 +50,61 @@ function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
     end
 
     self.Len = JLib.Vector2:new(xlen or 1, ylen or 1) -- length of w,h
-    self.BG = bg or JLib.Enums.Colors.black -- background color of element
-    self.FG = fg or JLib.Enums.Colors.white -- foregraoud color or element
+    self.BG = bg or JLib.Enums.Color.black -- background color of element
+    self.FG = fg or JLib.Enums.Color.white -- foregraoud color or element
     self.Children = {}
 
     self.Name = name or ""
 
 end
 
+-- [properties description]
+
+---@class UIElement
+---@field _screen Screen
+---@field Parent UIElement
+---@field PosRel Vector2
+---@field Pos Vector2
+---@field Len Vector2
+---@field BG Enums.Color
+---@field FG Enums.Color
+---@field Children table<number,UIElement>
+---@field Name string
+---@field new fun(parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
+
 -- [functions]
 
--- @brief set Parent of this element
--- @param parent:UIElement
+---set Parent of this element
+---@param parent UIElement
 function UIElement:setParent(parent)
     self.Parent = parent
     if (parent ~= nil) then table.insert(self.Parent.Children, self) end
     return parent
 end
 
--- @brief add Child element to this element
--- @param child:UIElement
+-- add Child element to this element
+---@param child UIElement
 function UIElement:addChild(child) table.insert(self.Children, child) end
 
--- @brief call render callback of children
+-- call render callback of children
 function UIElement:renderChildren()
     for index, value in ipairs(self.Children) do value:render() end
 end
 
--- @brief check if position is over element.
--- @param checkpos:JLib.Vector2
+-- check if position is over element.
+---@param checkpos Vector2
 function UIElement:isPositionOver(checkpos)
     return JLib.UITools.isInsideSquare(self.Pos, self.Len, checkpos)
 end
 
--- @brief check if position is over element. use only lua
--- @param x:num
--- @param y:num
+-- check if position is over element. use only lua
+---@param x number
+---@param y number
 function UIElement:isPositionOver_Raw(x, y)
     return UIElement:isPositionOver(JLib.Vector2:new(x, y))
 end
 
--- @brief update global Position of element based on Parent or nil
+-- update global Position of element based on Parent or nil
 -- spread to childs
 function UIElement:_updatePos()
     if (self.Parent == nil) then
@@ -82,7 +115,7 @@ function UIElement:_updatePos()
     -- for key, child in pairs(self.Children) do child:_updatePos() end
 end
 
--- @brief update length sync with parent's Len
+-- update length sync with parent's Len
 function UIElement:_updateLengthFromParent()
     self.Len.x = self.Parent.Len.x
     self.Len.x = math.max(1, self.Len.x)
@@ -90,20 +123,20 @@ function UIElement:_updateLengthFromParent()
     self.Len.y = math.max(1, self.Len.y)
 end
 
--- @brief add this UIelement to RenderHistory of JLib.Screen class to use at UIInteraction system
+-- add this UIelement to RenderHistory of JLib.Screen class to use at UIInteraction system
 function UIElement:_addThisToRenderHistory()
     table.insert(self._screen._renderHistory, self)
 end
 
--- @brief trigger bubble down click event to element
--- @param button:
+-- trigger bubble down click event to element
+---@param button UIElement
 function UIElement:triggerClickEvent(button, pos)
     local e = JLib.UIEvent.ClickEventArgs:new(button, pos)
     self:_ClickEventBubbleDown(e)
 end
 
--- @brief click event function for UIElement
--- @param e:JLib.UIEvent.ClickEventArgs
+-- click event function for UIElement
+---@param e ClickEventArgs
 function UIElement:_ClickEventBubbleDown(e)
     self:_ClickEvent(e)
     if (e.Handled == true) then
@@ -113,16 +146,16 @@ function UIElement:_ClickEventBubbleDown(e)
     end
 end
 
--- @brief scroll event function for UIElement
--- @param direction:JLib.Enums.ScrollDirection
--- @param pos:JLib.Vector2
+-- scroll event function for UIElement
+---@param direction Enums.ScrollDirection
+---@param pos Vector2
 function UIElement:triggerScrollEvent(direction, pos)
     local e = JLib.UIEvent.ScrollEventArgs:new(direction, pos)
     self:_ScrollEventBubbleDown(e)
 end
 
--- @brief scroll event function for UIelemnt
--- @param e:JLib.UIEvent.ScrollEventArgs
+-- scroll event function for UIelemnt
+---@param e ScrollEventArgs
 function UIElement:_ScrollEventBubbleDown(e)
     self:_ScrollEvent(e)
     if (e.Handled == true) then
@@ -134,15 +167,15 @@ function UIElement:_ScrollEventBubbleDown(e)
     end
 end
 
--- @brief keyinput event function for UIElement
--- @param key:JLib.Enums.key -- TODO:JLib.EnumsKey
+-- keyinput event function for UIElement
+---@param key Enums.Key -- TODO:JLib.EnumsKey
 function UIElement:triggerKeyInputEvent(key)
     local e = JLib.UIEvent.KeyInputEventArgs:new(key)
     self:_KeyInputBubbleDown(e)
 end
 
--- @brief keyinput event function for UIElement
--- @parem e:JLib.UIEvent.KeyInputEventArgs
+-- keyinput event function for UIElement
+---@param e KeyInputEventArgs
 function UIElement:_KeyInputBubbleDown(e)
     self:_KeyInputEvent(e)
     if (e.Handled == true) then
@@ -154,26 +187,25 @@ end
 
 -- [abstract functions]
 
--- @brief abstract render function.
--- @param pos:JLib.Vector2
-function UIElement:render(pos)
+---abstract render function.
+function UIElement:render()
     error("This is abstrct function! UIElement:render(pos)")
 end
 
--- @brief abstract Click Bubble down event function
--- @param e:JLib.UIEvent.ClickEventArgs
+-- abstract Click Bubble down event function
+---@param e ClickEventArgs
 function UIElement:_ClickEvent(e)
     error("this is abstrcat function! UIElement:_ClickEvent(e)")
 end
 
--- @brief abstract Scroll Bubble down event function
--- @param e:JLib.UIEvent.ScrollEventArgs
+-- abstract Scroll Bubble down event function
+---@param e ScrollEventArgs
 function UIElement:_ScrollEvent(e)
     error("This is abstract function! UIelement:_ScrollEvent(e)")
 end
 
--- @brief abstract KeyInput bubble down event function
--- @param e:JLib.UIEvent.KeyInputEventArgs
+-- abstract KeyInput bubble down event function
+---@param e KeyInputEventArgs
 function UIElement:_KeyInputEvent(e)
     error("This is abstract function!, UIElement:_KeyInputEvent(e)")
 end
