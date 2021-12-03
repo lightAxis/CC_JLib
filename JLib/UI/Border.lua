@@ -33,13 +33,11 @@ function Border:initialize(parent, screen, name, BorderThickness, BorderColor)
     self.BorderColor = BorderColor or JLib.Enums.Color.gray -- color of border
 end
 
-local asdfasdf = JLib.Border:new(nil)
-
 -- [properties description]
 
 ---@class Border
--- -@field BorderThickness number
--- -@field BorderColor Enums.Color
+---@field BorderThickness number
+---@field BorderColor Enums.Color
 ---@field new fun(parent: UIElement, screen: Screen, name:string, BorderThickness?:number, BorderColor?:Enums.Color): Border
 
 -- [functions]

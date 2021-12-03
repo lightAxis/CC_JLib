@@ -30,8 +30,8 @@ local borderthickness = 1
 local scroll = 1
 
 local sc1 = JLib.ScreenCanvas:new(nil, screen, "screencanvas_1")
-local t1 = JLib.TextBlock:new(sc1, screen, "Textblock_1", posrel, len, bg, fg,
-                              text)
+local t1 = JLib.TextBlock:new(sc1, screen, "Textblock_1", text, posrel, len, bg,
+                              fg)
 
 t1:setTextColor(textcolor)
 t1:setMarginAll(margin)

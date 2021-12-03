@@ -16,6 +16,7 @@ require("UI.TextArea")
 --- - UI.Border
 --- - UI.Margin
 --- - UI.TextArea
+---@class TextBlock : UIElement
 local TextBlock = class("TextBlock", JLib.UIElement)
 
 -- namespace JLib
@@ -54,11 +55,11 @@ function TextBlock:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
 end
 
 -- priperties description
----@class TextBlock
+---@class TextBlock : UIElement
 ---@field _Border Border
 ---@field _Margin Margin
 ---@field _TextArea TextArea
----@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color)
+---@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): TextBlock
 
 -- functions
 

@@ -50,7 +50,7 @@ function TextArea:initialize(parent, screen, name, text)
 end
 
 -- properties description
----@class TextArea
+---@class TextArea : UIElement
 ---@field _HorizontalAlignmentMode Enums.HorizontalAlignmentMode
 ---@field _VerticalAlignmentMode Enums.VerticalAlignmentMode
 ---@field _TextSplited table<number, TextArea.TextSplitedNode>
