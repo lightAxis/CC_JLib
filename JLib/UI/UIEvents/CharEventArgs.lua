@@ -19,7 +19,10 @@ JLib.UIEvent.CharEventArgs = CharEventArgs
 
 -- consturctor
 ---@param char string
-function CharEventArgs:initialize(char) self.Char = char end
+function CharEventArgs:initialize(char)
+    JLib.UIEvent.EventArgs.initialize(self)
+    self.Char = char
+end
 
 -- properties description
 ---@class CharEventArgs
