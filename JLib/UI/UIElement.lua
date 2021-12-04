@@ -135,7 +135,7 @@ function UIElement:triggerClickEvent(button, pos)
     self:_ClickEventBubbleDown(e)
 end
 
--- click event function for UIElement
+-- click event bubble down function for UIElement
 ---@param e ClickEventArgs
 function UIElement:_ClickEventBubbleDown(e)
     self:_ClickEvent(e)
@@ -154,7 +154,7 @@ function UIElement:triggerScrollEvent(direction, pos)
     self:_ScrollEventBubbleDown(e)
 end
 
--- scroll event function for UIelemnt
+-- scroll event bubble down function for UIelemnt
 ---@param e ScrollEventArgs
 function UIElement:_ScrollEventBubbleDown(e)
     self:_ScrollEvent(e)
@@ -174,7 +174,7 @@ function UIElement:triggerKeyInputEvent(key)
     self:_KeyInputBubbleDown(e)
 end
 
--- keyinput event function for UIElement
+-- keyinput bubble down event function for UIElement
 ---@param e KeyInputEventArgs
 function UIElement:_KeyInputBubbleDown(e)
     self:_KeyInputEvent(e)
@@ -182,6 +182,24 @@ function UIElement:_KeyInputBubbleDown(e)
         return nil
     else
         if (self.Parent ~= nil) then self.Parent:_KeyInputBubbleDown(e) end
+    end
+end
+
+---char event function for UIElement
+---@param char any
+function UIElement:triggerCharEvent(char)
+    local e = JLib.UIEvent.CharEventArgs:new(char)
+    self:_CharBubbleDown(e)
+end
+
+---char event bubble down function for UIElement
+---@param e CharEventArgs
+function UIElement:_CharBubbleDown(e)
+    self:_CharEvent(e)
+    if (e.Handled == true) then
+        return nil
+    else
+        if (self.Parent ~= nil) then self.Parent:_CharBubbleDown(e) end
     end
 end
 
@@ -208,4 +226,15 @@ end
 ---@param e KeyInputEventArgs
 function UIElement:_KeyInputEvent(e)
     error("This is abstract function!, UIElement:_KeyInputEvent(e)")
+end
+
+---abastract Char bubble down event function
+---@param e CharEventArgs
+function UIElement:_CharEvent(e)
+    error("This is abstract function!, UIElement:_CharEvent(e)")
+end
+
+---abstract PostRendering function when being focused Element
+function UIElement:PostRendering()
+    error("this is abstrct function!, UIElement:PostRendering")
 end
