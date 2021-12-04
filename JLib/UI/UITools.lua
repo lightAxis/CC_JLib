@@ -26,11 +26,13 @@ function UITools:initialize() end
 -- position 2 value to length
 ---@param pmin number
 ---@param pmax number
+---@return number
 function UITools.Pos2Len(pmin, pmax) return pmax - pmin + 1 end
 
 -- length to position 2 value, based on start 
 ---@param startAt number
 ---@param len number
+---@return number
 function UITools.Len2Pos_FromStart(startAt, len)
     return startAt, len + startAt - 1
 end
@@ -38,6 +40,7 @@ end
 -- length to position 2 value, based on end
 ---@param endAt number
 ---@param len number
+---@return number
 function UITools.Len2Pos_FromEnd(endAt, len) return endAt - len + 1, endAt end
 
 -- calc horizontal Align positions
@@ -65,6 +68,7 @@ end
 ---@param max number
 ---@param len number
 ---@param mode Enums.VerticalAlignmentMode
+---@return number y
 function UITools.calcVerticalAlignPos(min, max, len, mode)
     local y;
     local ylen = UITools.Pos2Len(min, max)
@@ -92,7 +96,7 @@ end
 -- calc relative position, move only x axis, as pos(1,1) is origin of offset
 ---@param origin Vector2
 ---@param offset_x number
--- return JLib.Vector2
+---@return Vector2
 function UITools.calcRelativeOffset_X(origin, offset_x)
     return UITools.calcRelativeOffset(origin, JLib.Vector2:new(offset_x, 1))
 end
@@ -100,15 +104,50 @@ end
 ---@brief calc relative position, move only y axis, as pos(1,1) is origin of offset
 ---@param origin Vector2
 ---@param offset_y number
--- return JLib.Vector2
+---@return Vector2
 function UITools.calcRelativeOffset_Y(origin, offset_y)
     return UITools.calcRelativeOffset(origin, JLib.Vector2:new(1, offset_y))
+end
+
+---transform global position to local position in UIElement
+---@param globalPos Vector2
+---@param localOrigin Vector2
+---@return Vector2
+function UITools.transformGlobalPos2LocalPos(globalPos, localOrigin)
+    return JLib.Vector2:new(globalPos.x - localOrigin.x + 1,
+                            globalPos.y - localOrigin.y + 1)
+end
+
+---transform local position to global position in UIElement
+---@param localPos Vector2
+---@param localOrigin Vector2
+---@return Vector2
+function UITools.transformLocalPos2GlobalPos(localPos, localOrigin)
+    return JLib.Vector2:new(localPos.x + localOrigin.x - 1,
+                            localPos.y + localOrigin.y - 1)
+end
+
+---transform global index to local index in UIelement
+---@param globalIndex number
+---@param localOrigin number
+---@return number
+function UITools.transformGlobalIndex2LocalIndex(globalIndex, localOrigin)
+    return globalIndex - localOrigin + 1
+end
+
+---transform local index to global index in UIelement
+---@param localIndex number
+---@param localOrigin number
+---@return number
+function UITools.transformLocalIndex2GlobalIndex(localIndex, localOrigin)
+    return localIndex + localOrigin - 1
 end
 
 -- calc if point in square area
 ---@param pos Vector2
 ---@param len Vector2
 ---@param checkpos Vector2
+---@return boolean isSquareInside
 function UITools.isInsideSquare(pos, len, checkpos)
     local x1, x2 = UITools.Len2Pos_FromStart(pos.x, len.x)
 
@@ -174,4 +213,15 @@ function UITools.drawLine_y(screen, startPos, len, bg)
         startPos_.y = startPos_.y + 1
         screen:setCursorPos(startPos_)
     end
+end
+
+---constrain value in range.
+---@param number number
+---@param min number  
+---@param max number
+---@return number
+function UITools.constrain(number, min, max)
+    if (number < min) then return min end
+    if (max < number) then return max end
+    return number
 end
