@@ -182,6 +182,7 @@ function TextArea:_updateTextSplitedViewport()
         local textline = v.text
         local textline_spliited = ""
         local textline_anchor = 1
+        v.wrappedNodes = {}
 
         local superContinue = false
         if (textline == "") then
@@ -299,18 +300,27 @@ function TextArea:_setTextEdittingPosAndIndex(clickedGlobalPos)
     -- decide where to snap pos.x value by available text line length and align pos
     local currentLineXMin, currentLineXMax = currentTextViewportItem.align,
                                              currentTextViewportItem.align
+    print(currentLineXMin, currentLineXMax)
     -- if text legnth is 0, Len2Pos_FromStart function does not fit becuase of \n char is missing
     if (#(currentTextViewportItem.text) >= 1) then
         currentLineXMin, currentLineXMax =
             JLib.UITools.Len2Pos_FromStart(currentTextViewportItem.align,
                                            #(currentTextViewportItem.text))
     end
+    print(currentLineXMin, currentLineXMax)
     self._TextEditPos.x = JLib.UITools.constrain(self._TextEditPos.x,
                                                  currentLineXMin,
                                                  currentLineXMax)
+    print(self._TextEditPos.x)
+
+    local currentTextViewportLineIndex = JLib.UITools
+                                             .transformGlobalIndex2LocalIndex(
+                                             self._TextEditPos.x,
+                                             currentTextViewportItem.align)
+
     -- get x index in current text splited line
     local currentTextLineIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
-                                     self._TextEditPos.x,
+                                     currentTextViewportLineIndex,
                                      currentTextViewportItem.index)
 
     -- get final x index in whole text including \n char
@@ -366,59 +376,68 @@ function TextArea:_setTextEditPos(TextEditIndex)
     ---@type TextArea.TextSplitedNode
     local currentTextSplittedLine = {}
     local currentTextSplittedLineIndex = 1
-
-    if (#(self._TextSplited) <= 1) then
-        currentTextSplittedLine = self._TextSplited[1]
-    else
-        for index, value in ipairs(self._TextSplited) do
-            if (value.index > TextEditIndex) then
-                currentTextSplittedLine = self._TextSplited[index - 1]
-
-                currentTextSplittedLineIndex = JLib.UITools
-                                                   .transformGlobalIndex2LocalIndex(
-                                                   TextEditIndex,
-                                                   currentTextSplittedLine.index)
-                break
-            end
+    local isTextSplittedLastLine = true
+    for index, value in ipairs(self._TextSplited) do
+        if (value.index > TextEditIndex) then
+            currentTextSplittedLine = self._TextSplited[index - 1]
+            currentTextSplittedLineIndex = JLib.UITools
+                                               .transformGlobalIndex2LocalIndex(
+                                               TextEditIndex,
+                                               currentTextSplittedLine.index)
+            isTextSplittedLastLine = false
+            break
         end
+    end
+    if (isTextSplittedLastLine) then
+        currentTextSplittedLine = self._TextSplited[#(self._TextSplited)]
+        currentTextSplittedLineIndex = JLib.UITools
+                                           .transformGlobalIndex2LocalIndex(
+                                           TextEditIndex,
+                                           currentTextSplittedLine.index)
     end
 
     ---@type TextArea.WrappedNode
     local currentTextViewportLine = {}
     local currentTextViewportLineIndex = 1
-    local relPos_x, relPos_y = 1, 1
+    local isTextViewportLastLine = true
 
-    if (#(currentTextSplittedLine.wrappedNodes) <= 1) then
-        currentTextViewportLine = currentTextSplittedLine.wrappedNodes[1]
+    for index, value in ipairs(currentTextSplittedLine.wrappedNodes) do
+        if (value.index > currentTextSplittedLineIndex) then
+            currentTextViewportLine =
+                currentTextSplittedLine.wrappedNodes[index - 1]
+            currentTextViewportLineIndex = JLib.UITools
+                                               .transformGlobalIndex2LocalIndex(
+                                               currentTextSplittedLineIndex,
+                                               currentTextViewportLine.index)
+            isTextViewportLastLine = false
+            break
+        end
+    end
+
+    if (isTextViewportLastLine) then
+        currentTextViewportLine =
+            currentTextSplittedLine.wrappedNodes[#(currentTextSplittedLine.wrappedNodes)]
         currentTextViewportLineIndex = JLib.UITools
                                            .transformGlobalIndex2LocalIndex(
                                            currentTextSplittedLineIndex,
                                            currentTextViewportLine.index)
-    else
-        for index, value in ipairs(currentTextSplittedLine.wrappedNodes) do
-            if (value.index >= currentTextSplittedLineIndex) then
-                currentTextViewportLine =
-                    currentTextSplittedLine.wrappedNodes[index - 1]
-                currentTextViewportLineIndex = JLib.UITools
-                                                   .transformGlobalIndex2LocalIndex(
-                                                   currentTextSplittedLineIndex,
-                                                   currentTextViewportLine.index)
+    end
+    print(currentTextViewportLineIndex, currentTextSplittedLineIndex,
+          currentTextViewportLine.index)
+    local relPos_x, relPos_y = 1, 1
+    relPos_x = JLib.UITools.transformLocalIndex2GlobalIndex(
+                   currentTextViewportLineIndex, currentTextViewportLine.align)
+    for index, value in ipairs(self._TextSplitedViewport) do
+        if (value.parent.index == currentTextViewportLine.parent.index) then
+            if (value.index == currentTextViewportLine.index) then
+                relPos_y = index
                 break
             end
         end
     end
-    relPos_x = JLib.UITools.transformLocalIndex2GlobalIndex(
-                   currentTextViewportLineIndex, currentTextViewportLine.align)
 
-    for index, value in ipairs(self._TextSplitedViewport) do
-        if (value == currentTextViewportLine) then
-            relPos_y = index
-            break
-        end
-    end
     relPos_y = JLib.UITools.transformGlobalIndex2LocalIndex(relPos_y,
                                                             self._scroll)
-
     self._TextEditPos.x = relPos_x
     self._TextEditPos.y = relPos_y
 end
@@ -469,6 +488,7 @@ function TextArea:_ClickEvent(e)
             -- check this event is handled
             e.Handled = true
             self:_setTextEdittingPosAndIndex(e.Pos)
+            self._isTextEditting = true
         end
     end
 end
@@ -510,6 +530,7 @@ function TextArea:PostRendering()
                                                                   self._TextEditPos)
         self._screen:setCursorPos(textEditGlobalPos)
         self._screen:setCursorBlink(true)
+
     else
         self._screen:setCursorBlink(false)
     end

@@ -28,4 +28,3 @@ end
 ---@class CharEventArgs
 ---@field Char string 
 ---@field new fun(char: string): CharEventArgs
-

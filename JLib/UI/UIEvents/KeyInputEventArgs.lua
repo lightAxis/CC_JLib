@@ -31,4 +31,3 @@ end
 ---@field Key any
 ---@field IsShiftPressed boolean
 ---@field new fun(key:any, isShiftPressed: boolean): KeyInputEventArgs
-
