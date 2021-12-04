@@ -14,12 +14,11 @@ require("UI.Includes")
 local screen = JLib.Screen:new({}, JLib.Enums.Side.top)
 screen:clearScreen()
 local posrel = JLib.Vector2:new(2, 3)
-local len = JLib.Vector2:new(20, 9)
+local len = JLib.Vector2:new(10, 9)
 local bg = JLib.Enums.Color.lightBlue
 local fg = JLib.Enums.Color.cyan
 
-local text =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna tortor.\nNam malesuada justo nec nulla molestie posuere.\nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus.\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
+local text = "12345\n123456789\n\n123\n456\n789\n1234567890"
 local textcolor = JLib.Enums.Color.black
 
 local margin = 2
@@ -39,9 +38,29 @@ t1:setBorderColor(bordercolor)
 t1:setBorderThickness(borderthickness)
 t1:setScroll(scroll)
 
+t1._TextArea.IsTextEditable = true
+
 sc1:render()
 
-local ee = screen:getUIAtPos(JLib.Vector2:new(10, 5))
+local touchPos = JLib.Vector2:new(9, 8)
+
+local ee = screen:getUIAtPos(touchPos)
 print(ee.Name)
 
-ee:triggerClickEvent(JLib.Enums.MouseButton.left, JLib.Vector2:new(10, 5))
+ee._isTextEditting = true
+
+ee:triggerClickEvent(JLib.Enums.MouseButton.left, touchPos)
+
+ee:triggerCharEvent("x")
+
+sc1:render()
+
+ee:triggerKeyInputEvent(JLib.Enums.Key.backspace)
+
+sc1:render()
+
+ee:triggerKeyInputEvent(JLib.Enums.Key.delete)
+
+sc1:render()
+
+ee:triggerKeyInputEvent(JLib.Enums.Key.enter)
