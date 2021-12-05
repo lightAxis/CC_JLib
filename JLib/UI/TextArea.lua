@@ -325,22 +325,23 @@ function TextArea:_setTextEdittingPosAndIndex(clickedGlobalPos)
                                               currentYMax)
 
     -- get text viewport index using scroll and pos.y value
-    local globalTextViewportIndex = JLib.UITools
-                                        .transformLocalIndex2GlobalIndex(
-                                        TextClickedPos.y, self._scroll)
+    local TextWrappedIndex = JLib.UITools.transformGlobalIndex2LocalIndex(
+                                 TextClickedPos.y, self._VerticalOffset)
+
+    TextWrappedIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
+                           TextWrappedIndex, self._scroll)
 
     -- get current text viewport item by index
-    local currentTextViewportItem =
-        self._TextSplitedWrapped[globalTextViewportIndex]
+    local currentTextWrappedItem = self._TextSplitedWrapped[TextWrappedIndex]
 
     -- decide where to snap pos.x value by available text line length and align pos
-    local currentLineXMin, currentLineXMax = currentTextViewportItem.align,
-                                             currentTextViewportItem.align
+    local currentLineXMin, currentLineXMax = currentTextWrappedItem.align,
+                                             currentTextWrappedItem.align
     -- if text legnth is 0, Len2Pos_FromStart function does not fit becuase of \n char is missing
-    if (#(currentTextViewportItem.text) >= 1) then
+    if (#(currentTextWrappedItem.text) >= 1) then
         currentLineXMin, currentLineXMax =
-            JLib.UITools.Len2Pos_FromStart(currentTextViewportItem.align,
-                                           #(currentTextViewportItem.text))
+            JLib.UITools.Len2Pos_FromStart(currentTextWrappedItem.align,
+                                           #(currentTextWrappedItem.text))
     end
 
     -- constrain x position to line horizontal position range
@@ -351,17 +352,17 @@ function TextArea:_setTextEdittingPosAndIndex(clickedGlobalPos)
     local currentTextViewportLineIndex = JLib.UITools
                                              .transformGlobalIndex2LocalIndex(
                                              TextClickedPos.x,
-                                             currentTextViewportItem.align)
+                                             currentTextWrappedItem.align)
 
     -- get x index in current text splited line
     local currentTextLineIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
                                      currentTextViewportLineIndex,
-                                     currentTextViewportItem.index)
+                                     currentTextWrappedItem.index)
 
     -- get final x index in whole text including \n char
     local currentTextIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
                                  currentTextLineIndex,
-                                 currentTextViewportItem.parent.index)
+                                 currentTextWrappedItem.parent.index)
 
     self._TextEditIndex = currentTextIndex
 end
@@ -619,5 +620,8 @@ end
 
 ---overrided function from UIElement:FocusOut()
 function TextArea:FocusOut()
-    if (self.IsTextEditable) then self._isTextEditting = false end
+    if (self.IsTextEditable) then
+        self._isTextEditting = false
+        self._screen:setCursorBlink(false)
+    end
 end

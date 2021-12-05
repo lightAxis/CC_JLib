@@ -123,6 +123,11 @@ function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end
 ---@return number scrollIndex
 function TextBlock:getScroll() return self._TextArea:getScroll() end
 
+---@param bool boolean
+function TextBlock:setIsTextEditable(bool)
+    self._TextArea.IsTextEditable = bool
+end
+
 --- fill textarea with current BG
 function TextBlock:_fillWithBG()
     self._screen:setBackgroundColor(self.BG)
