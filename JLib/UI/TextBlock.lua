@@ -168,7 +168,10 @@ function TextBlock:_ClickEvent(e) end
 
 ---overrided function from UIElement:_ScrollEvent
 ---@param e ScrollEventArgs
-function TextBlock:_ScrollEvent(e) end
+function TextBlock:_ScrollEvent(e) 
+    e.Handled = true
+    self:setScroll(self:getScroll() + e.Direction)
+end
 
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs

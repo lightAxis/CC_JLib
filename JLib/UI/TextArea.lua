@@ -494,6 +494,7 @@ function TextArea:_updatePosEditCursorPos()
     local relativePosEditCursorPos = JLib.Vector2:new(1, 1)
     relativePosEditCursorPos.y = JLib.UITools.transformGlobalIndex2LocalIndex(
                                      self._TextEditPos.y, self._scroll)
+    relativePosEditCursorPos.y = JLib.UITools.calcRelativeOffset_Raw(relativePosEditCursorPos.y, self._VerticalOffset)
     local currentwrappedLine = self._TextSplitedWrapped[self._TextEditPos.y]
     relativePosEditCursorPos.x = JLib.UITools.transformLocalIndex2GlobalIndex(
                                      self._TextEditPos.x,
@@ -605,6 +606,7 @@ function TextArea:PostRendering()
     if (self.IsTextEditable and self._isTextEditting) then
         local textEditGlobalPos = JLib.UITools.calcRelativeOffset(self.Pos,
                                                                   self._TextEditCursorPos)
+        self._screen:setTextColor(self.FG)
         self._screen:setCursorPos(textEditGlobalPos)
         self._screen:setCursorBlink(true)
 
