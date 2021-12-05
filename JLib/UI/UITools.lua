@@ -98,7 +98,7 @@ end
 ---@param offset_x number
 ---@return Vector2
 function UITools.calcRelativeOffset_X(origin, offset_x)
-    return UITools.calcRelativeOffset(origin, JLib.Vector2:new(offset_x, 1))
+    return JLib.Vector2:new(origin.x + offset_x - 1, origin.y)
 end
 
 ---@brief calc relative position, move only y axis, as pos(1,1) is origin of offset
@@ -106,7 +106,12 @@ end
 ---@param offset_y number
 ---@return Vector2
 function UITools.calcRelativeOffset_Y(origin, offset_y)
-    return UITools.calcRelativeOffset(origin, JLib.Vector2:new(1, offset_y))
+    return JLib.Vector2:new(origin.x, origin.y + offset_y - 1)
+end
+
+--- calc relative position offset, in 1D number as 1 is origin of offset
+function UITools.calcRelativeOffset_Raw(origin, offset)
+    return origin + offset - 1
 end
 
 ---transform global position to local position in UIElement
