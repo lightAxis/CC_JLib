@@ -613,7 +613,11 @@ function TextArea:PostRendering()
 end
 
 ---overrided function from UIElement:FocusIn()
-function TextArea:FocusIn() end
+function TextArea:FocusIn()
+    if (self.IsTextEditable) then self._isTextEditting = true end
+end
 
 ---overrided function from UIElement:FocusOut()
-function TextArea:FocusOut() end
+function TextArea:FocusOut()
+    if (self.IsTextEditable) then self._isTextEditting = false end
+end
