@@ -19,8 +19,7 @@ local len = JLib.Vector2:new(20, 9)
 local bg = JLib.Enums.Color.lightBlue
 local fg = JLib.Enums.Color.cyan
 
-local text =
-    "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto" -- r.\nNam males"--uada justo nec nulla molestie posuere."-- \nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus.\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
+local text = "Lorem ipsum" -- dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto" -- r.\nNam males"--uada justo nec nulla molestie posuere."-- \nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus.\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
 local textcolor = JLib.Enums.Color.black
 
 local margin = 2
@@ -39,16 +38,14 @@ t1:setMarginAll(margin)
 t1:setBorderColor(bordercolor)
 t1:setBorderThickness(borderthickness)
 t1:setScroll(scroll)
+t1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
+t1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
+t1:setIsTextEditable(true)
 
 sc1:render()
-t1._TextArea.IsTextEditable = true
 
-t1._TextArea:triggerClickEvent(1, JLib.Vector2:new(4, 5))
-
-sc1:render()
-t1._TextArea:PostRendering()
-
-t1._TextArea:triggerKeyInputEvent(JLib.Enums.Key.backspace)
+t1._TextArea:FocusIn()
+t1._TextArea:triggerClickEvent(1, JLib.Vector2:new(16, 9))
 
 sc1:render()
 t1._TextArea:PostRendering()

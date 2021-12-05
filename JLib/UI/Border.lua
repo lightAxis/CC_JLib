@@ -115,3 +115,9 @@ function Border:_CharEvent(e) end
 
 ---overrided function from UIElement:PostRendering()
 function Border:PostRendering() end
+
+---overrided function from UIElement:FocusIn()
+function Border:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function Border:FocusOut() end

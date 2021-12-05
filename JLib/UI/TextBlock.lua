@@ -123,6 +123,11 @@ function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end
 ---@return number scrollIndex
 function TextBlock:getScroll() return self._TextArea:getScroll() end
 
+---@param bool boolean
+function TextBlock:setIsTextEditable(bool)
+    self._TextArea.IsTextEditable = bool
+end
+
 --- fill textarea with current BG
 function TextBlock:_fillWithBG()
     self._screen:setBackgroundColor(self.BG)
@@ -163,7 +168,10 @@ function TextBlock:_ClickEvent(e) end
 
 ---overrided function from UIElement:_ScrollEvent
 ---@param e ScrollEventArgs
-function TextBlock:_ScrollEvent(e) end
+function TextBlock:_ScrollEvent(e) 
+    e.Handled = true
+    self:setScroll(self:getScroll() + e.Direction)
+end
 
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
@@ -175,3 +183,9 @@ function TextBlock:_CharEvent(e) end
 
 ---overrided function from UIElement:PostRendering()
 function TextBlock:PostRendering() end
+
+---overrided function from UIElement:FocusIn()
+function TextBlock:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function TextBlock:FocusOut() end

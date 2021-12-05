@@ -238,3 +238,13 @@ end
 function UIElement:PostRendering()
     error("this is abstrct function!, UIElement:PostRendering")
 end
+
+---abstract function when this element is focused in
+function UIElement:FocusIn()
+    error("this is abstract function!, UIElement:FocusIn()")
+end
+
+---abstract function when this element is focused out
+function UIElement:FocusOut()
+    error("this is abstract function!, UIElement:FocusOut()")
+end

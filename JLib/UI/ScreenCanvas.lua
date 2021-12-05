@@ -70,3 +70,9 @@ function ScreenCanvas:_CharEvent(e) end
 
 ---overrided function from UIElement:PostRendering()
 function ScreenCanvas:PostRendering() end
+
+---overrided function from UIElement:FocusIn()
+function ScreenCanvas:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function ScreenCanvas:FocusOut() end
