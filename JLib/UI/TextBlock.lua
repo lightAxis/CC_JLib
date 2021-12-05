@@ -175,3 +175,9 @@ function TextBlock:_CharEvent(e) end
 
 ---overrided function from UIElement:PostRendering()
 function TextBlock:PostRendering() end
+
+---overrided function from UIElement:FocusIn()
+function TextBlock:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function TextBlock:FocusOut() end

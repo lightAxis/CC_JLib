@@ -611,3 +611,9 @@ function TextArea:PostRendering()
         self._screen:setCursorBlink(false)
     end
 end
+
+---overrided function from UIElement:FocusIn()
+function TextArea:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function TextArea:FocusOut() end

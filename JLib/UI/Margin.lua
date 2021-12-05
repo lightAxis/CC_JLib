@@ -109,3 +109,9 @@ function Margin:_CharEvent(e) end
 
 ---overrided function from UIElement:PostRendering()
 function Margin:PostRendering() end
+
+---overrided function from UIElement:FocusIn()
+function Margin:FocusIn() end
+
+---overrided function from UIElement:FocusOut()
+function Margin:FocusOut() end
