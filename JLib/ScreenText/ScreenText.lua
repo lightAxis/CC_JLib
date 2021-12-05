@@ -75,10 +75,10 @@ function ScreenText:_calcCursorPosition(index)
     -- print("strlen"..strLen.."\n")
     local linesLen = #(self._textLines)
     -- print("linesLen:"..linesLen.."\n")
-    local xmax, ymax = self._monitor:getSize()
+    local monitorSize = self._monitor:getSize()
     -- print("xmax:"..xmax.."\n")
     -- print("ymax:"..ymax.."\n")
-
+    local xmax, ymax = monitorSize.x, monitorSize.y
     local x, y
 
     if self._curHorizontalAlignMode == "Left" then
@@ -88,7 +88,6 @@ function ScreenText:_calcCursorPosition(index)
     elseif self._curHorizontalAlignMode == "Center" then
         x = math.floor((xmax - strLen) / 2) + 1
     end
-
     if self._curVerticalAlignMode == "Top" then
         y = 1
     elseif self._curVerticalAlignMode == "Bottom" then
@@ -97,10 +96,8 @@ function ScreenText:_calcCursorPosition(index)
         y = math.floor((ymax - linesLen) / 2) + 1
         -- print("y is center:"..y.."\n")
     end
-
     y = y + (index - 1)
     -- print("x,y,i:"..x.."/"..y.."/"..index.."\n")
-
     return x, y
 end
 
