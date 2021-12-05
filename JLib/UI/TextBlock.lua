@@ -168,3 +168,10 @@ function TextBlock:_ScrollEvent(e) end
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
 function TextBlock:_KeyInputEvent(e) end
+
+---overrided function from UIElement:_CharEvent
+---@param e CharEventArgs
+function TextBlock:_CharEvent(e) end
+
+---overrided function from UIElement:PostRendering()
+function TextBlock:PostRendering() end

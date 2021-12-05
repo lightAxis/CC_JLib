@@ -21,6 +21,7 @@ JLib.UIEvent.ScrollEventArgs = ScrollEventArgs
 ---@param direction Enums.ScrollDirection
 ---@param pos Vector2
 function ScrollEventArgs:initialize(direction, pos)
+    JLib.UIEvent.EventArgs.initialize(self)
     self.Direction = direction
     self.Pos = pos:Copy()
 end

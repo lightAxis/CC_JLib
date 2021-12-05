@@ -108,3 +108,10 @@ function Border:_ScrollEvent(e) end
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
 function Border:_KeyInputEvent(e) end
+
+---overrided function from UIElement:_CharEvent
+---@param e CharEventArgs
+function Border:_CharEvent(e) end
+
+---overrided function from UIElement:PostRendering()
+function Border:PostRendering() end

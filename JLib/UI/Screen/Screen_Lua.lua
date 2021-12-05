@@ -78,7 +78,7 @@ end
 
 ---Disables the blinking or turns it on.
 function Screen_Lua:setCursorBlink(bool)
-    print("Screen_CC:setCursorBlink:" .. bool .. "\n")
+    print("Screen_CC:setCursorBlink:" .. tostring(bool) .. "\n")
 end
 
 ---Returns whether the terminal supports color.

@@ -21,6 +21,7 @@ JLib.UIEvent.KeyInputEventArgs = KeyInputEventArgs
 ---@param key any --TODO:set key enum
 ---@param isShiftPressed boolean
 function KeyInputEventArgs:initialize(key, isShiftPressed)
+    JLib.UIEvent.EventArgs.initialize(self)
     self.Key = key
     self.IsShiftPressed = isShiftPressed
 end
@@ -30,4 +31,3 @@ end
 ---@field Key any
 ---@field IsShiftPressed boolean
 ---@field new fun(key:any, isShiftPressed: boolean): KeyInputEventArgs
-

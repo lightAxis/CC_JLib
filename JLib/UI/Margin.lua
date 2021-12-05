@@ -102,3 +102,10 @@ function Margin:_ScrollEvent(e) end
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
 function Margin:_KeyInputEvent(e) end
+
+---overrided function from UIElement:_CharEvent
+---@param e CharEventArgs
+function Margin:_CharEvent(e) end
+
+---overrided function from UIElement:PostRendering()
+function Margin:PostRendering() end

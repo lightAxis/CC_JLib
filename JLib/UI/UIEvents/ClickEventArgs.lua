@@ -21,6 +21,7 @@ JLib.UIEvent.ClickEventArgs = ClickEventArgs
 ---@param button Enums.MouseButton
 ---@param pos Vector2
 function ClickEventArgs:initialize(button, pos)
+    JLib.UIEvent.EventArgs.initialize(self)
     self.Button = button
     self.Pos = pos:Copy()
 end

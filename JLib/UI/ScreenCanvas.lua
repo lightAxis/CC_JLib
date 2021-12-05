@@ -63,3 +63,10 @@ function ScreenCanvas:_ScrollEvent(e) end
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
 function ScreenCanvas:_KeyInputEvent(e) end
+
+---overrided function from UIElement:_CharEvent
+---@param e CharEventArgs
+function ScreenCanvas:_CharEvent(e) end
+
+---overrided function from UIElement:PostRendering()
+function ScreenCanvas:PostRendering() end
