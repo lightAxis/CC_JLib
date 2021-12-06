@@ -19,7 +19,7 @@ JLib.Button = Button
 
 ---constructor
 function Button:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
-    JLib.TextBlock.initialize(self, parent, screen, text, PosRel, Len, bg, fg)
+    JLib.TextBlock.initialize(self, parent, screen, name, text, PosRel, Len, bg, fg)
 
     self.IsToggleable = false
     self.IsButtonPressed = false

@@ -33,7 +33,6 @@ JLib.TextBlock = TextBlock
 ---@param bg? Enums.Color or Enums.Color.gray
 ---@param fg? Enums.Color or Enums.Color.white
 function TextBlock:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
-
     local PosRel_ = PosRel or JLib.Vector2:new(1, 1)
     local Len_ = Len or JLib.Vector2:new(1, 1)
     local bg_ = bg or JLib.Enums.Color.gray
@@ -119,6 +118,11 @@ end
 
 ---@param text string
 function TextBlock:setText(text) self._TextArea:setText(text) end
+
+---@return string text
+function TextBlock:getText() 
+    return self._TextArea._Text
+end
 
 ---@param color Enums.Color
 function TextBlock:setTextColor(color) self._TextArea.FG = color end

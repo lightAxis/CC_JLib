@@ -15,17 +15,17 @@ require("UI.Includes")
 local screen = JLib.Screen:new(term, JLib.Enums.Side.top)
 screen:clearScreen()
 local posrel = JLib.Vector2:new(2, 3)
-local len = JLib.Vector2:new(30, 15)
+local len = JLib.Vector2:new(20, 10)
 local bg = JLib.Enums.Color.lightBlue
 local fg = JLib.Enums.Color.cyan
-local text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto.\nNam males uada justo nec nulla molestie posuere.\nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus."--\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
+local text = "Lorem" --ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto."--\nNam males uada justo nec nulla molestie posuere.\nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus."--\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
 local textcolor = JLib.Enums.Color.black
 local margin = 2
 local bordercolor = JLib.Enums.Color.green
 local borderthickness = 1
 local scroll = 1
 
-local posrel2 = JLib.Vector2:new(5, 5)
+local posrel2 = JLib.Vector2:new(30, 3)
 local len2 = JLib.Vector2:new(20, 10)
 local bg2 = JLib.Enums.Color.lightGray
 local fg2 = JLib.Enums.Color.blue
@@ -35,6 +35,13 @@ local margin2 = 1
 local bordercolor2 = JLib.Enums.Color.lightBlue
 local borderthickness2 = 0
 local scroll2 = 1
+
+local posrel3 = JLib.Vector2:new(30,15)
+local len3 = JLib.Vector2:new(8,3)
+local bg3 = JLib.Enums.Color.green
+local fg3 = JLib.Enums.Color.red
+local text3 = "button"
+local margin3 = 1
 
 local sc1 = JLib.ScreenCanvas:new(nil, screen, "screencanvas_1")
 
@@ -55,6 +62,20 @@ t1:setBorderColor(bordercolor)
 t1:setBorderThickness(borderthickness)
 t1:setScroll(scroll)
 t1:setIsTextEditable(true)
+
+local b1 = JLib.Button:new(sc1, screen, "Button_1", text3, posrel3, len3, bg3, fg3)
+b1:setMarginAll(margin3)
+b1:setIsTextEditable(false)
+b1.BGPressed = JLib.Enums.Color.blue
+b1.FGPressed = JLib.Enums.Color.cyan
+b1.IsToggleable = false
+
+
+b1.ClickEvent = function(obj) 
+    if(obj.IsButtonPressed) then
+        t1:setText(t1:getText()..t2:getText())
+    end
+end
 
 
 sc1:render()
@@ -134,3 +155,4 @@ while(true) do
 
     --os.sleep(0.01)
 end
+
