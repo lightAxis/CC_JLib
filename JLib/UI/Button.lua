@@ -28,7 +28,7 @@ function Button:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
     self.FGUnpressed = self.FG
     self.BGPressed = JLib.Enums.Color.lightGray
     self.FGPressed = JLib.Enums.Color.black
-    self._tempPressed = false
+    -- self._tempPressed = false
 
     self.ClickEvent = function(self) end
 end
@@ -39,7 +39,7 @@ end
 ---@field IsButtonPressed boolean
 ---@field BGPressed Enums.Color
 ---@field FGPressed Enums.Color
----@field _tempPressed boolean
+-- -@field _tempPressed boolean
 ---@field ClickEvent fun(Button): nil
 ---@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): Button
 
@@ -61,20 +61,23 @@ function Button:render()
 
     if (self.IsButtonPressed == true) then
         self:setBackgroundColor(self.BGPressed)
+        self:setTextColor(self.FGPressed)
     else
         self:setBackgroundColor(self.BGUnpressed)
+        self:setTextColor(self.FGUnpressed)
     end
 
     -- fill inside the button with background color
     self:_fillWithBG()
 
-    -- sync bg of textarea same with button
+    -- sync bg,fg of textarea same with button
     self._TextArea.BG = self.BG
+    self._TextArea.FG = self.FG
 
-    if (self._tempPressed) then
-        self._tempPressed = false
-        self.IsButtonPressed = false
-    end
+    -- if (self._tempPressed) then
+    --     self._tempPressed = false
+    --     self.IsButtonPressed = false
+    -- end
     -- render history check
     self:_addThisToRenderHistory()
 
@@ -90,14 +93,18 @@ function Button:_ClickEvent(e)
         if (not (self.IsButtonPressed)) then
             self.IsButtonPressed = true
             self.BGUnpressed = self.BG
+            self.FGUnpressed = self.FG
         else
             self.IsButtonPressed = false
         end
-    else
-        self.BGUnpressed = self.BG
-        self.BG = self.BGPressed
-        self.IsButtonPressed = true
-        self._tempPressed = true
+    -- else
+        -- if(not(self._tempPressed)) then
+        --     self.BGUnpressed = self.BG
+        --     self.BG = self.BGPressed
+        --     self.IsButtonPressed = true
+        --     self._tempPressed = true
+        --     print(self.BGPressed.."d")
+        -- end
     end
 
     self.ClickEvent(self)
@@ -124,5 +131,13 @@ end
 -- ---overrided function from UIElement:FocusIn()
 -- function Button:FocusIn() end
 
--- ---overrided function from UIElement:FocusOut()
--- function Button:FocusOut() end
+---overrided function from UIElement:FocusOut()
+-- function Button:FocusOut() 
+--     if(not(self.IsToggleable)) then
+--         if(self._tempPressed) then
+--             self.BG = self.BGUnpressed
+--             self._tempPressed = false
+--             print(self.BG.."aa")
+--         end
+--     end
+-- end

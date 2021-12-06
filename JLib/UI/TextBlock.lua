@@ -125,7 +125,10 @@ function TextBlock:getText()
 end
 
 ---@param color Enums.Color
-function TextBlock:setTextColor(color) self._TextArea.FG = color end
+function TextBlock:setTextColor(color) 
+    self._TextArea.FG = color 
+    self.FG = color
+end
 
 ---@param scroll number
 function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end

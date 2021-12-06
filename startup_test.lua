@@ -72,9 +72,9 @@ b1.IsToggleable = false
 
 
 b1.ClickEvent = function(obj) 
-    if(obj.IsButtonPressed) then
+    -- if(not(obj.IsToggleable)) then
         t1:setText(t1:getText()..t2:getText())
-    end
+    -- end
 end
 
 
