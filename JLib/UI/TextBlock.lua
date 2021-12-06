@@ -33,7 +33,6 @@ JLib.TextBlock = TextBlock
 ---@param bg? Enums.Color or Enums.Color.gray
 ---@param fg? Enums.Color or Enums.Color.white
 function TextBlock:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
-
     local PosRel_ = PosRel or JLib.Vector2:new(1, 1)
     local Len_ = Len or JLib.Vector2:new(1, 1)
     local bg_ = bg or JLib.Enums.Color.gray
@@ -70,6 +69,12 @@ end
 
 ---@param color Enums.Color
 function TextBlock:setBorderColor(color) self._Border.BorderColor = color end
+
+---@param color Enums.Color
+function TextBlock:setBackgroundColor(color)
+    self.BG = color
+    self._TextArea.BG = color
+end
 
 ---@param margin number
 function TextBlock:setMarginAll(margin) self._Margin:setMarginAll(margin) end
@@ -114,6 +119,11 @@ end
 ---@param text string
 function TextBlock:setText(text) self._TextArea:setText(text) end
 
+---@return string text
+function TextBlock:getText() 
+    return self._TextArea._Text
+end
+
 ---@param color Enums.Color
 function TextBlock:setTextColor(color) self._TextArea.FG = color end
 
@@ -124,9 +134,7 @@ function TextBlock:setScroll(scroll) self._TextArea:setScroll(scroll) end
 function TextBlock:getScroll() return self._TextArea:getScroll() end
 
 ---@param bool boolean
-function TextBlock:setIsTextEditable(bool)
-    self._TextArea.IsTextEditable = bool
-end
+function TextBlock:setIsTextEditable(bool) self._TextArea.IsTextEditable = bool end
 
 --- fill textarea with current BG
 function TextBlock:_fillWithBG()
@@ -168,7 +176,7 @@ function TextBlock:_ClickEvent(e) end
 
 ---overrided function from UIElement:_ScrollEvent
 ---@param e ScrollEventArgs
-function TextBlock:_ScrollEvent(e) 
+function TextBlock:_ScrollEvent(e)
     e.Handled = true
     self:setScroll(self:getScroll() + e.Direction)
 end

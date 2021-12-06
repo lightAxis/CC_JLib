@@ -50,7 +50,7 @@ function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
     end
 
     self.Len = JLib.Vector2:new(xlen or 1, ylen or 1) -- length of w,h
-    self.BG = bg or JLib.Enums.Color.black -- background color of element
+    self.BG = bg or JLib.Enums.Color.gray -- background color of element
     self.FG = fg or JLib.Enums.Color.white -- foregraoud color or element
     self.Children = {}
 
