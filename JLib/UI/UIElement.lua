@@ -70,7 +70,7 @@ end
 ---@field FG Enums.Color
 ---@field Children table<number,UIElement>
 ---@field Name string
----@field new fun(parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
+---@field new fun(self:UIElement ,parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
 
 -- [functions]
 

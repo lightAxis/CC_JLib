@@ -30,4 +30,4 @@ end
 ---@class ClickEventArgs
 ---@field Button Enums.MouseButton
 ---@field Pos Vector2
----@field new fun(button: Enums.MouseButton, pos: Vector2): ClickEventArgs
+---@field new fun(self:ClickEventArgs, button: Enums.MouseButton, pos: Vector2): ClickEventArgs

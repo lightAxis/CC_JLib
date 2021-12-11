@@ -19,7 +19,8 @@ JLib.Button = Button
 
 ---constructor
 function Button:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
-    JLib.TextBlock.initialize(self, parent, screen, name, text, PosRel, Len, bg, fg)
+    JLib.TextBlock.initialize(self, parent, screen, name, text, PosRel, Len, bg,
+                              fg)
 
     self.IsToggleable = false
     self.IsButtonPressed = false
@@ -41,7 +42,7 @@ end
 ---@field FGPressed Enums.Color
 -- -@field _tempPressed boolean
 ---@field ClickEvent fun(Button): nil
----@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): Button
+---@field new fun(self:Button, parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): Button
 
 -- functions
 
@@ -97,7 +98,7 @@ function Button:_ClickEvent(e)
         else
             self.IsButtonPressed = false
         end
-    -- else
+        -- else
         -- if(not(self._tempPressed)) then
         --     self.BGUnpressed = self.BG
         --     self.BG = self.BGPressed

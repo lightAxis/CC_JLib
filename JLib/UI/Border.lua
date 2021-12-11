@@ -38,7 +38,7 @@ end
 ---@class Border
 ---@field BorderThickness number
 ---@field BorderColor Enums.Color
----@field new fun(parent: UIElement, screen: Screen, name:string, BorderThickness?:number, BorderColor?:Enums.Color): Border
+---@field new fun(self: Border, parent: UIElement, screen: Screen, name:string, BorderThickness?:number, BorderColor?:Enums.Color): Border
 
 -- [functions]
 

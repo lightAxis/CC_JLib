@@ -23,7 +23,7 @@ end
 ---@class Vector2
 ---@field x number|nil
 ---@field y number|nil
----@field new fun(x:number, y:number): Vector2
+---@field new fun(self:Vector2, x:number, y:number): Vector2
 
 -- functions
 

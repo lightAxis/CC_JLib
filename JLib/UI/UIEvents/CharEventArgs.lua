@@ -27,4 +27,4 @@ end
 -- properties description
 ---@class CharEventArgs
 ---@field Char string 
----@field new fun(char: string): CharEventArgs
+---@field new fun(self:CharEventArgs, char: string): CharEventArgs

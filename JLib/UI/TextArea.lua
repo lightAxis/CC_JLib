@@ -72,7 +72,7 @@ end
 ---@field _TextEditCursorPos Vector2
 ---@field IsTextEditable boolean
 ---@field _isTextEditting boolean
----@field new fun(parent: UIElement, screen: Screen, name: string, text: string): TextArea
+---@field new fun(self:TextArea, parent: UIElement, screen: Screen, name: string, text: string): TextArea
 
 ---------[private classes]-----------
 
@@ -494,7 +494,9 @@ function TextArea:_updatePosEditCursorPos()
     local relativePosEditCursorPos = JLib.Vector2:new(1, 1)
     relativePosEditCursorPos.y = JLib.UITools.transformGlobalIndex2LocalIndex(
                                      self._TextEditPos.y, self._scroll)
-    relativePosEditCursorPos.y = JLib.UITools.calcRelativeOffset_Raw(relativePosEditCursorPos.y, self._VerticalOffset)
+    relativePosEditCursorPos.y = JLib.UITools.calcRelativeOffset_Raw(
+                                     relativePosEditCursorPos.y,
+                                     self._VerticalOffset)
     local currentwrappedLine = self._TextSplitedWrapped[self._TextEditPos.y]
     relativePosEditCursorPos.x = JLib.UITools.transformLocalIndex2GlobalIndex(
                                      self._TextEditPos.x,

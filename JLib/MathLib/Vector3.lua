@@ -25,7 +25,7 @@ end
 ---@field x number|nil
 ---@field y number|nil
 ---@field z number|nil
----@field new fun(x:number, y:number, z:number): Vector3
+---@field new fun(self:Vector3, x:number, y:number, z:number): Vector3
 
 -- functions
 

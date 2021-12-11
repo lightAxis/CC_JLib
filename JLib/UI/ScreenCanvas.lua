@@ -25,7 +25,7 @@ end
 
 -- properties description
 ---@class ScreenCanvas
----@field new fun(parentL: UIElement, screen: Screen, name: string): ScreenCanvas
+---@field new fun(self:ScreenCanvas, parent: UIElement, screen: Screen, name: string): ScreenCanvas
 
 -- functions
 

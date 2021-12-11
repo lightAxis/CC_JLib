@@ -30,4 +30,4 @@ end
 ---@class KeyInputEventArgs
 ---@field Key any
 ---@field IsShiftPressed boolean
----@field new fun(key:any, isShiftPressed: boolean): KeyInputEventArgs
+---@field new fun(self:KeyInputEventArgs, key:any, isShiftPressed: boolean): KeyInputEventArgs
