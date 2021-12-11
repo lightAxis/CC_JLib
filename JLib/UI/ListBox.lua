@@ -31,7 +31,8 @@ function ListBox:initialize(parent, screen, name)
 
     self._SelectedItem = nil
     self._SelectedIndex = nil
-    self.SelectedIndexChanged = function(self) end
+    ---@type fun(obj: ListBoxItem)
+    self.SelectedIndexChanged = nil
 
     self._viewportItems = {}
 
@@ -53,7 +54,7 @@ end
 ---@field _ItemRenderYOffset number
 ---@field _SelectedItem ListBoxItem
 ---@field _SelectedIndex number
----@field SelectedIndexChanged fun(self: ListBox)
+---@field SelectedIndexChanged fun(obj: ListBoxItem)
 ---@field _viewportItems table<number, ListBoxItem>
 ---@field _OddIndexBG Enums.Color
 ---@field _OddIndexFG Enums.Color
@@ -124,6 +125,9 @@ function ListBox:SelectItemAt(index)
     self._SelectedIndex = index
     self._SelectedItem = newSelectedItem
 
+    if (self.SelectedIndexChanged ~= nil) then
+        self.SelectedIndexChanged(self._SelectedItem)
+    end
     return true
 end
 
@@ -140,7 +144,7 @@ end
 function ListBox:_updateViewportItems()
 
     -- wrap scroll
-    local scrollMin = self._Scroll
+    local scrollMin = math.max(self._Scroll, 1)
     local scrollMax = JLib.UITools.calcRelativeOffset_Raw(scrollMin, self.Len.y)
 
     scrollMax = math.min(scrollMax, #(self._Items))
@@ -208,11 +212,27 @@ end
 
 ---overrided function from UIElement:_ClickEvent
 ---@param e ClickEventArgs
-function ListBox:_ClickEvent(e) end
+function ListBox:_ClickEvent(e)
+    local relClickPos = JLib.UITools
+                            .transformGlobalPos2LocalPos(e.Pos, self.Pos)
+
+    local clickedIndex = nil
+    if ((1 <= relClickPos.y) and (relClickPos.y <= #(self._viewportItems))) then
+        clickedIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
+                           relClickPos.y, self._Scroll)
+    end
+
+    if (clickedIndex == nil) then return nil end
+
+    self:SelectItemAt(clickedIndex)
+end
 
 ---overrided function from UIElement:_ScrollEvent
 ---@param e ScrollEventArgs
-function ListBox:_ScrollEvent(e) end
+function ListBox:_ScrollEvent(e)
+    self._Scroll = self._Scroll + e.Direction
+    e.Handled = true
+end
 
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs

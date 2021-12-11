@@ -32,6 +32,6 @@ listbox.PosRel = JLib.Vector2:new(2, 3)
 
 listbox.Len = JLib.Vector2:new(5, 5)
 
-listbox:setScroll(9000)
+listbox:setScroll(2)
 
 screenCanvas:render()

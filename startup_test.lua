@@ -11,74 +11,59 @@ require("UI.Includes")
 -- require("MathLib.Vector2")
 
 
--- local screen = JLib.Screen:new(peripheral.wrap("top"), JLib.Enums.Side.top)
-local screen = JLib.Screen:new(term, JLib.Enums.Side.top)
+local screen = JLib.Screen:new(peripheral.wrap("top"), JLib.Enums.Side.top)
+-- local screen = JLib.Screen:new(term, JLib.Enums.Side.top)
 screen:clearScreen()
-local posrel = JLib.Vector2:new(2, 3)
-local len = JLib.Vector2:new(20, 10)
-local bg = JLib.Enums.Color.lightBlue
-local fg = JLib.Enums.Color.cyan
-local text = "Lorem" --ipsum dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto."--\nNam males uada justo nec nulla molestie posuere.\nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus."--\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
-local textcolor = JLib.Enums.Color.black
-local margin = 2
-local bordercolor = JLib.Enums.Color.green
-local borderthickness = 1
-local scroll = 1
-
-local posrel2 = JLib.Vector2:new(30, 3)
-local len2 = JLib.Vector2:new(20, 10)
-local bg2 = JLib.Enums.Color.lightGray
-local fg2 = JLib.Enums.Color.blue
-local text2 = "another text!"
-local textcolor2 = JLib.Enums.Color.red
-local margin2 = 1
-local bordercolor2 = JLib.Enums.Color.lightBlue
-local borderthickness2 = 0
-local scroll2 = 1
-
-local posrel3 = JLib.Vector2:new(30,15)
-local len3 = JLib.Vector2:new(8,3)
-local bg3 = JLib.Enums.Color.green
-local fg3 = JLib.Enums.Color.red
-local text3 = "button"
-local margin3 = 1
-
 local sc1 = JLib.ScreenCanvas:new(nil, screen, "screencanvas_1")
 
 
-local t2 = JLib.TextBlock:new(sc1, screen, "Textblock_2", text2, posrel2, len2,bg2, fg2)
-t2:setTextColor(textcolor2)
-t2:setMarginAll(margin2)
-t2:setBorderColor(bordercolor2)
-t2:setBorderThickness(borderthickness2)
-t2:setScroll(scroll2)
-t2:setIsTextEditable(true)
-
-
-local t1 = JLib.TextBlock:new(sc1, screen, "Textblock_1",text, posrel, len, bg, fg)
-t1:setTextColor(textcolor)
-t1:setMarginAll(margin)
-t1:setBorderColor(bordercolor)
-t1:setBorderThickness(borderthickness)
-t1:setScroll(scroll)
-t1:setIsTextEditable(true)
-
-local b1 = JLib.Button:new(sc1, screen, "Button_1", text3, posrel3, len3, bg3, fg3)
-b1:setMarginAll(margin3)
-b1:setIsTextEditable(false)
-b1.BGPressed = JLib.Enums.Color.blue
-b1.FGPressed = JLib.Enums.Color.cyan
-b1.IsToggleable = false
-
-
-b1.ClickEvent = function(obj) 
-    -- if(not(obj.IsToggleable)) then
-        t1:setText(t1:getText()..t2:getText())
-    -- end
+local listbox = JLib.ListBox:new(sc1, screen, "listbox")
+local fuu = function(k, v) return {["a"] = k, ["b"] = v} end
+local testTable1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
+local testTable2 = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
+local source = {}
+for index, value in ipairs(testTable1) do
+    table.insert(source, fuu(testTable1[index], testTable2[index]))
 end
 
+listbox:setItemSource(source)
+local itemTemplate = function(obj)
+    local text = tostring(obj.a) .. "/" .. obj.b
+    return text
+end
+
+listbox:setItemTemplate(itemTemplate)
+listbox:Refresh()
+listbox.PosRel = JLib.Vector2:new(2, 3)
+listbox.Len = JLib.Vector2:new(5, 5)
+listbox:setScroll(2)
+
+
+local tb1 = JLib.TextBlock:new(sc1, screen, "tb1","")
+tb1.PosRel = JLib.Vector2:new(10,1)
+tb1.Len = JLib.Vector2:new(10,3)
+tb1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
+tb1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
+tb1:setIsTextEditable(true)
+
+local tb2 = JLib.TextBlock:new(sc1, screen, "tb2","")
+tb2.PosRel = JLib.Vector2:new(10,5)
+tb2.Len = JLib.Vector2:new(10,3)
+tb2:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
+tb2:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
+
+---@param obj ListBoxItem
+local fuu2 = function(obj)
+    local obj2 = obj.obj
+    tb1:setText("id : ".. tostring(obj2.a))
+    tb2:setText("pass : "..obj2.b)
+end
+
+listbox.SelectedIndexChanged = fuu2
 
 sc1:render()
+
+
 local FocusedElement = sc1
 while(true) do
     
@@ -100,44 +85,10 @@ while(true) do
             newFocusElement:triggerClickEvent(button, JLib.Vector2:new(x,y))
             FocusedElement = newFocusElement
         end
-    elseif(event == "key") then
-        if(button == keys.up) then
-            t1.PosRel.y = t1.PosRel.y - 1
-        elseif(button == keys.down) then
-            t1.PosRel.y = t1.PosRel.y + 1
-        elseif(button == keys.left) then
-            t1.PosRel.x = t1.PosRel.x - 1
-        elseif(button == keys.right) then
-            t1.PosRel.x = t1.PosRel.x + 1
-        elseif(button == keys.numPad8) then
-            t1.Len.y = t1.Len.y - 1
-        elseif(button == keys.numPad2) then
-            t1.Len.y = t1.Len.y + 1
-        elseif(button == keys.numPad4) then
-            t1.Len.x = t1.Len.x - 1
-        elseif(button == keys.numPad6) then
-            t1.Len.x = t1.Len.x + 1
-        elseif(button == keys.one) then
-            t1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.left)
-        elseif(button == keys.two) then
-            t1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
-        elseif(button == keys.three) then
-            t1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.right)
-        elseif(button == keys.four) then
-            t1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.top)
-        elseif(button == keys.five) then
-            t1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
-        elseif(button == keys.six) then
-            t1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.bottom)
-        elseif(button == keys.backspace) then
-            FocusedElement:triggerKeyInputEvent(button)
-        elseif(button == keys.delete) then
-            FocusedElement:triggerKeyInputEvent(button)
-        elseif(button == keys.enter) then
-            FocusedElement:triggerKeyInputEvent(button)
-        end
     elseif(event == "char") then
         FocusedElement:triggerCharEvent(button) 
+    elseif(event == "key") then
+        FocusedElement:triggerKeyInputEvent(button)
     elseif(event == "monitor_touch") then
         local newFocusElement = screen:getUIAtPos(JLib.Vector2:new(x,y))
             if(newFocusElement ~= FocusedElement) then
@@ -148,11 +99,8 @@ while(true) do
             FocusedElement = newFocusElement
     end
 
-    screen:clearScreen()
+    -- screen:clearScreen()
     sc1:render()
     FocusedElement:PostRendering()
-
-
-    --os.sleep(0.01)
 end
 
