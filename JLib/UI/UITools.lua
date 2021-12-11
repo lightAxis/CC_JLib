@@ -110,6 +110,9 @@ function UITools.calcRelativeOffset_Y(origin, offset_y)
 end
 
 --- calc relative position offset, in 1D number as 1 is origin of offset
+---@param origin number
+---@param offset number
+---@return number
 function UITools.calcRelativeOffset_Raw(origin, offset)
     return origin + offset - 1
 end

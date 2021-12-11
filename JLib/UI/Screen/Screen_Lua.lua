@@ -34,7 +34,7 @@ end
 ---@field _screen any
 ---@field _side Enums.Side
 ---@field _renderHistory table<number, UIElement>
----@field new fun(screenObj: Screen, side: Enums.Side): Screen
+---@field new fun(self:Screen, screenObj: Screen, side: Enums.Side): Screen
 
 -- [functions]
 

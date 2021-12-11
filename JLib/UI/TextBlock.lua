@@ -58,7 +58,7 @@ end
 ---@field _Border Border
 ---@field _Margin Margin
 ---@field _TextArea TextArea
----@field new fun(parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): TextBlock
+---@field new fun(self:TextBlock, parent: UIElement, screen: Screen, name: string, text?: string, PosRel?: Vector2, Len?: Vector3, bg?: Enums.Color, fg?: Enums.Color): TextBlock
 
 -- functions
 
@@ -120,13 +120,11 @@ end
 function TextBlock:setText(text) self._TextArea:setText(text) end
 
 ---@return string text
-function TextBlock:getText() 
-    return self._TextArea._Text
-end
+function TextBlock:getText() return self._TextArea._Text end
 
 ---@param color Enums.Color
-function TextBlock:setTextColor(color) 
-    self._TextArea.FG = color 
+function TextBlock:setTextColor(color)
+    self._TextArea.FG = color
     self.FG = color
 end
 

@@ -19,4 +19,4 @@ function EventArgs:initialize() self.Handled = false end
 -- properties description
 ---@class EventArgs
 ---@field Handled boolean
----@field new fun(): EventArgs
+---@field new fun(self:EventArgs): EventArgs

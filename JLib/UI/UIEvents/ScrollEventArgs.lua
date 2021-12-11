@@ -30,4 +30,4 @@ end
 ---@class ScrollEventArgs
 ---@field Direction Enums.ScrollDirection
 ---@field Pos Vector2
----@field new fun(direction: Enums.ScrollDirection, pos: Vector2): ScrollEventArgs
+---@field new fun(self:ScrollEventArgs, direction: Enums.ScrollDirection, pos: Vector2): ScrollEventArgs

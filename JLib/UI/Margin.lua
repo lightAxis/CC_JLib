@@ -43,7 +43,7 @@ end
 ---@field MarginRight number
 ---@field MarginTop number
 ---@field MarginBottom number
----@field new fun(parent: UIElement, screen: Screen, name: string, marginLeft?: number, marginRight?: number,  marginTop?: number, marginBottom?: number) : Margin
+---@field new fun(self: Margin, parent: UIElement, screen: Screen, name: string, marginLeft?: number, marginRight?: number,  marginTop?: number, marginBottom?: number) : Margin
 
 -- functions
 

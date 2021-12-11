@@ -1,51 +1,37 @@
 require("init")
 
 require("UI.Includes")
--- require("LibGlobal.StaticMethods")
--- require("UI.Screen")
--- require("UI.ScreenCanvas")
 
--- require("UI.TextArea")
--- require("UI.Border")
--- require("UI.Margin")
--- require("MathLib.Vector2")
-
--- local screen = JLib.Screen:new(peripheral.wrap("top"), JLib.Enums.Side.top)
--- local screen = JLib.Screen:new(term, JLib.Enums.Side.top)
 local screen = JLib.Screen:new({}, JLib.Enums.Side.top)
-screen:clearScreen()
-local posrel = JLib.Vector2:new(2, 3)
-local len = JLib.Vector2:new(20, 9)
-local bg = JLib.Enums.Color.lightBlue
-local fg = JLib.Enums.Color.cyan
+local screenCanvas = JLib.ScreenCanvas:new(nil, screen, "screenCanvas")
 
-local text = "Lorem ipsum" -- dolor sit amet, consectetur adipiscing elit.\nNunc nec urna torto" -- r.\nNam males"--uada justo nec nulla molestie posuere."-- \nAenean mi quam, tristique a est sed, facilisis imperdiet purus.\nInteger ornare non nulla vel commodo.\nMorbi ut mollis lorem, ut placerat purus.\nUt in est vel mauris consectetur cursus eu sodales metus.\nIn hac habitasse platea dictumst.\nVivamus pharetra consectetur ex ut scelerisque.\nFusce consequat luctus justo, ut ornare nisl ultricies eget.\nAenean non fermentum sem.."
-local textcolor = JLib.Enums.Color.black
+local listbox = JLib.ListBox:new(screenCanvas, screen, "listbox")
 
-local margin = 2
+local fuu = function(k, v) return {["a"] = k, ["b"] = v} end
 
-local bordercolor = JLib.Enums.Color.green
-local borderthickness = 1
+local testTable1 = {1, 2, 3, 4, 5, 6, 7, 8, 9, 0}
+local testTable2 = {"a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k"}
+local source = {}
 
-local scroll = 2
+for index, value in ipairs(testTable1) do
+    table.insert(source, fuu(testTable1[index], testTable2[index]))
+end
 
-local sc1 = JLib.ScreenCanvas:new(nil, screen, "screencanvas_1")
-local t1 = JLib.TextBlock:new(sc1, screen, "Textblock_1", text, posrel, len, bg,
-                              fg)
+listbox:setItemSource(source)
 
-t1:setTextColor(textcolor)
-t1:setMarginAll(margin)
-t1:setBorderColor(bordercolor)
-t1:setBorderThickness(borderthickness)
-t1:setScroll(scroll)
-t1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
-t1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
-t1:setIsTextEditable(true)
+local itemTemplate = function(obj)
+    local text = tostring(obj.a) .. "/" .. obj.b
+    return text
+end
 
-sc1:render()
+listbox:setItemTemplate(itemTemplate)
 
-t1._TextArea:FocusIn()
-t1._TextArea:triggerClickEvent(1, JLib.Vector2:new(16, 9))
+listbox:Refresh()
 
-sc1:render()
-t1._TextArea:PostRendering()
+listbox.PosRel = JLib.Vector2:new(2, 3)
+
+listbox.Len = JLib.Vector2:new(5, 5)
+
+listbox:setScroll(2)
+
+screenCanvas:render()
