@@ -27,70 +27,80 @@ end
 ---handler msg to server
 ---@param msgLine string
 function Server:ServerHandle(msgLine)
-    ---@type PortDB.Message
-    local msg = textutils.deserialize(msgLine)
+
+    local msg = JLib.PortDB.Message:Deserialize(msgLine)
 
     if (msg.Header == JLib.PortDB.Headers.ADD) then
-        print("aaaa1")
-        self:_serverHandleADD(msg)
+        self:_serverHandleADD(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.PortDB.Headers.REMOVE) then
-        self:_serverHandleREMOVE(msg)
+        self:_serverHandleREMOVE(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.PortDB.Headers.REQUEST) then
-        self:_serverHandleREQUEST(msg)
+        self:_serverHandleREQUEST(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.PortDB.Headers.REFRESH) then
-        self:_serverHandleREFRESH(msg)
+        self:_serverHandleREFRESH(msg.SerializedMsgStruct)
     end
 end
 
 ---handle add in server
----@param struct PortDB.MsgStruct.ADD
-function Server:_serverHandleADD(struct)
+---@param struct_ string
+function Server:_serverHandleADD(struct_)
+    local struct = JLib.PortDB.MsgStruct.ADD:Deserialize(struct_)
+
     local portPath = JLib.PortDB.Consts.ServerPath + "/" + struct.PortToAdd
 
     ---@type PortDB.Table
-    local table = JLib.Common.Serializer.deserialize(portPath)
+    local table = JLib.Common.Serializer.DeserializeFrom(portPath,
+                                                         JLib.PortDB.Table)
 
     if (table == nil) then table = JLib.PortDB.Table:new(struct.PortToAdd) end
 
     table.IDs[struct.IDToAdd] = true
 
-    JLib.Common.Serializer.serializeTo(table, portPath)
+    JLib.Common.Serializer.SerializeTo(table, portPath, JLib.PortDB.Table)
 end
 
 ---handle remove in server
----@param struct PortDB.MsgStruct.REMOVE
-function Server:_serverHandleREMOVE(struct)
+---@param struct_ string
+function Server:_serverHandleREMOVE(struct_)
+    local struct = JLib.PortDB.MsgStruct.REMOVE:Deserialize(struct_)
+
     local portPath = JLib.PortDB.Consts.ServerPath + "/" + struct.PortToRemove
 
     ---@type PortDB.Table
-    local table = JLib.Common.Serializer.deserialize(portPath)
+    local table = JLib.Common.Serializer.DeserializeFrom(portPath,
+                                                         JLib.PortDB.Table)
 
     if (table == nil) then table = JLib.PortDB.Table:new(struct.PortToRemove) end
 
     table.IDs[struct.IDToRemove] = nil
 
-    JLib.Common.Serializer.serializeTo(table, portPath)
+    JLib.Common.Serializer.SerializeTo(table, portPath, JLib.PortDB.Table)
 end
 
 ---handle request in server
----@param struct PortDB.MsgStruct.REQUEST
-function Server:_serverHandleREQUEST(struct)
+---@param struct_ string
+function Server:_serverHandleREQUEST(struct_)
+    local struct = JLib.PortDB.MsgStruct.REQUEST:Deserialize(struct_)
+
     local portPath = JLib.PortDB.Consts.ServerPath + "/" + struct.PortToRequest
 
     ---@type PortDB.Table
-    local table = JLib.Common.Serializer.deserialize(portPath)
+    local table = JLib.Common.Serializer.DeserializeFrom(portPath,
+                                                         JLib.PortDB.Table)
 
     if (table == nil) then
         table = JLib.PortDB.Table:new(struct.PortToRequest)
     end
 
-    local msg = JLib.PortDB.Message:new(JLib.PortDB.Headers.REFRESH, table)
+    local msg = JLib.PortDB.Message:new(JLib.PortDB.Headers.REFRESH,
+                                        JLib.PortDB.Table(table))
 
-    rednet.send(struct.IDToSendBack, msg, JLib.PortDB.Consts.masterPort)
+    rednet.send(struct.IDToSendBack, msg:Serialize(),
+                JLib.PortDB.Consts.masterPort)
 end
 
 ---handle refresh in server
----@param struct PortDB.MsgStruct.REFRESH
-function Server:_serverHandleREFRESH(struct)
+---@param struct_ string
+function Server:_serverHandleREFRESH(struct_)
     ---none
 end

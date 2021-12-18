@@ -14,14 +14,32 @@ JLib.PortDB.Message = Message
 
 ---constructor
 ---@param Header PortDB.Headers
----@param MsgStruct any
-function Message:initialize(Header, MsgStruct)
+---@param SerializedMsgStruct string
+function Message:initialize(Header, SerializedMsgStruct)
     self.Header = Header
-    self.MsgStruct = MsgStruct
+    self.SerializedMsgStruct = SerializedMsgStruct
 end
 
 ---properties description
 ---@class PortDB.Message
----@field Header string
----@field MsgStruct any
----@field new fun(self:PortDB.Message, Header, MsgStruct)
+---@field Header PortDB.Headers
+---@field SerializedMsgStruct string
+---@field new fun(self:PortDB.Message, Header: PortDB.Headers, SerializedMsgStruct: string):PortDB.Message
+
+---serialize message
+---@return string
+function Message:Serialize()
+    local temp = {}
+    temp["Header"] = self.Header
+    temp["SerializedMsgStruct"] = self.SerializedMsgStruct
+    return temp
+end
+
+---deserialize message 
+---@param str string
+---@return PortDB.Message
+function Message:Deserialize(str)
+    local temp = textutils.deserialize(str)
+    local temp2 = Message:new(temp.Header, temp.SerializedMsgStruct)
+    return temp2
+end
