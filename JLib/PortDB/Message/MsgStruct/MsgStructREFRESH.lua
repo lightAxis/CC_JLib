@@ -2,8 +2,10 @@ local class = require("Class.middleclass")
 
 ----------------------REFRESH------------------------
 
+---public class MsgStructREFRESH : IMsgStruct
 ---@class PortDB.MsgStruct.REFRESH
-local REFRESH = class("PortDB.MsgStruct.REFRESH")
+local REFRESH = class("PortDB.MsgStruct.REFRESH",
+                      JLib.PortDB.MsgStruct.IMsgStruct)
 
 ---namespace JLib
 JLib = JLib or {}
@@ -15,14 +17,29 @@ JLib.PortDB.MsgStruct.REFRESH = REFRESH
 
 ---constructor
 ---@param PortToRefresh string
----@param IDList table<number, boolean>
-function REFRESH:initialize(PortToRefresh, IDList)
+---@param PortTable PortDB.Table
+function REFRESH:initialize(PortToRefresh, PortTable)
     self.PortToRefresh = PortToRefresh
-    self.IdList = IDList
+    self.PortTable = PortTable
 end
 
 ---properties description
 ---@class PortDB.MsgStruct.REFRESH
 ---@field PortToRefresh string
----@field IdList table<number, boolean>
----@field new fun(PortToRefresh: string, IDList: table<number, boolean>):PortDB.MsgStruct.REFRESH
+---@field PortTable PortDB.Table
+---@field new fun(self:PortDB.MsgStruct.REFRESH, PortToRefresh: string, IDList: table<number, boolean>):PortDB.MsgStruct.REFRESH
+
+---abstract function
+function REFRESH:Serialize()
+    local temp = {}
+    temp["PortToRefresh"] = self.PortToRefresh
+    temp["PortTable"] = self.PortTable:Serialize()
+    return textutils.serialize(temp)
+end
+
+function REFRESH:Deserialize(str)
+    local temp = textutils.deserialize(str)
+    local PortTable = JLib.PortDB.Table:Deserialize(temp.PortTable)
+    temp2 = REFRESH:new(temp.PortToRefresh, PortTable)
+    return temp2
+end

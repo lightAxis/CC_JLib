@@ -2,8 +2,10 @@ local class = require("Class.middleclass")
 
 ------------------REQUEST--------------------
 
+---public class MsgStructREQUEST : IMsgStruct
 ---@class PortDB.MsgStruct.REQUEST
-local REQUEST = class("PortDB.MsgStruct.REQUEST")
+local REQUEST = class("PortDB.MsgStruct.REQUEST",
+                      JLib.PortDB.MsgStruct.IMsgStruct)
 
 ---namespace JLib
 JLib = JLib or {}
@@ -24,4 +26,19 @@ end
 ---@class PortDB.MsgStruct.REQUEST
 ---@field PortToRequest string
 ---@field IDToSendBack number
----@field new fun(PortToRequest: string, IDToSendBack: number):PortDB.MsgStruct.REQUEST
+---@field new fun(self: PortDB.MsgStruct.REQUEST, PortToRequest: string, IDToSendBack: number):PortDB.MsgStruct.REQUEST
+
+---abstract function
+
+function REQUEST:Serialize()
+    local temp = {}
+    temp["PortToRequest"] = self.PortToRequest
+    temp["IDToSendBack"] = self.IDToSendBack
+    return textutils.serialize(temp)
+end
+
+function REQUEST:Deserialize(str)
+    local temp = textutils.deserialize(str)
+    local temp2 = REQUEST:new(temp.PortToRequest, temp.IDToSendBack)
+    return temp2
+end

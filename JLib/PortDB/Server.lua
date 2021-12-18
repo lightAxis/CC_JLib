@@ -20,10 +20,18 @@ function Server:initialize()
     end
 end
 
+---properties description
+---@class PortDB.Server
+---@field new fun(self:PortDB.Server):PortDB.Server
+
 ---handler msg to server
----@param msg PortDB.Message
-function Server:ServerHandle(msg)
+---@param msgLine string
+function Server:ServerHandle(msgLine)
+    ---@type PortDB.Message
+    local msg = textutils.deserialize(msgLine)
+
     if (msg.Header == JLib.PortDB.Headers.ADD) then
+        print("aaaa1")
         self:_serverHandleADD(msg)
     elseif (msg.Header == JLib.PortDB.Headers.REMOVE) then
         self:_serverHandleREMOVE(msg)

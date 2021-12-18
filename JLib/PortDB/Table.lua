@@ -21,3 +21,23 @@ end
 ---@field Port string
 ---@field IDs table<number, number>
 ---@field new fun(self:PortDB.Table, Port: string):PortDB.Table
+
+---serialize content
+---@return string
+function Table:Serialize()
+    local temp = {}
+    temp["Port"] = self.Port
+    temp["IDs"] = {}
+    for key, value in pairs(self.IDs) do temp[key] = -value end
+    return textutils.serialize(temp)
+end
+
+---deserialize function
+---@param str string
+---@return PortDB.Table
+function Table:Deserialize(str)
+    local temp = textutils.deserialize(str)
+    local temp2 = Table:new(temp.Port)
+    temp2.IDs = temp.IDs
+    return temp2
+end
