@@ -12,8 +12,9 @@ JLib.EventThreadManager.EventThread = EventThread
 ---constructor
 ---@param eventMethod EventThreadManager.EventMethod
 function EventThread:initialize(eventMethod)
-    self.Thread = coroutine.create(eventMethod)
+    self.Thread = coroutine.create(function() eventMethod:main() end)
     self.Ok, self.Filter = coroutine.resume(self.Thread)
+
     self.rednetFilter = ""
     if (self.Filter == JLib.EventThreadManager.Events.rednet_message) then
         self.rednetFilter = eventMethod.rednetProtocol

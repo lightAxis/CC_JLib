@@ -26,10 +26,6 @@ function Manager:reserveStop() os.queueEvent("stop") end
 ---attach eventThread to Manager
 ---@param eventThread EventThreadManager.EventThread
 function Manager:attach(eventThread)
-    -- check if thread is already in thread
-    for index, value in ipairs(self.Threads) do
-        if (value == eventThread) then return end
-    end
 
     -- if not exist, add eventthread to Threads
     if (eventThread.Filter == JLib.EventThreadManager.Events.rednet_message) then
@@ -37,7 +33,6 @@ function Manager:attach(eventThread)
     else
         self.Threads[eventThread.Filter] = eventThread
     end
-
 end
 
 function Manager:run()
@@ -59,10 +54,10 @@ function Manager:run()
             end
 
         else
-            if (self.rednetThreads[EventTable[4]] ~= nil) then
-                ok, filter = self.Threads[EventTable[4]]:resume(EventTable)
+            if (self.Threads[EventTable[1]] ~= nil) then
+                ok, filter = self.Threads[EventTable[1]]:resume(EventTable)
                 if (ok == nil) then
-                    self.Threads[EventTable[4]] = nil
+                    self.Threads[EventTable[1]] = nil
                 end
             end
         end
