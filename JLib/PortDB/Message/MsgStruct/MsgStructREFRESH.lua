@@ -17,29 +17,28 @@ JLib.PortDB.MsgStruct.REFRESH = REFRESH
 
 ---constructor
 ---@param PortToRefresh string
----@param PortTable PortDB.Table
-function REFRESH:initialize(PortToRefresh, PortTable)
+---@param PortTableSerialized string
+function REFRESH:initialize(PortToRefresh, PortTableSerialized)
     self.PortToRefresh = PortToRefresh
-    self.PortTable = PortTable
+    self.PortTableSerialized = PortTableSerialized
 end
 
 ---properties description
 ---@class PortDB.MsgStruct.REFRESH
 ---@field PortToRefresh string
----@field PortTable PortDB.Table
+---@field PortTableSerialized string
 ---@field new fun(self:PortDB.MsgStruct.REFRESH, PortToRefresh: string, IDList: table<number, boolean>):PortDB.MsgStruct.REFRESH
 
 ---abstract function
 function REFRESH:Serialize()
     local temp = {}
     temp["PortToRefresh"] = self.PortToRefresh
-    temp["PortTable"] = self.PortTable:Serialize()
+    temp["PortTableSerialized"] = self.PortTableSerialized
     return textutils.serialize(temp)
 end
 
 function REFRESH:Deserialize(str)
-    local temp = textutils.deserialize(str)
-    local PortTable = JLib.PortDB.Table:Deserialize(temp.PortTable)
-    temp2 = REFRESH:new(temp.PortToRefresh, PortTable)
+    local temp = textutils.unserialize(str)
+    temp2 = REFRESH:new(temp.PortToRefresh, temp.PortTableSerialized)
     return temp2
 end

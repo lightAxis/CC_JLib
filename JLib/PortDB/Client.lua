@@ -10,7 +10,11 @@ local Client = class("PortDB.Client")
 JLib = JLib or {}
 ---namespace JLib.PortDB
 JLib.PortDB = JLib.PortDB or {}
-JLib.PortDB.Server = Client
+JLib.PortDB.Client = Client
+
+function Client:initialize()
+
+end
 
 ---handle msg to client
 ---@param msgLine PortDB.Message
@@ -50,8 +54,11 @@ end
 ---handle REFRESH in client
 ---@param struct_ string
 function Client:_clientHandleREFRESH(struct_)
+
     local struct = JLib.PortDB.MsgStruct.REFRESH:Deserialize(struct_)
-    local portPath = JLib.PortDB.Consts.ClientPath + "/" + struct.PortToRefresh
-    JLib.Common.Serializer.serializeTo(struct.PortTable, portPath,
-                                       JLib.PortDB.Table)
+    local portPath = JLib.PortDB.Consts.ClientPath .. "/" .. struct.PortToRefresh
+    local portTable = JLib.PortDB.Table:Deserialize(struct.PortTableSerialized)
+
+    JLib.Common.Serializer.SerializeTo(portTable, portPath,
+                                       true)
 end

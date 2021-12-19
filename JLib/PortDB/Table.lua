@@ -27,8 +27,10 @@ end
 function Table:Serialize()
     local temp = {}
     temp["Port"] = self.Port
-    temp["IDs"] = {}
-    for key, value in pairs(self.IDs) do temp[key] = -value end
+    temp["IDs"] = self.IDs
+    -- for key, value in pairs(self.IDs) do 
+    --     temp.IDs[key] = value 
+    -- end
     return textutils.serialize(temp)
 end
 
@@ -36,7 +38,7 @@ end
 ---@param str string
 ---@return PortDB.Table
 function Table:Deserialize(str)
-    local temp = textutils.deserialize(str)
+    local temp = textutils.unserialize(str)
     local temp2 = Table:new(temp.Port)
     temp2.IDs = temp.IDs
     return temp2

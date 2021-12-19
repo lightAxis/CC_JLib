@@ -13,15 +13,15 @@ JLib.Common.Serializer = Serializer
 ---serialize to path.
 ---@param obj any
 ---@param path string
----@param serializeModule any must have :Serialize(any) function
-function Serializer.SerializeTo(obj, path, serializeModule)
+---@param isCustomSerialize boolean obj must have :Serialize(any) function
+function Serializer.SerializeTo(obj, path, isCustomSerialize)
     local f = fs.open(path, "w")
     local objStr = ""
 
-    if (serializeModule == nil) then
+    if (isCustomSerialize == false) then
         objStr = textutils.serialize(obj)
     else
-        objStr = serializeModule:Serialize(obj)
+        objStr = obj:Serialize()
     end
 
     f.write(objStr)
@@ -31,9 +31,13 @@ end
 ---deserialize in path
 ---@param path string
 ---@param deserializeModule any must have :Deserialize(str) function
----@return any obj
+---@return any|nil obj
 function Serializer.DeserializeFrom(path, deserializeModule)
     local f = fs.open(path, "r")
+
+    if(f == nil) then
+        return nil
+    end
     local objstr = f.readAll()
 
     local obj

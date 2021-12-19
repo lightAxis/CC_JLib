@@ -32,14 +32,14 @@ function Message:Serialize()
     local temp = {}
     temp["Header"] = self.Header
     temp["SerializedMsgStruct"] = self.SerializedMsgStruct
-    return temp
+    return textutils.serialize(temp)
 end
 
 ---deserialize message 
 ---@param str string
 ---@return PortDB.Message
 function Message:Deserialize(str)
-    local temp = textutils.deserialize(str)
+    local temp = textutils.unserialize(str)
     local temp2 = Message:new(temp.Header, temp.SerializedMsgStruct)
     return temp2
 end

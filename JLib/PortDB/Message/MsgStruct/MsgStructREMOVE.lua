@@ -44,7 +44,7 @@ end
 ---@param str string
 ---@return PortDB.MsgStruct.REMOVE
 function REMOVE:Deserialize(str)
-    local temp = textutils.deserialize(str)
-    local temp2 = REMOVE:new(temp.IDToREmove, temp.PortToRemove)
+    local temp = textutils.unserialize(str)
+    local temp2 = REMOVE:new(temp.IDToRemove, temp.PortToRemove)
     return temp2
 end

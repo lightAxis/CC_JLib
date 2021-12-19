@@ -38,7 +38,7 @@ function ADD:Serialize()
 end
 
 function ADD:Deserialize(str)
-    local temp = textutils.serialize(str)
+    local temp = textutils.unserialize(str)
     local temp2 = ADD:new(temp.IDToAdd, temp.PortToAdd)
     return temp2
 end

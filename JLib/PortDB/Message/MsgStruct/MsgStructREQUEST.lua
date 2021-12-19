@@ -38,7 +38,7 @@ function REQUEST:Serialize()
 end
 
 function REQUEST:Deserialize(str)
-    local temp = textutils.deserialize(str)
+    local temp = textutils.unserialize(str)
     local temp2 = REQUEST:new(temp.PortToRequest, temp.IDToSendBack)
     return temp2
 end
