@@ -1,4 +1,4 @@
----@class EventThreadManager.Events
+---@class EventRouter.Events
 local Events = {
     ["char"] = "char",
     ["key"] = "key",
@@ -12,7 +12,7 @@ local Events = {
     ["disk"] = "disk",
     ["disk_eject"] = "disk_eject",
     ["peripheral"] = "peripheral",
-    ["peripheral_detach	"] = "peripheral_detach	",
+    ["peripheral_detach"] = " peripheral_detach	",
     ["rednet_message"] = "rednet_message",
     ["modem_message"] = "modem_message",
     ["http_success"] = "http_success",
@@ -27,8 +27,6 @@ local Events = {
     ["turtle_inventory"] = "turtle_inventory"
 }
 
----namespace JLib
 JLib = JLib or {}
----namespace JLib.EventThreadManager
-JLib.EventThreadManager = JLib.EventThreadManager or {}
-JLib.EventThreadManager.Events = Events
+JLib.EventRouter = JLib.EventRouter or {}
+JLib.EventRouter.Events = Events
