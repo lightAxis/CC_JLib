@@ -40,6 +40,9 @@ function Router:attachEventCallback(event, mthd)
     table.insert(self._eventCallbacks[event], mthd)
 end
 
+---attach rednet event callback method to router
+---@param protocol EventRouter.Events
+---@param mthd fun(a:string, b:string, c:string, d:string)
 function Router:attachRednetCallback(protocol, mthd)
     self._rednetCallbacks[protocol] = self._rednetCallbacks[protocol] or {}
 
@@ -50,6 +53,9 @@ function Router:attachRednetCallback(protocol, mthd)
     table.insert(self._rednetCallbacks[protocol], mthd)
 end
 
+---detach event callback
+---@param event EventRouter.Events
+---@param mthd fun(a:string, b:string, c:string, d:string)
 function Router:detachEventCallback(event, mthd)
     if (self._eventCallbacks[event] == nil) then return end
 
@@ -61,6 +67,9 @@ function Router:detachEventCallback(event, mthd)
     end
 end
 
+---detach rednet event callback
+---@param protocol string
+---@param mthd fun(a:string, b:string, c:string, d:string)
 function Router:detachRednetCallback(protocol, mthd)
     if (self._rednetCallbacks[protocol] == nil) then return end
 
@@ -85,6 +94,7 @@ function Router:_runCallbacks(functionTable, a, b, c, d)
 
 end
 
+---main function for Router to run
 function Router:main()
     local a, b, c, d
 
@@ -92,9 +102,9 @@ function Router:main()
         a, b, c, d = os.pullEvent()
 
         if (a == JLib.EventRouter.Events.rednet_message) then
-            self:_runCallbacks(self._rednetCallbacks[d])
+            self:_runCallbacks(self._rednetCallbacks[d], a, b, c, d)
         else
-            self:_runCallbacks(self._eventCallbacks[a])
+            self:_runCallbacks(self._eventCallbacks[a], a, b, c, d)
         end
     end
 end
