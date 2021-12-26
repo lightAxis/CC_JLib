@@ -81,6 +81,38 @@ function Router:detachRednetCallback(protocol, mthd)
     end
 end
 
+---attach UIRunner to this Router
+---@param UIrunner UIRunner
+function Router:attachUIRunner(UIrunner)
+
+    self:attachEventCallback(JLib.EventRouter.Events.mouse_click, function(a, b,
+                                                                           c, d)
+        UIrunner:MouseClickEventCallback(a, b, c, d)
+    end)
+
+    self:attachEventCallback(JLib.EventRouter.Events.mouse_scroll, function(a,
+                                                                            b,
+                                                                            c, d)
+        UIrunner:ScrollEventCallback(a, b, c, d)
+    end)
+
+    self:attachEventCallback(JLib.EventRouter.Events.key, function(a, b, c, d)
+        UIrunner:KeyInputEventCallback(a, b, c, d)
+    end)
+
+    self:attachEventCallback(JLib.EventRouter.Events.char, function(a, b, c, d)
+        UIrunner:CharEventCallback(a, b, c, d)
+    end)
+
+    self:attachEventCallback(JLib.EventRouter.Events.monitor_touch, function(a,
+                                                                             b,
+                                                                             c,
+                                                                             d)
+        UIrunner:MonitorTouchEventCallback(a, b, c, d)
+    end)
+
+end
+
 ---run callback table
 ---@param functionTable table<number, fun(a:string, b:string, c:string, d:string)>|nil
 ---@param a string
@@ -100,7 +132,7 @@ function Router:main()
 
     while true do
         a, b, c, d = os.pullEvent()
-
+        -- print(a, b, c, d, "aaaa123123")
         if (a == JLib.EventRouter.Events.rednet_message) then
             self:_runCallbacks(self._rednetCallbacks[d], a, b, c, d)
         else

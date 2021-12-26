@@ -7,6 +7,7 @@ require("MathLib.Vector2")
 require("UI.UIElement")
 require("UI.UITools")
 require("UI.UIEvent")
+require("UI.UIRunner")
 require("UI.Enums")
 require("UI.Screen")
 

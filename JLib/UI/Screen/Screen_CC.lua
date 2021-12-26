@@ -131,15 +131,19 @@ function Screen_CC:clearScreen()
     self._renderHistory = {}
 end
 
+function Screen_CC:clearRenderHistory() self._renderHistory = {} end
+
 ---Get UIElement at position
 ---@param pos Vector2
 ---@return UIElement|nil
 function Screen_CC:getUIAtPos(pos)
+    -- print(#(self._renderHistory), "aaaa")
     for i = #(self._renderHistory), 1, -1 do
         if (self._renderHistory[i]:isPositionOver(pos) == true) then
             return self._renderHistory[i]
         end
     end
+    -- print("aaaa2")
     return nil
 end
 
