@@ -34,7 +34,8 @@ JLib.Enums.Side = {
     ["left"] = "left",
     ["right"] = "right",
     ["top"] = "top",
-    ["bottom"] = "bottom"
+    ["bottom"] = "bottom",
+    ["NONE"] = "NONE"
 }
 
 ---@class Enums.MouseButton

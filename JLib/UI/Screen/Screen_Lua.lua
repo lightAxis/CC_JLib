@@ -145,4 +145,6 @@ function Screen_Lua:getUIAtPos(pos)
     return nil
 end
 
+function Screen_Lua:clearRenderHistory() self._renderHistory = {} end
+
 function Screen_Lua:getScreenSide() return self._side end

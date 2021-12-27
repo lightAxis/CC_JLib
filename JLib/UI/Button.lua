@@ -31,7 +31,7 @@ function Button:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
     self.FGPressed = JLib.Enums.Color.black
     -- self._tempPressed = false
 
-    self.ClickEvent = function(self) end
+    self.ClickEvent = function(button) end
 end
 
 -- priperties description
