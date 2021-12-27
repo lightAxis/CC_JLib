@@ -39,6 +39,14 @@ function UIRunner:detachScene(scene)
     self.Scenes[scene.attachingScreen:getScreenSide()] = nil
 end
 
+---change scene of side
+---@param scene UIScene
+function UIRunner:changeScene(scene)
+    self.Scenes[scene.attachingScreen:getScreenSide()] = scene
+    self:ClearScreens()
+    self:RenderScreen()
+end
+
 ---set initial scene from side
 ---@param side Enums.Side
 function UIRunner:setIntialScene(side)
