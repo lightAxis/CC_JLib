@@ -1,6 +1,6 @@
 -- select your environment
 -- 0 : jasuk500, 1 : CC, 2 : replit.com
-local environment = 0
+local environment = 1
 
 if (environment == 0) then
     -- in another env

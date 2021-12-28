@@ -2,5 +2,5 @@
 BankProj = BankProj or {}
 BankProj.Param = {
     ["PlayerDetectorName"] = "playerDetector",
-    ["PlayerScanRange"] = 3
+    ["PlayerScanRange"] = 4
 }

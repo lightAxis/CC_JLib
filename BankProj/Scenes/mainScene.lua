@@ -9,10 +9,10 @@ local SCENE = class("BankProj.mainScene", JLib.UIScene)
 ---@param projNamespace table
 function SCENE:initialize(attachedScreen, projNamespace)
     JLib.UIScene.initialize(self, attachedScreen, projNamespace)
-
     local grid = JLib.Grid:new(self.rootScreenCanvas.Len)
     grid:setHorizontalSetting({"*", "2*", "*"})
     grid:setVerticalSetting({"*", "2*", "*", "2*", "*"})
+    grid:updatePosLen()
 
     self.tb1 = JLib.TextBlock:new(self.rootScreenCanvas, self.attachingScreen,
                                   "tb1")
@@ -48,4 +48,9 @@ function SCENE:butt1_style(bt1)
     bt1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
 end
 
-function SCENE:bt1_click() self.PROJ.UIRunner.changeScene(self.PROJ.LoginScene) end
+function SCENE:bt1_click() 
+    self.PROJ.LoginScene:resetList()
+    self.PROJ.UIRunner:changeScene(self.PROJ.LoginScene) 
+end
+
+return SCENE
