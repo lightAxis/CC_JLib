@@ -14,7 +14,6 @@ JLib.UIScene = UIScene
 function UIScene:initialize(attachedScreen, projNamespace)
     self.attachingScreen = attachedScreen
     self.PROJ = projNamespace
-
     self.rootScreenCanvas = JLib.ScreenCanvas:new(nil, attachedScreen,
                                                   "rootScreenCanvas")
 

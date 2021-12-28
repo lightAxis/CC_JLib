@@ -21,6 +21,7 @@ JLib.ScreenCanvas = ScreenCanvas
 ---@param name string
 function ScreenCanvas:initialize(parent, screen, name)
     JLib.UIElement.initialize(self, parent, screen, name)
+    self:_updateLengthFromScreen()
 end
 
 -- properties description

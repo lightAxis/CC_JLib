@@ -5,7 +5,9 @@ local environment = 1
 if (environment == 0) then
     -- in another env
     package.path = package.path .. ";D:/lua/CC_JLib/JLib/?.lua"
-    package.path = package.path .. ";/home/jisuk500/asdf/CC_JLib/JLib/?.lua"
+    -- package.path = package.path .. ";/home/jisuk500/asdf/CC_JLib/JLib/?.lua"
+    package.path = package.path ..
+                       ";/home/jisuk500/.local/share/craftos-pc/computer/0/CC_JLib/JLib/?.lua"
 
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
