@@ -12,8 +12,8 @@ JLib.BankDB = JLib.BankDB or {}
 JLib.BankDB.Server = Server
 
 function Server:initialize()
-    if (fs.exists(JLib.PortDB.Consts.ServerPath) == false) then
-        fs.makeDir(JLib.PortDB.Consts.ServerPath)
+    if (fs.exists(JLib.BankDB.Consts.ServerPath) == false) then
+        fs.makeDir(JLib.BankDB.Consts.ServerPath)
     end
 end
 
@@ -26,12 +26,16 @@ function Server:ServerHandle(msgLine)
     local msg = JLib.BankDB.Message:Deserialize(msgLine)
     if (msg.Header == JLib.BankDB.Headers.GETACCOUNT) then
         print("GETACCOUNT:" .. msg.SerializedMsgStruct)
+        self:_serverHanleGETACCOUNT(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.GETHISTORY) then
         print("GETHISTORY:" .. msg.SerializedMsgStruct)
+        self:_serverHanleGETHISTORY(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.REGISTER) then
         print("REGISTER:" .. msg.SerializedMsgStruct)
+        self:_serverHanleREGISTER(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.SEND) then
         print("SEND:" .. msg.SerializedMsgStruct)
+        self:_serverHanleSEND(msg.SerializedMsgStruct)
     end
 end
 
@@ -47,15 +51,18 @@ function Server:_serverHanleGETACCOUNT(struct_)
                                                          JLib.BankDB.Table)
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_GETACCOUNT:new()
+    ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETACCOUNT,"")
 
     -- SendNoTableError
     if (table == nil) then
-        ackmsg.Account = nil
+        ackmsg.Account = JLib.BankDB.Table:new()
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState
                            .NO_ACCOUNT_FOR_NAME
-
-        rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+        print("---")
+        print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
@@ -65,8 +72,11 @@ function Server:_serverHanleGETACCOUNT(struct_)
     ackmsg.Account.Histories = {}
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState.SUCCESS
-
-    rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+    print("---")
+    print(ackmsg:Serialize())
+    
+    ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+    rednet.send(struct.IDToSendBack,  ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
 
@@ -75,7 +85,6 @@ end
 ---handle get account history msg
 ---@param struct_ string
 function Server:_serverHanleGETHISTORY(struct_)
-
     local struct = JLib.BankDB.MsgStruct.GETHISTORY:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
@@ -84,35 +93,42 @@ function Server:_serverHanleGETHISTORY(struct_)
                                                           JLib.BankDB.Table)
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_GETHISTORY:new()
+    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETHISTORY,"")
 
     --- no account error
     if (table_ == nil) then
-        ackmsg.Histories = nil
+        ackmsg.Histories = {}
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETHISTORY.eState.NO_ACCOUNT
-        rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+        print("---")
+        print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
 
     -- quary account histories
     local histories = {}
-    local idx = #histories
-    for i = idx, 1, -1 do
-        if (table_.Histories[i].DayTime.Day >= struct.DaytimeTerm.Day) then
-            table.insert(histories, table_.Histories[i])
-        elseif (table_.Histories[i].DayTime.Time >= struct.DaytimeTerm.Time) then
-            table.insert(histories, table_.Histories[i])
-        else
+    local i = #(table_.Histories)
+    local outcount = i - struct.Count
+    outcount = math.max(outcount, 0)
+    while true do
+        if(i == outcount) then
             break
         end
+        table.insert(histories, table_.Histories[i])
+        i = i - 1
     end
 
     -- send back histories
     ackmsg.Histories = histories
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETHISTORY.eState.SUCCESS
-    rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+    -- print("---")
+    -- print(ackmsg:Serialize())
+    ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+    rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
 end
@@ -127,13 +143,17 @@ function Server:_serverHanleREGISTER(struct_)
     local table_ = JLib.Common.Serializer.DeserializeFrom(bankpath,
                                                           JLib.BankDB.Table)
     local ackmsg = JLib.BankDB.MsgStruct.ACK_REGISTER:new()
+    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_REGISTER,"")
 
     -- if table exist already ack
     if (table_ ~= nil) then
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_REGISTER.eState
                            .ALREADY_ACCOUNT_EXIST
-        rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+        -- print("---")
+        -- print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
@@ -149,7 +169,10 @@ function Server:_serverHanleREGISTER(struct_)
     -- send ack success msg
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_REGISTER.eState.SUCCESS
-    rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+    print("---")
+    print(ackmsg:Serialize())
+    ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+    rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
 end
@@ -162,6 +185,7 @@ function Server:_serverHanleSEND(struct_)
     local bankpath_to = JLib.BankDB.Consts.ServerPath .. "/" .. struct.To
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_SEND:new()
+    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_SEND, "")
 
     ---@type BankDB.Table
     local table_from = JLib.Common.Serializer.DeserializeFrom(bankpath_from,
@@ -171,7 +195,10 @@ function Server:_serverHanleSEND(struct_)
     if (table_from == nil) then
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_SEND.eState.NO_ACCOUNT_TO_SEND
-        rednet.send(struct.IDToSendBack, ackmsg:Serialize(),
+        -- print("---")
+        -- print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
@@ -181,7 +208,10 @@ function Server:_serverHanleSEND(struct_)
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_SEND.eState
                            .NOT_ENOUGHT_BALLANCE_TO_SEND
-        rednet.send(struct.IDToSendBack, ackmsg:Serialzie(),
+        --                    print("---")
+        -- print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
@@ -194,7 +224,10 @@ function Server:_serverHanleSEND(struct_)
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_SEND.eState
                            .NO_ACCOUNT_TO_RECIEVE
-        redner.send(struct.IDToSendBack, ackmsg:Serialzie(),
+                        --    print("---")
+                        --    print(ackmsg:Serialize())
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
         return nil
     end
@@ -202,26 +235,20 @@ function Server:_serverHanleSEND(struct_)
     table_from.Balance = table_from.Balance - struct.Balance
     table_to.Balance = table_to.Balance + struct.Balance
 
-    local new_daytime = JLib.BankDB.Table.Daytime:new()
-    new_daytime.Day = os.day()
-    new_daytime.Time = os.time()
+    local now_daytime = JLib.BankDB.Table_t.Daytime:new()
 
-    local new_history_from = JLib.BankDB.Table.History:new()
+    local new_history_from = JLib.BankDB.Table_t.History:new()
     new_history_from.BalanceLeft = table_from.Balance
     new_history_from.Inout = -struct.Balance
     new_history_from.Name = struct.FromMsg
-    new_history_from.DayTime = JLib.BankDB.Table.Daytime:new()
-    new_history_from.DayTime.Day = new_daytime.Day
-    new_history_from.DayTime.Time = new_daytime.Time
+    new_history_from.DayTime = now_daytime
     table.insert(table_from.Histories, new_history_from)
 
-    local new_history_to = JLib.BankDB.Table.History:new()
+    local new_history_to = JLib.BankDB.Table_t.History:new()
     new_history_to.BalanceLeft = table_to.Balance
     new_history_to.Inout = struct.Balance
     new_history_to.Name = struct.ToMsg
-    new_history_to.DayTime = JLib.BankDB.Table.Daytime:new()
-    new_history_to.DayTime.Day = new_daytime.Day
-    new_history_to.DayTime.Time = new_daytime.Time
+    new_history_to.DayTime = now_daytime
     table.insert(table_to.Histories, new_history_to)
 
     JLib.Common.Serializer.SerializeTo(table_from, bankpath_from, true)
@@ -229,8 +256,10 @@ function Server:_serverHanleSEND(struct_)
 
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_SEND.eState.SUCCESS
-
-    rednet.send(struct.IDToSendBack, ackmsg:Serialzie(),
+    -- print("---")
+    --     print(ackmsg:Serialize())
+    ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+    rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
 end

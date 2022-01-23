@@ -55,7 +55,7 @@ function SEND:Deserialize(str)
     local temp = textutils.unserialize(str)
     local temp2 = JLib.BankDB.MsgStruct.SEND:new()
     temp2.From = temp.From
-    temp2.FromMsg = temp.fromMsg
+    temp2.FromMsg = temp.FromMsg
     temp2.To = temp.To
     temp2.ToMsg = temp.ToMsg
     temp2.Balance = temp.Balance

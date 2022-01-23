@@ -28,7 +28,7 @@ end
 
 ---properties description
 ---@class BankDB.MsgStruct.ACK_GETHISTORY : BankDB.IMsgStruct
----@field Histories table<number, BankDB.Table.History>
+---@field Histories table<number, BankDB.Table_t.History>
 ---@field Success boolean
 ---@field State BankDB.MsgStruct.ACK_GETHISTORY.eState
 ---@field new fun(self:BankDB.MsgStruct.ACK_GETHISTORY):BankDB.MsgStruct.ACK_GETHISTORY
@@ -55,7 +55,7 @@ function ACK_GETHISTORY:Deserialize(str)
     local temp2 = {}
     local temp3 = textutils.unserialize(temp.Histories)
     for index, value in ipairs(temp3) do
-        table.insert(temp2, JLib.BankDB.Table.History:Deserialize(value))
+        table.insert(temp2, JLib.BankDB.Table_t.History:Deserialize(value))
     end
     local new_t = JLib.BankDB.MsgStruct.ACK_GETHISTORY:new()
     new_t.Histories = temp2

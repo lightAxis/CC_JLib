@@ -24,7 +24,7 @@ end
 ---@class BankDB.Message
 ---@field Header BankDB.Headers
 ---@field SerializedMsgStruct string
----@field new fun(self:BankDB.Message, Header: PortDB.Headers, SerializedMsgStruct: string):BankDB.Message
+---@field new fun(self:BankDB.Message, Header: BankDB.Headers, SerializedMsgStruct: string):BankDB.Message
 
 ---serialize message
 ---@return string
@@ -40,6 +40,8 @@ end
 ---@return BankDB.Message
 function Message:Deserialize(str)
     local temp = textutils.unserialize(str)
+    -- print("---")
+    -- print(str)
     local temp2 = Message:new(temp.Header, temp.SerializedMsgStruct)
     return temp2
 end

@@ -12,6 +12,10 @@ JLib.BankDB.Client = Client
 
 function Client:initialize() end
 
+--- properties description
+---@class BankDB.Client
+---@field new fun(self:BankDB.Client):BankDB.Client
+
 ---handle msg to client
 ---@param MsgLine string
 function Client:HandleMsg(MsgLine)
@@ -46,7 +50,7 @@ end
 ---handle client msg ack_gethistory
 ---@param strcut_ string
 ---@return boolean success
----@return table<number, BankDB.Table.History> histories
+---@return table<number, BankDB.Table_t.History> histories
 ---@return BankDB.MsgStruct.ACK_GETHISTORY.eState state
 function Client:_clientHandleACK_GETHISTORY(strcut_)
     local struct = JLib.BankDB.MsgStruct.ACK_GETHISTORY:Deserialize(strcut_)

@@ -36,7 +36,7 @@ end
 
 ---serialize this
 ---@return string
-function ACK_SEND:Serialzie()
+function ACK_SEND:Serialize()
     local temp = {}
     temp.Success = self.Success
     temp.State = self.State

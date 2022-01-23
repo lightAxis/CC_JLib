@@ -3,8 +3,8 @@ local class = require("Class.middleclass")
 ---@class BankDB.Table
 local Table = class("BankDB.Table")
 
-require("BankDB.TableStruct.daytime_t")
-require("BankDB.TableStruct.history_t")
+require("DBs.BankDB.TableStruct.daytime_t")
+require("DBs.BankDB.TableStruct.history_t")
 
 ---namespace JLib
 JLib = JLib or {}
@@ -23,7 +23,7 @@ end
 ---@class BankDB.Table
 ---@field Owner string
 ---@field Balance number
----@field Histories table<number, BankDB.Table.History>
+---@field Histories table<number, BankDB.Table_t.History>
 ---@field new fun(self:BankDB.Table):BankDB.Table
 
 ---serialize this
@@ -32,6 +32,11 @@ function Table:Serialize()
     local temp = {}
     temp.Owner = self.Owner
     temp.Balance = self.Balance
+    local histories = {}
+    for index, value in ipairs(self.Histories) do
+        table.insert(histories,value:Serialize())
+    end
+    temp.Histories = textutils.serialize(histories)
     return textutils.serialize(temp)
 end
 
@@ -43,5 +48,11 @@ function Table:Deserialize(str)
     local temp2 = JLib.BankDB.Table:new()
     temp2.Owner = temp.Owner
     temp2.Balance = temp.Balance
+    local temp3 = textutils.unserialize(temp.Histories)
+    local temp4 = {}
+    for index, value in ipairs(temp3) do
+        table.insert(temp4, JLib.BankDB.Table_t.History:Deserialize(value))
+    end
+    temp2.Histories = temp4
     return temp2
 end

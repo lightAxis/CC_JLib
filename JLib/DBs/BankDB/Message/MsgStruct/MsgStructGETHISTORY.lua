@@ -14,17 +14,17 @@ JLib.BankDB.MsgStruct.GETHISTORY = GETHISTORY
 
 ---constructor
 ---@param username? string or nil
----@param daytime? BankDB.Table.Daytime or nil
+---@param count? number or nil
 ---@param IDToSendBack? number or nil
-function GETHISTORY:initialize(username, daytime, IDToSendBack)
+function GETHISTORY:initialize(username, count, IDToSendBack)
     self.Username = username or nil
-    self.DaytimeTerm = daytime or nil
+    self.Count = count or nil
     self.IDToSendBack = IDToSendBack or nil
 end
 
 ---@class BankDB.MsgStruct.GETHISTORY : BankDB.IMsgStruct
 ---@field Username string
----@field DaytimeTerm BankDB.Table.Daytime
+---@field Count number
 ---@field IDToSendBack number
 ---@field new fun(self:BankDB.MsgStruct.GETHISTORY):BankDB.MsgStruct.GETHISTORY
 
@@ -33,7 +33,7 @@ end
 function GETHISTORY:Serialize()
     local temp = {}
     temp.Username = self.Username
-    temp.DaytimeTerm = self.DaytimeTerm:Serialize()
+    temp.Count = self.Count
     temp.IDToSendBack = self.IDToSendBack
     return textutils.serialize(temp)
 end
@@ -42,10 +42,10 @@ end
 ---@param str string
 ---@return BankDB.MsgStruct.GETHISTORY
 function GETHISTORY:Deserialize(str)
-    local temp = textutils(str)
+    local temp = textutils.unserialize(str)
     local temp2 = JLib.BankDB.MsgStruct.GETHISTORY:new()
     temp2.Username = temp.Username
-    temp2.DaytimeTerm = JLib.BankDB.Table.Daytime:Deserialize(temp.DaytimeTerm)
+    temp2.Count = temp.Count
     temp2.IDToSendBack = temp.IDToSendBack
     return temp2
 end
