@@ -1,7 +1,7 @@
 local class = require("Class.middleclass")
 
 require("Common.Serializer")
-require("PortDB.Message.MsgStruct.IMsgStruct")
+require("DBs.PortDB.Message.MsgStruct.IMsgStruct")
 
 ---public class MsgStructADD : IMsgStruct
 ---@class PortDB.MsgStruct.ADD

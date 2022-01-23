@@ -1,19 +1,19 @@
 local class = require("Class.middleclass")
 
-require("PortDB.Message.Headers")
-require("PortDB.Message.MsgStruct")
+require("DBs.BankDB.Message.Headers")
+require("DBs.BankDB.Message.MsgStruct")
 
----@class PortDB.Message
-local Message = class("PortDB.Message")
+---@class BankDB.Message
+local Message = class("BankDB.Message")
 
 ---namespace JLib
 JLib = JLib or {}
 ---namespace JLib.PortDB
-JLib.PortDB = JLib.PortDB or {}
-JLib.PortDB.Message = Message
+JLib.BankDB = JLib.BankDB or {}
+JLib.BankDB.Message = Message
 
 ---constructor
----@param Header PortDB.Headers
+---@param Header BankDB.Headers
 ---@param SerializedMsgStruct string
 function Message:initialize(Header, SerializedMsgStruct)
     self.Header = Header
@@ -21,10 +21,10 @@ function Message:initialize(Header, SerializedMsgStruct)
 end
 
 ---properties description
----@class PortDB.Message
----@field Header PortDB.Headers
+---@class BankDB.Message
+---@field Header BankDB.Headers
 ---@field SerializedMsgStruct string
----@field new fun(self:PortDB.Message, Header: PortDB.Headers, SerializedMsgStruct: string):PortDB.Message
+---@field new fun(self:BankDB.Message, Header: BankDB.Headers, SerializedMsgStruct: string):BankDB.Message
 
 ---serialize message
 ---@return string
@@ -37,9 +37,11 @@ end
 
 ---deserialize message 
 ---@param str string
----@return PortDB.Message
+---@return BankDB.Message
 function Message:Deserialize(str)
     local temp = textutils.unserialize(str)
+    -- print("---")
+    -- print(str)
     local temp2 = Message:new(temp.Header, temp.SerializedMsgStruct)
     return temp2
 end

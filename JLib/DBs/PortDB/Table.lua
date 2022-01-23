@@ -1,7 +1,7 @@
 local class = require("Class.middleclass")
 
 ---@class PortDB.Table
-Table = class("PortDB.Table")
+local Table = class("PortDB.Table")
 
 ---namespace JLib
 JLib = JLib or {}
