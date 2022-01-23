@@ -1,7 +1,7 @@
 local class = require("Class.middleclass")
 
-require("PortDB.Message.Headers")
-require("PortDB.Message.MsgStruct")
+require("DBs.PortDB.Message.Headers")
+require("DBs.PortDB.Message.MsgStruct")
 
 ---@class PortDB.Message
 local Message = class("PortDB.Message")

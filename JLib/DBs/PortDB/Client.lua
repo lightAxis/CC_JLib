@@ -1,7 +1,7 @@
 local class = require("Class.middleclass")
 
-require("PortDB.Message")
-require("PortDB.Consts")
+require("DBs.PortDB.Message")
+require("DBs.PortDB.Consts")
 
 ---@class PortDB.Client
 local Client = class("PortDB.Client")

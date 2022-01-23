@@ -1,0 +1,5 @@
+require("DBs.BankDB.Consts")
+require("DBs.BankDB.Message")
+require("DBs.BankDB.Client")
+require("DBs.BankDB.Server")
+require("DBs.BankDB.Table")
