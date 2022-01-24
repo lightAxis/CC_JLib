@@ -11,5 +11,9 @@ JLib.BankDB.Consts = Consts
 JLib.BankDB.Consts = {
     ["masterPort"] = "BankDB",
     ["ServerPath"] = "BankDBServer",
-    ["ClientPath"] = "BankDBClient"
+    ["ClientPath"] = "BankDBClient",
+    ["rednet_side"] = "left",
+    ["player_detector_side"] = "right",
+    ["salary_update_sec"] = 50,
+    ["salary_init"] = 17568000
 }
