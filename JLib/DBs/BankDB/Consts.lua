@@ -14,6 +14,7 @@ JLib.BankDB.Consts = {
     ["ClientPath"] = "BankDBClient",
     ["rednet_side"] = "left",
     ["player_detector_side"] = "right",
+    ["chat_box_side"] = "back",
     ["salary_update_sec"] = 50,
     ["salary_init"] = 17568000
 }

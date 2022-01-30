@@ -5,6 +5,7 @@ require("DBs.BankDB.Consts")
 require("DBs.BankDB.Table")
 
 require("AdvancedPeripherals.PlayerDetector")
+require("AdvancedPeripherals.ChatBox")
 require("Economy.WorkHourDetector")
 require("Economy.SalaryCalculator")
 
@@ -21,9 +22,12 @@ function Server:initialize()
     end
 
     rednet.open(JLib.BankDB.Consts.rednet_side)
-
+    ---@type AdvancedPeripherals.PlayerDetector
     self.PlayerDetector = peripheral.wrap(JLib.BankDB.Consts
                                               .player_detector_side)
+    ---@type AdvancedPeripherals.ChatBox
+    self.ChatBox = peripheral.wrap(JLib.BankDB.Consts.chat_box_side)
+
     self.SalaryTimer = os.startTimer(JLib.BankDB.Consts.salary_update_sec)
     self.WorkHourDetector = JLib.Economy.WorkHourDetector:new(
                                 self.PlayerDetector)
@@ -55,16 +59,49 @@ end
 function Server:SalaryUpdate()
     local updated_players = self.WorkHourDetector:update()
 
+    tb = {}
+
     for index, value in ipairs(updated_players) do
         -- print("---")
         print(value)
-        local sal = self.SalaryCalculator:give(value, 1,
+        local sal = self.SalaryCalculator:calcHourSalary(value, 1,
                                                JLib.BankDB.Consts.salary_init)
         -- print("-")
         -- print(sal)
+        table.insert(tb,JLib.BankDB.Consts.salary_init)
+    end
+
+    local result_table = self.SalaryCalculator:isPlayersSalarySettlement(updated_players)
+
+    for key, value in pairs(result_table) do
+        self:_addSalaryToAccount(key, value)
     end
 
 end
+
+function Server:_addSalaryToAccount(name, salary)
+    local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. name
+    print("giv salr?")
+    ---@type BankDB.Table
+     local tb = JLib.Common.Serializer.DeserializeFrom(bankpath,
+                                                         JLib.BankDB.Table)
+
+     if(tb == nil) then
+        return false
+     end
+
+    tb.Balance = tb.Balance + salary
+    local new_his = JLib.BankDB.Table_t.History:new("salary",salary,tb.Balance,JLib.BankDB.Table_t.Daytime:new())
+    table.insert(tb.Histories, new_his)
+    
+    JLib.Common.Serializer.SerializeTo(tb,bankpath,true)
+
+    self.ChatBox.sendMessageToPlayer("Got a Payment! : "..salary.. "/ balance : "..tb.Balance, name, "KRW Bank")
+
+    return true
+end
+
+
 
 ---handler msg to Server
 function Server:ServerHandle(msgLine)
@@ -308,3 +345,5 @@ function Server:_serverHanleSEND(struct_)
                 JLib.BankDB.Consts.masterPort)
     return nil
 end
+
+
