@@ -4,6 +4,12 @@ require("DBs.BankDB.Message")
 require("DBs.BankDB.Consts")
 require("DBs.BankDB.Table")
 
+require("AdvancedPeripherals.PlayerDetector")
+require("AdvancedPeripherals.ChatBox")
+require("Economy.WorkHourDetector")
+require("Economy.SalaryCalculator")
+require("Common.MonitorPrinter")
+
 ---@class BankDB.Server
 local Server = class("BankDB.Server")
 
@@ -15,26 +21,126 @@ function Server:initialize()
     if (fs.exists(JLib.BankDB.Consts.ServerPath) == false) then
         fs.makeDir(JLib.BankDB.Consts.ServerPath)
     end
+
+    rednet.open(JLib.BankDB.Consts.rednet_side)
+    ---@type AdvancedPeripherals.PlayerDetector
+    self.PlayerDetector = peripheral.wrap(JLib.BankDB.Consts
+                                              .player_detector_side)
+    ---@type AdvancedPeripherals.ChatBox
+    self.ChatBox = peripheral.wrap(JLib.BankDB.Consts.chat_box_side)
+
+    self.SalaryTimer = os.startTimer(JLib.BankDB.Consts.salary_update_sec)
+    self.WorkHourDetector = JLib.Economy.WorkHourDetector:new(
+                                self.PlayerDetector)
+    self.SalaryCalculator = JLib.Economy.SalaryCalculator:new()
+
+    self.salaryMonitor = peripheral.wrap(JLib.BankDB.Consts.salary_monitor_side)
+    self.salaryMonitorPrinter = JLib.Common.MonitorPrinter:new(
+                                    self.salaryMonitor)
+    self.bankingMonitor = peripheral.wrap(JLib.BankDB.Consts
+                                              .banking_monitor_side)
+    self.bankingMonitorPrinter = JLib.Common.MonitorPrinter:new(
+                                     self.bankingMonitor)
+
+    self.salaryMonitor.clear()
+    self.salaryMonitor.setCursorPos(1, 1)
+    self.bankingMonitor.clear()
+    self.bankingMonitor.setCursorPos(1, 1)
 end
 
 ---properties descrtiption
 ---@class BankDB.Server
 ---@field new fun(self:BankDB.Server):BankDB.Server
 
+function Server:main()
+    local a, b, c, d
+
+    while true do
+        a, b, c, d = os.pullEvent()
+
+        if (a == "rednet_message") then
+            if (d == JLib.BankDB.Consts.masterPort) then
+                self:ServerHandle(c)
+            end
+        elseif (a == "timer") then
+            self:SalaryUpdate()
+            self.SalaryTimer = os.startTimer(JLib.BankDB.Consts
+                                                 .salary_update_sec)
+        end
+    end
+end
+
+function Server:SalaryUpdate()
+    local updated_players = self.WorkHourDetector:update()
+    self.salaryMonitorPrinter:print("---\n")
+    self.salaryMonitorPrinter:print("Check Working Players..\n")
+    tb = {}
+
+    for index, value in ipairs(updated_players) do
+        -- print("---")
+        -- print(value)
+        local sal = self.SalaryCalculator:calcHourSalary(value, 1, JLib.BankDB
+                                                             .Consts.salary_init)
+        -- print("-")
+        -- print(sal)
+        table.insert(tb, JLib.BankDB.Consts.salary_init)
+        self.salaryMonitorPrinter:print(value .. "\n")
+    end
+
+    self.salaryMonitorPrinter:print("---\n")
+    self.salaryMonitorPrinter:print("salary settlement check...\n")
+    local result_table = self.SalaryCalculator:isPlayersSalarySettlement(
+                             updated_players)
+
+    for key, value in pairs(result_table) do
+        self:_addSalaryToAccount(key, value)
+        self.salaryMonitorPrinter:print(key .. ":" .. value .. "\n")
+    end
+
+end
+
+function Server:_addSalaryToAccount(name, salary)
+    local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. name
+    -- print("giv salr?")
+    ---@type BankDB.Table
+    local tb = JLib.Common.Serializer.DeserializeFrom(bankpath,
+                                                      JLib.BankDB.Table)
+
+    if (tb == nil) then return false end
+
+    tb.Balance = tb.Balance + salary
+    local new_his = JLib.BankDB.Table_t.History:new("salary", salary,
+                                                    tb.Balance, JLib.BankDB
+                                                        .Table_t.Daytime:new())
+    table.insert(tb.Histories, new_his)
+
+    JLib.Common.Serializer.SerializeTo(tb, bankpath, true)
+
+    self.ChatBox.sendMessageToPlayer("Got a Payment! : " .. salary ..
+                                         "/ balance : " .. tb.Balance, name,
+                                     "KRW Bank")
+
+    return true
+end
+
 ---handler msg to Server
 function Server:ServerHandle(msgLine)
     local msg = JLib.BankDB.Message:Deserialize(msgLine)
     if (msg.Header == JLib.BankDB.Headers.GETACCOUNT) then
-        print("GETACCOUNT:" .. msg.SerializedMsgStruct)
+        self.bankingMonitorPrinter:print("GETACCOUNT:" ..
+                                             msg.SerializedMsgStruct .. "\n")
         self:_serverHanleGETACCOUNT(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.GETHISTORY) then
-        print("GETHISTORY:" .. msg.SerializedMsgStruct)
+        self.bankingMonitorPrinter:print("GETHISTORY:" ..
+                                             msg.SerializedMsgStruct .. "\n")
         self:_serverHanleGETHISTORY(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.REGISTER) then
-        print("REGISTER:" .. msg.SerializedMsgStruct)
+        self.bankingMonitorPrinter:print(
+            "REGISTER:" .. msg.SerializedMsgStruct .. "\n")
         self:_serverHanleREGISTER(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.SEND) then
-        print("SEND:" .. msg.SerializedMsgStruct)
+        self.bankingMonitorPrinter:print(
+            "SEND:" .. msg.SerializedMsgStruct .. "\n")
         self:_serverHanleSEND(msg.SerializedMsgStruct)
     end
 end
@@ -51,7 +157,7 @@ function Server:_serverHanleGETACCOUNT(struct_)
                                                          JLib.BankDB.Table)
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_GETACCOUNT:new()
-    ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETACCOUNT,"")
+    ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETACCOUNT, "")
 
     -- SendNoTableError
     if (table == nil) then
@@ -59,8 +165,8 @@ function Server:_serverHanleGETACCOUNT(struct_)
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState
                            .NO_ACCOUNT_FOR_NAME
-        print("---")
-        print(ackmsg:Serialize())
+        self.bankingMonitorPrinter:print("---\n")
+        self.bankingMonitorPrinter:print(ackmsg:Serialize() .. "\n")
         ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
         rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
@@ -72,11 +178,11 @@ function Server:_serverHanleGETACCOUNT(struct_)
     ackmsg.Account.Histories = {}
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState.SUCCESS
-    print("---")
-    print(ackmsg:Serialize())
-    
+    self.bankingMonitorPrinter:print("---\n")
+    self.bankingMonitorPrinter:print(ackmsg:Serialize() .. "\n")
+
     ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
-    rednet.send(struct.IDToSendBack,  ackmsgline:Serialize(),
+    rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
 
@@ -93,15 +199,16 @@ function Server:_serverHanleGETHISTORY(struct_)
                                                           JLib.BankDB.Table)
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_GETHISTORY:new()
-    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETHISTORY,"")
+    local ackmsgline = JLib.BankDB.Message:new(
+                           JLib.BankDB.Headers.ACK_GETHISTORY, "")
 
     --- no account error
     if (table_ == nil) then
         ackmsg.Histories = {}
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETHISTORY.eState.NO_ACCOUNT
-        print("---")
-        print(ackmsg:Serialize())
+        self.bankingMonitorPrinter:print("---\n")
+        self.bankingMonitorPrinter:print(ackmsg:Serialize() .. "\n")
         ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
         rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
@@ -114,9 +221,7 @@ function Server:_serverHanleGETHISTORY(struct_)
     local outcount = i - struct.Count
     outcount = math.max(outcount, 0)
     while true do
-        if(i == outcount) then
-            break
-        end
+        if (i == outcount) then break end
         table.insert(histories, table_.Histories[i])
         i = i - 1
     end
@@ -143,7 +248,8 @@ function Server:_serverHanleREGISTER(struct_)
     local table_ = JLib.Common.Serializer.DeserializeFrom(bankpath,
                                                           JLib.BankDB.Table)
     local ackmsg = JLib.BankDB.MsgStruct.ACK_REGISTER:new()
-    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_REGISTER,"")
+    local ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_REGISTER,
+                                               "")
 
     -- if table exist already ack
     if (table_ ~= nil) then
@@ -163,14 +269,16 @@ function Server:_serverHanleREGISTER(struct_)
     table_new.Owner = struct.Username
     table_new.Balance = 1000
     table_new.Histories = {}
+    table_new.Salary = JLib.BankDB.Consts.salary_init
+    table_new.WorkingHour = 0
 
     JLib.Common.Serializer.SerializeTo(table_new, bankpath, true)
 
     -- send ack success msg
     ackmsg.Success = true
     ackmsg.State = JLib.BankDB.MsgStruct.ACK_REGISTER.eState.SUCCESS
-    print("---")
-    print(ackmsg:Serialize())
+    self.bankingMonitorPrinter:write("---\n")
+    self.bankingMonitorPrinter:write(ackmsg:Serialize() .. "\n")
     ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
     rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
@@ -224,8 +332,8 @@ function Server:_serverHanleSEND(struct_)
         ackmsg.Success = false
         ackmsg.State = JLib.BankDB.MsgStruct.ACK_SEND.eState
                            .NO_ACCOUNT_TO_RECIEVE
-                        --    print("---")
-                        --    print(ackmsg:Serialize())
+        --    print("---")
+        --    print(ackmsg:Serialize())
         ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
         rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                     JLib.BankDB.Consts.masterPort)
@@ -263,3 +371,4 @@ function Server:_serverHanleSEND(struct_)
                 JLib.BankDB.Consts.masterPort)
     return nil
 end
+

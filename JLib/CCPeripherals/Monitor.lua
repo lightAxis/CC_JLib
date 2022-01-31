@@ -1,0 +1,6 @@
+---@class CCPeripherals.Monitor
+---@field write fun(str:string)
+---@field getSize fun():number,number
+---@field setCursorPos fun(x:number, y:number)
+---@field clear fun()
+---@field clearLine fun()
