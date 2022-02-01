@@ -9,8 +9,10 @@ JLib.Grid = Grid
 
 ---constructo
 ---@param Len Vector2   
-function Grid:initialize(Len)
+---@param Pos? Vector2 or (1,1)
+function Grid:initialize(Len, Pos)
     self.targetLen = Len:Copy()
+    self.Offset = Pos or JLib.Vector2:new(1, 1)
     self.horizontalSettings = {}
     self.verticalSettings = {}
     self._LensX = {}
@@ -111,6 +113,23 @@ end
 ---@return Vector2 Len
 function Grid:getPosLen(col, row, colSpan, rowSpan)
 
+    return self:getPosLenWithMargin(col, row, colSpan, rowSpan, 0, 0, 0, 0)
+
+end
+
+---get Position and length with margin applied
+---@param col number column number > 1
+---@param row number row number > 1
+---@param colSpan? number column span number > 1
+---@param rowSpan? number row span number > 1
+---@param marginLeft? number margin > 0
+---@param marginRight? number margin >0
+---@param marginTop? number margin >0
+---@param marginBottom? number margin >0
+---@return Vector2 Pos
+---@return Vector2 Len
+function Grid:getPosLenWithMargin(col, row, colSpan, rowSpan, marginLeft,
+                                  marginRight, marginTop, marginBottom)
     local colspan = colSpan or 1
     local rowspan = rowSpan or 1
 
@@ -132,6 +151,26 @@ function Grid:getPosLen(col, row, colSpan, rowSpan)
         Pos.y = self._LensY[row - 1] + 1
         Len.y = self._LensY[row + rowspan - 1] - self._LensY[row - 1]
     end
+
+    local marginLeft = marginLeft or 0
+    local marginRight = marginRight or 0
+    local marginTop = marginTop or 0
+    local marginBottom = marginBottom or 0
+
+    Pos.x = Pos.x + marginLeft
+    Len.x = Len.x - marginLeft
+
+    Len.x = Len.x - marginRight
+
+    Pos.y = Pos.y + marginTop
+    Len.y = Len.y - marginTop
+
+    Len.y = Len.y - marginBottom
+
+    Len.x = math.min(Len.x, self.targetLen.x)
+    Len.y = math.min(Len.y, self.targetLen.y)
+
+    Pos = JLib.UITools.calcRelativeOffset(Pos, self.Offset)
 
     return Pos, Len
 end

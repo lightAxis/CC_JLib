@@ -24,7 +24,10 @@ local Events = {
     ["monitor_touch"] = "monitor_touch",
     ["monitor_resize"] = "monitor_resize",
     ["term_resize"] = "term_resize",
-    ["turtle_inventory"] = "turtle_inventory"
+    ["turtle_inventory"] = "turtle_inventory",
+
+    ["chat"] = "chat", -- chatbox
+    ["playerClick"] = "playerClick" -- player detector
 }
 
 JLib = JLib or {}

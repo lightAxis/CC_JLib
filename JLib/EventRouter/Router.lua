@@ -67,6 +67,10 @@ function Router:detachEventCallback(event, mthd)
     end
 end
 
+---remove all event handlers
+---@param event EventRouter.Events
+function Router:removeEventCallback(event) self._eventCallbacks[event] = {} end
+
 ---detach rednet event callback
 ---@param protocol string
 ---@param mthd fun(a:string, b:string, c:string, d:string)
