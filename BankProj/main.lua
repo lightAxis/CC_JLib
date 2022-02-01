@@ -19,7 +19,8 @@ BankProj.EventRouter:attachUIRunner(BankProj.UIRunner)
 --- initialize Screen objects to use,
 --- can terminal or monitor
 --- side must exist. NONE is terminal
-local screen_term = JLib.Screen:new(peripheral.wrap("left"), JLib.Enums.Side.left)
+local screen_term = JLib.Screen:new(peripheral.wrap("left"),
+                                    JLib.Enums.Side.left)
 
 ------------ Param -------------
 
@@ -29,11 +30,15 @@ require("param")
 
 --- register Project SceneFile to other 
 local MainScene = require("Scenes.mainScene")
-local LoginScene = require("Scenes.loginScene")
+-- local LoginScene = require("Scenes.loginScene")
+local BioScanScene = require("Scenes.bioScanScene")
+local bankingMenuScene = require("Scenes.bankingMenuScene")
 
 --- register Project Scene Instance to Project global namespace
 BankProj.MainScene = MainScene:new(screen_term, BankProj)
-BankProj.LoginScene = LoginScene:new(screen_term, BankProj)
+-- BankProj.LoginScene = LoginScene:new(screen_term, BankProj)
+BankProj.BioScanScene = BioScanScene:new(screen_term, BankProj)
+BankProj.BankingMenuScene = bankingMenuScene:new(screen_term, BankProj)
 
 --- register each screen sides initialize Scene
 BankProj.UIRunner:attachScene(BankProj.MainScene)

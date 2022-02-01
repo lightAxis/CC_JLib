@@ -37,6 +37,8 @@ end
 ---comment
 ---@param tb1 TextBlock
 function SCENE:tb1_style(tb1)
+    tb1:setBackgroundColor(JLib.Enums.Color.black)
+    tb1:setTextColor(JLib.Enums.Color.cyan)
     tb1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
     tb1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
 end
@@ -44,13 +46,15 @@ end
 ---comment
 ---@param bt1 Button
 function SCENE:butt1_style(bt1)
+    bt1:setBackgroundColor(JLib.Enums.Color.green)
+    bt1:setTextColor(JLib.Enums.Color.lime)
     bt1:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
     bt1:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
 end
 
-function SCENE:bt1_click() 
-    self.PROJ.LoginScene:resetList()
-    self.PROJ.UIRunner:changeScene(self.PROJ.LoginScene) 
+function SCENE:bt1_click()
+    self.PROJ.BioScanScene:clean()
+    self.PROJ.UIRunner:changeScene(self.PROJ.BioScanScene)
 end
 
 return SCENE
