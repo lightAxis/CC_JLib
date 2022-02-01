@@ -56,6 +56,8 @@ function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
 
     self.Name = name or ""
 
+    self.Visible = true
+
 end
 
 -- [properties description]
@@ -70,6 +72,7 @@ end
 ---@field FG Enums.Color
 ---@field Children table<number,UIElement>
 ---@field Name string
+---@field Visible boolean
 ---@field new fun(self:UIElement ,parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
 
 -- [functions]
@@ -88,7 +91,9 @@ function UIElement:addChild(child) table.insert(self.Children, child) end
 
 -- call render callback of children
 function UIElement:renderChildren()
-    for index, value in ipairs(self.Children) do value:render() end
+    for index, value in ipairs(self.Children) do
+        if (value.Visible == true) then value:render() end
+    end
 end
 
 -- check if position is over element.
