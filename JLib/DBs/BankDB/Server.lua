@@ -71,30 +71,49 @@ function Server:main()
 end
 
 function Server:SalaryUpdate()
+    self.salaryMonitorPrinter:print("-------------------------------")
+    self.salaryMonitorPrinter:print("check players online...")
     local updated_players = self.WorkHourDetector:update()
-    self.salaryMonitorPrinter:print("---\n")
-    self.salaryMonitorPrinter:print("Check Working Players..\n")
-    tb = {}
-
     for index, value in ipairs(updated_players) do
-        -- print("---")
-        -- print(value)
-        local sal = self.SalaryCalculator:calcHourSalary(value, 1, JLib.BankDB
-                                                             .Consts.salary_init)
-        -- print("-")
-        -- print(sal)
-        table.insert(tb, JLib.BankDB.Consts.salary_init)
-        self.salaryMonitorPrinter:print(value .. "\n")
+        self.salaryMonitorPrinter:print(value)
     end
 
-    self.salaryMonitorPrinter:print("---\n")
-    self.salaryMonitorPrinter:print("salary settlement check...\n")
-    local result_table = self.SalaryCalculator:isPlayersSalarySettlement(
-                             updated_players)
+    self.salaryMonitorPrinter:print("check players working hour...")
+    local workedPlayers = self.SalaryCalculator:checkPlayersHourWorked(
+                              updated_players)
+    for index, value in ipairs(workedPlayers) do
+        self.salaryMonitorPrinter:print(value)
+    end
 
-    for key, value in pairs(result_table) do
+    self.salaryMonitorPrinter:print("add players working hour...")
+    local workingPlayersTable = self.SalaryCalculator:addPlayersHourWorked(
+                                    workedPlayers)
+    for key, value in pairs(workingPlayersTable) do
+        self.salaryMonitorPrinter:print(key .. ":" .. value)
+    end
+
+    self.salaryMonitorPrinter:print("check player at payment time...")
+    self.SalaryCalculator:checkIsPlayersTimeToPayment()
+    local playersToBePaid = self.SalaryCalculator:extractPlayersListToBePaid()
+    local playersPaymenyTable = self.SalaryCalculator:makePlayerPayTable(
+                                    playersToBePaid)
+    -- tb = {}
+
+    -- for index, value in ipairs(updated_players) do
+    --     -- print("---")
+    --     print(value)
+    --     local sal = self.SalaryCalculator:calcHourSalary(value, 1,
+    --                                            JLib.BankDB.Consts.salary_init)
+    --     -- print("-")
+    --     -- print(sal)
+    --     table.insert(tb,JLib.BankDB.Consts.salary_init)
+    -- end
+
+    -- local result_table = self.SalaryCalculator:isPlayersSalarySettlement(updated_players)
+    self.salaryMonitorPrinter:print("give player salary...")
+    for key, value in pairs(playersPaymenyTable) do
+        self.salaryMonitorPrinter:print(key .. ":" .. value)
         self:_addSalaryToAccount(key, value)
-        self.salaryMonitorPrinter:print(key .. ":" .. value .. "\n")
     end
 
 end
