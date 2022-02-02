@@ -39,26 +39,28 @@ function workhourdetector:update()
     for index, value in ipairs(players) do
         local playerinfo = self.detector.getPlayerPos(value)
 
-        if (self.lastPlayerStates[value] == nil) then
-            self.lastPlayerStates[value] = playerinfo
-            self.PlayerAFKTime[value] = 0
-            self.isPlayerAFK[value] = false
-        else
-            if (self:comparePlayerState(self.lastPlayerStates[value], playerinfo) ==
-                true) then
-                self.PlayerAFKTime[value] = self.PlayerAFKTime[value] + 1
-                if (self.PlayerAFKTime[value] >= self.AKFTime) then
-                    self.isPlayerAFK[value] = true
-                end
-            else
+        if (playerinfo ~= nil) then
+            if (self.lastPlayerStates[value] == nil) then
                 self.lastPlayerStates[value] = playerinfo
                 self.PlayerAFKTime[value] = 0
                 self.isPlayerAFK[value] = false
+            else
+                if (self:comparePlayerState(self.lastPlayerStates[value],
+                                            playerinfo) == true) then
+                    self.PlayerAFKTime[value] = self.PlayerAFKTime[value] + 1
+                    if (self.PlayerAFKTime[value] >= self.AKFTime) then
+                        self.isPlayerAFK[value] = true
+                    end
+                else
+                    self.lastPlayerStates[value] = playerinfo
+                    self.PlayerAFKTime[value] = 0
+                    self.isPlayerAFK[value] = false
+                end
             end
-        end
 
-        if (self.isPlayerAFK[value] == false) then
-            table.insert(results, value)
+            if (self.isPlayerAFK[value] == false) then
+                table.insert(results, value)
+            end
         end
     end
 

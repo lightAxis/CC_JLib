@@ -53,6 +53,8 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
         JLib.EventRouter.Events.playerClick,
         function(a, b, c, d) self:playerClickEvent(a, b, c, d) end)
 
+    self.current_Player = ""
+
 end
 
 --- properties description
@@ -94,7 +96,9 @@ function SCENE:auth_bt_style(bt)
 end
 
 function SCENE:auth_bt_ClickEvent()
-    self:clean()
+    -- self:clean()
+    self.PROJ.EventRouter:removeEventCallback(
+        JLib.EventRouter.Events.playerClick)
     self.PROJ.UIRunner:changeScene(self.PROJ.BankingMenuScene)
 end
 
@@ -116,6 +120,7 @@ end
 
 function SCENE:playerClickEvent(a, b, c, d)
     self.player_textblock:setText(b)
+    self.current_Player = b
     self.player_textblock.Visible = true
     self.auth_bt.Visible = true
     self.PROJ.UIRunner:RenderScreen()
@@ -126,6 +131,7 @@ function SCENE:clean()
         JLib.EventRouter.Events.playerClick,
         function(a, b, c, d) self:playerClickEvent(a, b, c, d) end)
     self.player_textblock:setText("")
+    self.current_Player = ""
     self.player_textblock.Visible = false
     self.auth_bt.Visible = false
 end

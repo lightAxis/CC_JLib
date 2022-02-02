@@ -30,15 +30,17 @@ require("param")
 
 --- register Project SceneFile to other 
 local MainScene = require("Scenes.mainScene")
--- local LoginScene = require("Scenes.loginScene")
 local BioScanScene = require("Scenes.bioScanScene")
 local bankingMenuScene = require("Scenes.bankingMenuScene")
+local profileScene = require("Scenes.profileScene")
+local historiesScene = require("Scenes.historiesScene")
 
 --- register Project Scene Instance to Project global namespace
 BankProj.MainScene = MainScene:new(screen_term, BankProj)
--- BankProj.LoginScene = LoginScene:new(screen_term, BankProj)
 BankProj.BioScanScene = BioScanScene:new(screen_term, BankProj)
 BankProj.BankingMenuScene = bankingMenuScene:new(screen_term, BankProj)
+BankProj.ProfileScene = profileScene:new(screen_term, BankProj)
+BankProj.HistoriesScene = historiesScene:new(screen_term, BankProj)
 
 --- register each screen sides initialize Scene
 BankProj.UIRunner:attachScene(BankProj.MainScene)

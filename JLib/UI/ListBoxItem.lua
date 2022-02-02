@@ -30,7 +30,7 @@ function ListBoxItem:initialize(parentListBox, screen, obj)
 end
 
 --- properties description
----@class ListBoxItem : ListBox
+---@class ListBoxItem : UIElement
 ---@field obj any
 ---@field _TextArea TextArea
 ---@field _IsSelected boolean

@@ -27,6 +27,7 @@ function SCENE:initialize(attachedScreen, projNamespace)
     self:butt1_style(self.bt1)
     self.bt1.ClickEvent = function() self:bt1_click() end
 
+    rednet.open(self.PROJ.Param.rednet_side)
 end
 
 ---properties description
