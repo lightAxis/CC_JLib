@@ -63,9 +63,11 @@ function Server:main()
                 self:ServerHandle(c)
             end
         elseif (a == "timer") then
-            self:SalaryUpdate()
-            self.SalaryTimer = os.startTimer(JLib.BankDB.Consts
-                                                 .salary_update_sec)
+            if (b == self.SalaryTimer) then
+                self:SalaryUpdate()
+                self.SalaryTimer = os.startTimer(JLib.BankDB.Consts
+                                                     .salary_update_sec)
+            end
         end
     end
 end
@@ -128,6 +130,9 @@ function Server:_addSalaryToAccount(name, salary)
     if (tb == nil) then return false end
 
     tb.Balance = tb.Balance + salary
+
+    local hour = salary / (JLib.BankDB.Consts.salary_init / 1920)
+    tb.WorkingHour = tb.WorkingHour + hour
     local new_his = JLib.BankDB.Table_t.History:new("salary", salary,
                                                     tb.Balance, JLib.BankDB
                                                         .Table_t.Daytime:new())
@@ -135,10 +140,11 @@ function Server:_addSalaryToAccount(name, salary)
 
     JLib.Common.Serializer.SerializeTo(tb, bankpath, true)
 
-    self.ChatBox.sendMessageToPlayer("Got a Payment! : " .. salary ..
-                                         "/ balance : " .. tb.Balance, name,
-                                     "KRW Bank")
-
+    print("chatbox+debug:" .. name)
+    local suc = self.ChatBox.sendMessageToPlayer(
+                    "Got a Payment! : " .. salary .. "/ balance : " ..
+                        tb.Balance, name, "KRW Bank")
+    print(suc)
     return true
 end
 

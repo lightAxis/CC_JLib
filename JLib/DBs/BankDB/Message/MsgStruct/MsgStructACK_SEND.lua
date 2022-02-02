@@ -21,6 +21,15 @@ JLib.BankDB.MsgStruct.ACK_SEND.eState = {
     ["SUCCESS"] = 0
 }
 
+---@class BankDB.MsgStruct.ACK_SEND.eStateReverse
+JLib.BankDB.MsgStruct.ACK_SEND.eStateReverse = {
+    [-1] = "NONE",
+    [-2] = "NO_ACCOUNT_TO_SEND",
+    [-3] = "NO_ACCOUNT_TO_RECIEVE",
+    [-4] = "NOT_ENOUGHT_BALLANCE_TO_SEND",
+    [0] = "SUCCESS"
+}
+
 ---constructor
 ---@param success? boolean or false
 function ACK_SEND:initialize(success)

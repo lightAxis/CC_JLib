@@ -85,6 +85,12 @@ function Router:detachRednetCallback(protocol, mthd)
     end
 end
 
+---remove all rednet callback at protocol
+---@param protocol string
+function Router:removeRednetEventCallBack(protocol)
+    self._rednetCallbacks[protocol] = nil
+end
+
 ---attach UIRunner to this Router
 ---@param UIrunner UIRunner
 function Router:attachUIRunner(UIrunner)

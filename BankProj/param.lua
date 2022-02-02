@@ -2,5 +2,7 @@
 BankProj = BankProj or {}
 BankProj.Param = {
     ["PlayerDetectorName"] = "playerDetector",
-    ["PlayerScanRange"] = 4
+    ["BankServerID"] = 17,
+    ["myID"] = 8,
+    ["rednet_side"] = "right"
 }

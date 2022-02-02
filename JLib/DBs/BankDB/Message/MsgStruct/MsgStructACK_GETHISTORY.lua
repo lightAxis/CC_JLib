@@ -19,6 +19,13 @@ JLib.BankDB.MsgStruct.ACK_GETHISTORY.eState = {
     ["SUCCESS"] = 0
 }
 
+---@class BankDB.MsgStruct.ACK_GETHISTORY.eStateReverse
+JLib.BankDB.MsgStruct.ACK_GETHISTORY.eStateReverse = {
+    [-1] = "NONE",
+    [-2] = "NO_ACCOUNT",
+    [0] = "SUCCESS"
+}
+
 ---constructor
 function ACK_GETHISTORY:initialize()
     self.Histories = {}

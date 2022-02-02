@@ -19,6 +19,13 @@ JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState = {
     ["SUCCESS"] = 0
 }
 
+---@class BankDB.MsgStruct.ACK_GETACCOUNT.eStateReverse
+JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eStateReverse = {
+    [-1] = "NONE",
+    [-2] = "NO_ACCOUNT_FOR_NAME",
+    [0] = "SUCCESS"
+}
+
 ---constructor
 function ACK_GETACCOUNT:initialize()
     self.Account = {}

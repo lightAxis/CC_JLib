@@ -19,6 +19,13 @@ JLib.BankDB.MsgStruct.ACK_REGISTER.eState = {
     ["SUCCESS"] = 0
 }
 
+---@class BankDB.MsgStruct.ACK_REGISTER.eStateReverse
+JLib.BankDB.MsgStruct.ACK_REGISTER.eStateReverse = {
+    [-1] = "NONE",
+    [-2] = "ALREADY_ACCOUNT_EXIST",
+    [0] = "SUCCESS"
+}
+
 ---constructor
 ---@param success? boolean or false
 function ACK_REGISTER:initialize(success)
