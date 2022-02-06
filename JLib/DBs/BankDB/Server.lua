@@ -154,27 +154,31 @@ function Server:ServerHandle(msgLine)
     if (msg.Header == JLib.BankDB.Headers.GETACCOUNT) then
         self.bankingMonitorPrinter:print("GETACCOUNT:" ..
                                              msg.SerializedMsgStruct .. "\n")
-        self:_serverHanleGETACCOUNT(msg.SerializedMsgStruct)
+        self:_serverHandleGETACCOUNT(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.GETHISTORY) then
         self.bankingMonitorPrinter:print("GETHISTORY:" ..
                                              msg.SerializedMsgStruct .. "\n")
-        self:_serverHanleGETHISTORY(msg.SerializedMsgStruct)
+        self:_serverHandleGETHISTORY(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.REGISTER) then
         self.bankingMonitorPrinter:print(
             "REGISTER:" .. msg.SerializedMsgStruct .. "\n")
-        self:_serverHanleREGISTER(msg.SerializedMsgStruct)
+        self:_serverHandleREGISTER(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.SEND) then
         self.bankingMonitorPrinter:print(
             "SEND:" .. msg.SerializedMsgStruct .. "\n")
-        self:_serverHanleSEND(msg.SerializedMsgStruct)
+        self:_serverHandleSEND(msg.SerializedMsgStruct)
+    elseif (msg.Header == JLib.BankDB.Headers.GETACCOUNTS) then
+        self.bankingMonitorPrinter:print("GETACCOUNTS:" ..
+                                             msg.SerializedMsgStruct .. "\n")
+        self:_serverHandleGETACCOUNTS(msg.SerializedMsgStruct)
     end
 end
 
 ---handle add in get account msg
 ---@param struct_ string
-function Server:_serverHanleGETACCOUNT(struct_)
+function Server:_serverHandleGETACCOUNT(struct_)
 
-    local struct = JLib.BankDB.MsgStruct.GETACCOUNT:Deserialize(struct_)
+    local struct = JLib.BankDB.MsgStruct.GETACCOUNTS:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
     ---@type BankDB.Table
@@ -182,7 +186,8 @@ function Server:_serverHanleGETACCOUNT(struct_)
                                                          JLib.BankDB.Table)
 
     local ackmsg = JLib.BankDB.MsgStruct.ACK_GETACCOUNT:new()
-    ackmsgline = JLib.BankDB.Message:new(JLib.BankDB.Headers.ACK_GETACCOUNT, "")
+    local ackmsgline = JLib.BankDB.Message:new(
+                           JLib.BankDB.Headers.ACK_GETACCOUNT, "")
 
     -- SendNoTableError
     if (table == nil) then
@@ -215,7 +220,7 @@ end
 
 ---handle get account history msg
 ---@param struct_ string
-function Server:_serverHanleGETHISTORY(struct_)
+function Server:_serverHandleGETHISTORY(struct_)
     local struct = JLib.BankDB.MsgStruct.GETHISTORY:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
@@ -265,7 +270,7 @@ end
 
 ---handle register new account msg
 ---@param struct_ string
-function Server:_serverHanleREGISTER(struct_)
+function Server:_serverHandleREGISTER(struct_)
     local struct = JLib.BankDB.MsgStruct.REGISTER:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
@@ -312,7 +317,7 @@ end
 
 ---handle sending balance msg
 ---@param struct_ string
-function Server:_serverHanleSEND(struct_)
+function Server:_serverHandleSEND(struct_)
     local struct = JLib.BankDB.MsgStruct.SEND:Deserialize(struct_)
     local bankpath_from = JLib.BankDB.Consts.ServerPath .. "/" .. struct.From
     local bankpath_to = JLib.BankDB.Consts.ServerPath .. "/" .. struct.To
@@ -395,5 +400,35 @@ function Server:_serverHanleSEND(struct_)
     rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
     return nil
+end
+
+function Server:_serverHandleGETACCOUNTS(struct_)
+    local struct = JLib.BankDB.MsgStruct.GETACCOUNTS:Deserialize(struct_)
+    local bankpath = JLib.BankDB.Consts.ServerPath
+
+    local ackmsgline = JLib.BankDB.Message:new(
+                           JLib.BankDB.Headers.ACK_GETACCOUNTS, "")
+    local ackmsg = JLib.BankDB.MsgStruct.ACK_GETACCOUNTS:new()
+    ackmsg.AccountsList = {}
+
+    --- no path for bank file.
+    if (fs.exists(bankpath) == false) then
+        ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNTS.eState.NO_BANK_FILE
+        ackmsg.Success = false
+        ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+        rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
+                    JLib.BankDB.Consts.masterPort)
+        return nil
+    end
+
+    local fsList = fs.list(bankpath)
+    ackmsg.AccountsList = fsList
+
+    ackmsg.State = JLib.BankDB.MsgStruct.ACK_GETACCOUNTS.eState.SUCCESS
+    ackmsg.Success = true
+    ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
+    rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
+                JLib.BankDB.Consts.masterPort)
+
 end
 

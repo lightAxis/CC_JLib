@@ -17,5 +17,7 @@ JLib.BankDB.Headers = {
     ["GETACCOUNT"] = 5,
     ["ACK_GETACCOUNT"] = 6,
     ["GETHISTORY"] = 7,
-    ["ACK_GETHISTORY"] = 8
+    ["ACK_GETHISTORY"] = 8,
+    ["GETACCOUNTS"] = 9,
+    ["ACK_GETACCOUNTS"] = 10
 }
