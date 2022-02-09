@@ -178,7 +178,7 @@ end
 ---@param struct_ string
 function Server:_serverHandleGETACCOUNT(struct_)
 
-    local struct = JLib.BankDB.MsgStruct.GETACCOUNTS:Deserialize(struct_)
+    local struct = JLib.BankDB.MsgStruct.GETACCOUNT:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
     ---@type BankDB.Table
