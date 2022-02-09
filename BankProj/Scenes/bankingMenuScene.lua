@@ -118,7 +118,12 @@ function SCENE:send_bt_style(bt)
     bt.ClickEvent = function() self:send_bt_clickEvent() end
 end
 
-function SCENE:send_bt_clickEvent() print("aa3") end
+function SCENE:send_bt_clickEvent()
+    print("aa3")
+    self.PROJ.SendingScene:link_rednet_event()
+    self.PROJ.SendingScene:clear()
+    self.PROJ.UIRunner:changeScene(self.PROJ.SendingScene)
+end
 
 ---@param bt Button
 function SCENE:register_bt_style(bt)
