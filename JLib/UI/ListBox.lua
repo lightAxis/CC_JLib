@@ -136,6 +136,14 @@ end
 ---@return boolean isSelected
 function ListBox:SelectItem(item) end
 
+---get current selected Item
+---@return ListBoxItem selectedItem or nil
+function ListBox:getSelectedItem() return self._SelectedItem end
+
+---get current selected item index
+---@return number selectedIndex or nil
+function ListBox:getSelectedIndex() return self._SelectedIndex end
+
 function ListBox:_makeListBoxItemWithTemplate(obj)
     local listBoxItem = JLib.ListBoxItem:new(self, self._screen, obj)
     return listBoxItem
