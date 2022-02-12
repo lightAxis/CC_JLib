@@ -170,11 +170,11 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
     accounts_lb.PosRel, accounts_lb.Len =
         grid_aclb:getPosLenWithMargin(1, 2, 5, 1, 0, 0, 0, 0)
     accounts_lb:setItemTemplate(function(obj) return obj end)
-    local temppp = {
-        "test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8",
-        "test9", "test10", "test11", "test12"
-    }
-    accounts_lb:setItemSource(temppp)
+    -- local temppp = {
+    --     "test1", "test2", "test3", "test4", "test5", "test6", "test7", "test8",
+    --     "test9", "test10", "test11", "test12"
+    -- }
+    -- accounts_lb:setItemSource(temppp)
     self:accounts_lb_style(accounts_lb)
     accounts_lb:Refresh()
     self.accounts_lb = accounts_lb
@@ -351,7 +351,19 @@ function SCENE:query_bt_style(bt)
     bt.ClickEvent = function() self:query_bt_clickEvent() end
 end
 
-function SCENE:query_bt_clickEvent() print("aaaa3") end
+function SCENE:query_bt_clickEvent()
+    -- print("aaaa3")
+
+    local msgstruct = JLib.BankDB.MsgStruct.GETACCOUNTS:new()
+    msgstruct.IDToSendBack = self.PROJ.Param.myID
+
+    local msg = JLib.BankDB.Message:new(JLib.BankDB.Headers.GETACCOUNTS,
+                                        msgstruct:Serialize())
+
+    rednet.send(self.PROJ.Param.BankServerID, msg:Serialize(),
+                JLib.BankDB.Consts.masterPort)
+
+end
 
 function SCENE:send_bt_style(bt)
     bt:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
@@ -359,7 +371,49 @@ function SCENE:send_bt_style(bt)
     bt.ClickEvent = function() self:send_bt_clickEvent() end
 end
 
-function SCENE:send_bt_clickEvent() print("aaaa4") end
+function SCENE:send_bt_clickEvent()
+    -- print("aaaa4")
+
+    local myName = self.PROJ.BioScanScene.current_Player
+
+    local temp = self.accounts_lb:getSelectedItem()
+    -- print(temp)
+    if (temp == nil) then
+        self.msg_tb:setText("no selected account")
+        return
+    end
+    -- print(temp.obj)
+    if (temp.obj == nil) then
+        self.msg_tb:setText("no selected account")
+        return
+    end
+    local targetName = temp.obj
+
+    if (myName == targetName) then
+        self.msg_tb:setText("sender is reciever")
+        return
+    end
+
+    local balance = self.sending2_ammount_tb:getText()
+    if (balance == "") then
+        self.msg_tb:setText("strange sending amount")
+        return
+    end
+
+    balance = tonumber(balance)
+
+    local msgstruct =
+        JLib.BankDB.MsgStruct.SEND:new(myName, targetName, balance)
+    msgstruct.FromMsg = targetName
+    msgstruct.IDToSendBack = self.PROJ.Param.myID
+    msgstruct.ToMsg = myName
+
+    local msg = JLib.BankDB.Message:new(JLib.BankDB.Headers.SEND,
+                                        msgstruct:Serialize())
+
+    rednet.send(self.PROJ.Param.BankServerID, msg:Serialize(),
+                JLib.BankDB.Consts.masterPort)
+end
 
 function SCENE:link_rednet_event()
     self.PROJ.EventRouter:attachRednetCallback(JLib.BankDB.Consts.masterPort,
@@ -373,10 +427,43 @@ function SCENE:unlink_rednet_event()
                                                         .masterPort)
 end
 
-function SCENE:bank_callback(a, b, c, d) end
+function SCENE:bank_callback(a, b, c, d)
+    -- print(a, b, c, d)
+    if (b == self.PROJ.Param.BankServerID) then
+        local msg = JLib.BankDB.Message:Deserialize(c)
+        if (msg.Header == JLib.BankDB.Headers.ACK_GETACCOUNTS) then
+            local msgstruct = JLib.BankDB.MsgStruct.ACK_GETACCOUNTS:Deserialize(
+                                  msg.SerializedMsgStruct)
+
+            if (msgstruct.Success == true) then
+                self.accounts_lb:setItemSource(msgstruct.AccountsList)
+                self.accounts_lb:Refresh()
+            end
+
+            self.msg_tb:setText(JLib.BankDB.MsgStruct.ACK_GETACCOUNTS
+                                    .eStateReverse[msgstruct.State])
+            self.PROJ.UIRunner:ClearScreens()
+            self.PROJ.UIRunner:RenderScreen()
+
+        elseif (msg.Header == JLib.BankDB.Headers.ACK_SEND) then
+            local msgstruct = JLib.BankDB.MsgStruct.ACK_SEND:Deserialize(
+                                  msg.SerializedMsgStruct)
+
+            if (msgstruct.Success == true) then end
+
+            self.msg_tb:setText(
+                JLib.BankDB.MsgStruct.ACK_SEND.eStateReverse[msgstruct.State])
+            self.PROJ.UIRunner:ClearScreens()
+            self.PROJ.UIRunner:RenderScreen()
+
+        end
+    end
+
+end
 
 function SCENE:clear()
     self.sending2_ammount_tb:setText("")
+    self.msg_tb:setText("Press Query Button")
     self.accounts_lb:setItemSource({})
     self.accounts_lb:Refresh()
 end
