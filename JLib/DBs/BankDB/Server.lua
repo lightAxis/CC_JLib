@@ -178,7 +178,7 @@ end
 ---@param struct_ string
 function Server:_serverHandleGETACCOUNT(struct_)
 
-    local struct = JLib.BankDB.MsgStruct.GETACCOUNTS:Deserialize(struct_)
+    local struct = JLib.BankDB.MsgStruct.GETACCOUNT:Deserialize(struct_)
     local bankpath = JLib.BankDB.Consts.ServerPath .. "/" .. struct.Username
 
     ---@type BankDB.Table
@@ -399,6 +399,11 @@ function Server:_serverHandleSEND(struct_)
     ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
     rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
+
+    self.ChatBox.sendMessageToPlayer(
+        "you get " .. struct.Balance .. " from " .. struct.From, struct.To,
+        "KRW Bank")
+
     return nil
 end
 
