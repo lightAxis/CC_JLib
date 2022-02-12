@@ -104,6 +104,21 @@ function ListBox:Refresh()
             local newItem = JLib.ListBoxItem:new(self, self._screen, value)
             table.insert(self._Items, newItem)
         end
+
+        if (self._SelectedItem ~= nil) then
+            local isfind = false
+            self._SelectedIndex = nil
+            for index, value in ipairs(self._ItemSource) do
+                if (value == self._SelectedItem.obj) then
+                    self._SelectedIndex = index
+                    isfind = true
+                    self:SelectItemAt(index)
+                    break
+                end
+            end
+
+            if (isfind == false) then self._SelectedItem = nil end
+        end
     end
 end
 
