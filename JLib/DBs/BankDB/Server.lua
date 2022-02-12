@@ -399,6 +399,11 @@ function Server:_serverHandleSEND(struct_)
     ackmsgline.SerializedMsgStruct = ackmsg:Serialize()
     rednet.send(struct.IDToSendBack, ackmsgline:Serialize(),
                 JLib.BankDB.Consts.masterPort)
+
+    self.ChatBox.sendMessageToPlayer(
+        "you get " .. struct.Balance .. " from " .. struct.From, struct.To,
+        "KRW Bank")
+
     return nil
 end
 
