@@ -13,21 +13,21 @@ end
 -- set default Enums
 
 -- enum used in vertical alignmentmode
----@class Enums.VerticalAlignmentMode
+---@enum Enums.VerticalAlignmentMode
 JLib.Enums.VerticalAlignmentMode = {
     ["top"] = "top",
     ["bottom"] = "bottom",
     ["center"] = "center"
 }
 
----@class Enums.HorizontalAlignmentMode
+---@enum Enums.HorizontalAlignmentMode
 JLib.Enums.HorizontalAlignmentMode = {
     ["left"] = "left",
     ["right"] = "right",
     ["center"] = "center"
 }
 
----@class Enums.Side
+---@enum Enums.Side
 JLib.Enums.Side = {
     ["front"] = "front",
     ["back"] = "back",
@@ -38,13 +38,20 @@ JLib.Enums.Side = {
     ["NONE"] = "NONE"
 }
 
----@class Enums.MouseButton
-JLib.Enums.MouseButton = {["left"] = 1, ["right"] = 2, ["center"] = 3}
+---@enum Enums.MouseButton
+JLib.Enums.MouseButton = {
+    ["left"] = 1,
+    ["right"] = 2,
+    ["center"] = 3
+}
 
----@class Enums.ScrollDirection
-JLib.Enums.ScrollDirection = {["up"] = -1, ["down"] = 1}
+---@enum Enums.ScrollDirection
+JLib.Enums.ScrollDirection = {
+    ["up"] = -1,
+    ["down"] = 1
+}
 
----@class Enums.Key
+---@enum Enums.Key
 JLib.Enums.Key = {
     ["a"] = 65,
     ["c"] = 67,
@@ -162,7 +169,7 @@ JLib.Enums.Key = {
     ["numPad8"] = 328
 }
 
----@class Enums.KeyReverse
+---@enum Enums.KeyReverse
 JLib.Enums.KeyReverse = {
     [65] = "a",
     [67] = "c",
