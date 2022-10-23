@@ -3,9 +3,9 @@ local class = require("Class.middleclass")
 -- #includes
 require("UI.UIEvents.EventArgs")
 
--- public class KeyInputEventArgs : EventArgs   
----  
----**require** :  
+-- public class KeyInputEventArgs : EventArgs
+---
+---**require** :
 --- - Class.middleclass
 --- - UI.UIEvents.EventArgs
 ---@class KeyInputEventArgs : EventArgs
@@ -18,7 +18,7 @@ JLib.UIEvent = JLib.UIEvent or {}
 JLib.UIEvent.KeyInputEventArgs = KeyInputEventArgs
 
 -- constructor
----@param key any --TODO:set key enum
+---@param key Enums.Key
 ---@param isShiftPressed boolean
 function KeyInputEventArgs:initialize(key, isShiftPressed)
     JLib.UIEvent.EventArgs.initialize(self)
@@ -28,6 +28,6 @@ end
 
 -- properties description
 ---@class KeyInputEventArgs
----@field Key any
+---@field Key Enums.Key
 ---@field IsShiftPressed boolean
----@field new fun(self:KeyInputEventArgs, key:any, isShiftPressed: boolean): KeyInputEventArgs
+---@field new fun(self:KeyInputEventArgs, key:Enums.Key, isShiftPressed: boolean): KeyInputEventArgs

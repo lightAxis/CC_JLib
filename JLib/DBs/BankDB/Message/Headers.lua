@@ -1,4 +1,3 @@
----@class BankDB.Headers
 local Headers = {}
 
 ---namespace JLib
@@ -8,7 +7,7 @@ JLib = JLib or {}
 JLib.BankDB = JLib.BankDB or {}
 JLib.BankDB.Headers = Headers
 
----@class BankDB.Headers
+---@enum BankDB.Headers
 JLib.BankDB.Headers = {
     ["REGISTER"] = 1,
     ["ACK_REGISTER"] = 2,

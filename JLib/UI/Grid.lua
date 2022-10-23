@@ -8,7 +8,7 @@ local Grid = class("Grid")
 JLib.Grid = Grid
 
 ---constructo
----@param Len Vector2   
+---@param Len Vector2
 ---@param Pos? Vector2 or (1,1)
 function Grid:initialize(Len, Pos)
     self.targetLen = Len:Copy()
@@ -22,7 +22,7 @@ end
 ---properties description
 ---@class Grid
 ---@field targetLen Vector2
----@field new fun(self:Grid, Len:Vector2, Pos:Vector2):Grid
+---@field new fun(self:Grid, Len:Vector2, Pos?:Vector2):Grid
 
 ---set horizontal setting, table<number, string>, "num", "num*"
 ---@param setting table<number, string>

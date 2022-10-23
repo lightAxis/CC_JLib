@@ -1,8 +1,8 @@
 local class = require("Class.middleclass")
 
----public class Vector3  
----  
----**require** : 
+---public class Vector3
+---
+---**require** :
 --- - Class.middleclass
 ---@class Vector3
 local Vector3 = class("Vector3")
@@ -21,15 +21,20 @@ function Vector3:initialize(x, y, z)
     self.y = y
     self.z = z
 end
+
 ---@class Vector3
 ---@field x number|nil
 ---@field y number|nil
 ---@field z number|nil
 ---@field new fun(self:Vector3, x:number, y:number, z:number): Vector3
+---@operator add(Vector3):Vector3
+---@operator sub(Vector3):Vector3
+---@operator mul(Vector3):Vector3
+---@operator div(Vector3):Vector3
 
 -- functions
 
--- operator+ overloading  
+-- operator+ overloading
 ---add by each element
 ---@param lhs Vector3
 ---@param rhs Vector3
@@ -38,7 +43,7 @@ function Vector3.__add(lhs, rhs)
     return Vector3:new(lhs.x + rhs.x, lhs.y + rhs.y, lhs.z + rhs.z)
 end
 
--- operator- overloading  
+-- operator- overloading
 ---sub by each element
 ---@param lhs Vector3
 ---@param rhs Vector3
@@ -75,8 +80,8 @@ end
 ---@return Vector3
 function Vector3:cross(vec3)
     return Vector3:new(self.y * vec3.z - self.z * vec3.y,
-                       self.z * vec3.x - self.x * vec3.z,
-                       self.x * vec3.y - self.y * vec3.x)
+        self.z * vec3.x - self.x * vec3.z,
+        self.x * vec3.y - self.y * vec3.x)
 end
 
 -- deep copy

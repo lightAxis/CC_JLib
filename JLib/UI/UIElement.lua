@@ -6,9 +6,9 @@ require("UI.Enums")
 require("UI.UITools")
 require("UI.UIEvent")
 
--- public class UIElement  
----  
----**require** :  
+-- public class UIElement
+---
+---**require** :
 --- - Class.middleclass
 --- - MathLib.Vector2
 --- - UI.Enums
@@ -52,6 +52,8 @@ function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
     self.Len = JLib.Vector2:new(xlen or 1, ylen or 1) -- length of w,h
     self.BG = bg or JLib.Enums.Color.gray -- background color of element
     self.FG = fg or JLib.Enums.Color.white -- foregraoud color or element
+
+    ---@type table<number,UIElement>
     self.Children = {}
 
     self.Name = name or ""
@@ -73,7 +75,7 @@ end
 ---@field Children table<number,UIElement>
 ---@field Name string
 ---@field Visible boolean
----@field new fun(self:UIElement ,parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
+---@field new fun(self:UIElement ,parent: UIElement|nil, screen: Screen, name: string, x?: number, y?: number, xlen?: number, ylen?:number, bg?: Enums.Color, fg?:Enums.Color)
 
 -- [functions]
 
@@ -134,7 +136,7 @@ function UIElement:_addThisToRenderHistory()
 end
 
 -- trigger bubble down click event to element
----@param button UIElement
+---@param button Enums.MouseButton
 function UIElement:triggerClickEvent(button, pos)
     local e = JLib.UIEvent.ClickEventArgs:new(button, pos)
     self:_ClickEventBubbleDown(e)
@@ -173,7 +175,7 @@ function UIElement:_ScrollEventBubbleDown(e)
 end
 
 -- keyinput event function for UIElement
----@param key Enums.Key -- TODO:JLib.EnumsKey
+---@param key Enums.Key
 function UIElement:triggerKeyInputEvent(key)
     local e = JLib.UIEvent.KeyInputEventArgs:new(key)
     self:_KeyInputBubbleDown(e)

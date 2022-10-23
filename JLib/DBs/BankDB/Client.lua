@@ -23,13 +23,13 @@ function Client:HandleMsg(MsgLine)
     local msg = JLib.BankDB.Message:Deserialize(MsgLine)
 
     if (msg.Header == JLib.BankDB.Headers.ACK_GETACCOUNT) then
-        self:_clientHandleACK_GETACCOUNT(msg)
+        self:_clientHandleACK_GETACCOUNT(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.ACK_GETHISTORY) then
-        self:_clientHandleACK_GETHISTORY(msg)
+        self:_clientHandleACK_GETHISTORY(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.ACK_REGISTER) then
-        self:_clientHandleACK_REGISTER(msg)
+        self:_clientHandleACK_REGISTER(msg.SerializedMsgStruct)
     elseif (msg.Header == JLib.BankDB.Headers.ACK_SEND) then
-        self:_clientHandleACK_SEND(msg)
+        self:_clientHandleACK_SEND(msg.SerializedMsgStruct)
     end
 end
 
@@ -64,7 +64,7 @@ end
 
 ---handle client msg ack_getregister
 ---@param strcut_ string
----@return boolean success 
+---@return boolean success
 ---@return integer|BankDB.MsgStruct.ACK_REGISTER.eState state
 function Client:_clientHandleACK_REGISTER(strcut_)
     local struct = JLib.BankDB.MsgStruct.ACK_REGISTER:Deserialize(strcut_)

@@ -4,8 +4,8 @@ local class = require("Class.middleclass")
 require("UI.UIElement")
 
 -- public class ScreenCanvas : UIElement
----  
----**require** :  
+---
+---**require** :
 --- - Class.middleclass
 --- - UI.UIElement
 ---@class ScreenCanvas : UIElement
@@ -32,7 +32,12 @@ end
 
 -- get length from screen and reset Len of current
 function ScreenCanvas:_updateLengthFromScreen() self.Len =
-    self._screen:getSize() end
+    self._screen:getSize()
+end
+
+function ScreenCanvas:Reflect2Screen()
+    self._screen:reflect2Screen()
+end
 
 -- [overrinding functions]
 

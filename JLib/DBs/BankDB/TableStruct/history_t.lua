@@ -43,7 +43,7 @@ end
 
 ---deserialize this string
 ---@param str string
----@return BankDB.Table_t.Daytime
+---@return BankDB.Table_t.History
 function history:Deserialize(str)
     local temp = textutils.unserialize(str)
     local dayy = JLib.BankDB.Table_t.Daytime:Deserialize(temp.DayTime)

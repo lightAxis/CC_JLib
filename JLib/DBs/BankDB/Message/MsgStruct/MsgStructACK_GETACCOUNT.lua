@@ -5,21 +5,21 @@ require("DBs.BankDB.Message.MsgStruct.IMsgStruct")
 
 ---@class BankDB.MsgStruct.ACK_GETACCOUNT : BankDB.IMsgStruct
 local ACK_GETACCOUNT = class("BankDB.MsgStruct.ACK_GETACCOUNT",
-                             JLib.BankDB.MsgStruct.IMsgStruct)
+    JLib.BankDB.MsgStruct.IMsgStruct)
 
 JLib = JLib or {}
 JLib.BankDB = JLib.BankDB or {}
 JLib.BankDB.MsgStruct = JLib.BankDB.MsgStruct or {}
 JLib.BankDB.MsgStruct.ACK_GETACCOUNT = ACK_GETACCOUNT
 
----@class BankDB.MsgStruct.ACK_GETACCOUNT.eState
+---@enum BankDB.MsgStruct.ACK_GETACCOUNT.eState
 JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eState = {
     ["NONE"] = -1,
     ["NO_ACCOUNT_FOR_NAME"] = -2,
     ["SUCCESS"] = 0
 }
 
----@class BankDB.MsgStruct.ACK_GETACCOUNT.eStateReverse
+---@enum BankDB.MsgStruct.ACK_GETACCOUNT.eStateReverse
 JLib.BankDB.MsgStruct.ACK_GETACCOUNT.eStateReverse = {
     [-1] = "NONE",
     [-2] = "NO_ACCOUNT_FOR_NAME",

@@ -15,9 +15,10 @@ JLib = JLib or {}
 JLib.UIRunner = UIRunner
 
 ---constructor
----@param initialFocusedElement UIElement
+---@param initialFocusedElement? UIElement
 function UIRunner:initialize(initialFocusedElement)
     self.FocusedElement = initialFocusedElement
+    ---@type table<Enums.Side, UIScene>
     self.Scenes = {}
 end
 
@@ -69,6 +70,10 @@ function UIRunner:RenderScreen()
     for key, value in pairs(self.Scenes) do value.rootScreenCanvas:render() end
 end
 
+function UIRunner:Reflect2Screen()
+    for key, value in pairs(self.Scenes) do value.rootScreenCanvas:Reflect2Screen() end
+end
+
 function UIRunner:PostRendering() self.FocusedElement:PostRendering() end
 
 ---Char event callback function for EventRouter
@@ -103,6 +108,7 @@ function UIRunner:MouseClickEventCallback(event, button, x, y)
 
     self:ClearRenderHistories()
     self:RenderScreen()
+    self:Reflect2Screen()
     self:PostRendering()
 end
 
@@ -116,6 +122,7 @@ function UIRunner:KeyInputEventCallback(event, key, _, _)
 
     self:ClearRenderHistories()
     self:RenderScreen()
+    self:Reflect2Screen()
     self:PostRendering()
 end
 
@@ -133,6 +140,7 @@ function UIRunner:ScrollEventCallback(event, direction, x, y)
 
     self:ClearRenderHistories()
     self:RenderScreen()
+    self:Reflect2Screen()
     self:PostRendering()
 end
 
@@ -153,5 +161,6 @@ function UIRunner:MonitorTouchEventCallback(event, side, x, y)
 
     self:ClearRenderHistories()
     self:RenderScreen()
+    self:Reflect2Screen()
     self:PostRendering()
 end

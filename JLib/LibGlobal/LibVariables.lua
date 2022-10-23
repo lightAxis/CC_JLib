@@ -12,9 +12,10 @@ JLib.LibVariables = LibVariables
 function LibVariables:initialize() end
 
 -- class static variable
+LibVariables.static = {}
 
--- environment of code to run. 
+-- environment of code to run.
 -- Lua : normal Lua environment
 -- CC : ComputerCraft environment
 LibVariables.static.ENVIRONMENT = "Lua"
-LibVariables.static.eENVIRONMENT = {["Lua"] = "Lua", ["CC"] = "CC"}
+LibVariables.static.eENVIRONMENT = { ["Lua"] = "Lua", ["CC"] = "CC" }

@@ -10,7 +10,7 @@ JLib.Enums = Enums_Lua
 
 -- set default Enums
 
----@class Enums.Color
+---@enum Enums.Color
 Enums_Lua.Color = {
     ["white"] = "white",
     ["orange"] = "oranage",

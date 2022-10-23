@@ -1,0 +1,9 @@
+{
+    "Lua.diagnostics.globals": [
+        "rednet",
+        "textutils",
+        "fs",
+        "peripheral",
+        "colors"
+    ]
+}
