@@ -6,9 +6,9 @@ require("UI.Enums")
 require("UI.UITools")
 require("UI.UIEvent")
 
--- public class UIElement  
----  
----**require** :  
+-- public class UIElement
+---
+---**require** :
 --- - Class.middleclass
 --- - MathLib.Vector2
 --- - UI.Enums
@@ -73,7 +73,7 @@ end
 ---@field Children table<number,UIElement>
 ---@field Name string
 ---@field Visible boolean
----@field new fun(self:UIElement ,parent: UIElement, screen: Screen, name: string, x: number, y: number, xlen: number, ylen:number, bg: Enums.Color, fg:Enums.Color)
+---@field new fun(self:UIElement|nil ,parent: UIElement, screen: Screen, name: string, x?: number, y?: number, xlen?: number, ylen?:number, bg?: Enums.Color, fg?:Enums.Color)
 
 -- [functions]
 
@@ -173,7 +173,7 @@ function UIElement:_ScrollEventBubbleDown(e)
 end
 
 -- keyinput event function for UIElement
----@param key Enums.Key -- TODO:JLib.EnumsKey
+---@param key Enums.Key
 function UIElement:triggerKeyInputEvent(key)
     local e = JLib.UIEvent.KeyInputEventArgs:new(key)
     self:_KeyInputBubbleDown(e)
