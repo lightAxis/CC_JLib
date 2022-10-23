@@ -1,16 +1,24 @@
--- selection build
-require("LibGlobal.LibVariables")
+-- -- selection build
+-- require("LibGlobal.LibVariables")
 
-if (JLib.LibVariables.static.ENVIRONMENT ==
-    JLib.LibVariables.static.eENVIRONMENT.Lua) then
-    require("UI.Enums.Enums_Lua")
+-- if (JLib.LibVariables.static.ENVIRONMENT ==
+--     JLib.LibVariables.static.eENVIRONMENT.Lua) then
+--     require("UI.Enums.Enums_Lua")
 
-elseif (JLib.LibVariables.static.ENVIRONMENT ==
-    JLib.LibVariables.static.eENVIRONMENT.CC) then
-    require("UI.Enums.Enums_CC")
-end
+-- elseif (JLib.LibVariables.static.ENVIRONMENT ==
+--     JLib.LibVariables.static.eENVIRONMENT.CC) then
+--     require("UI.Enums.Enums_CC")
+-- end
 
 -- set default Enums
+
+local class = require("Class.middleclass")
+
+
+-- namespace JLib
+JLib = JLib or {}
+-- namespace Enums
+JLib.Enums = JLib.Enums or {}
 
 -- enum used in vertical alignmentmode
 ---@enum Enums.VerticalAlignmentMode
@@ -283,4 +291,66 @@ JLib.Enums.KeyReverse = {
     [281] = "scrollLock",
     [53] = "five",
     [328] = "numPad8"
+}
+
+---@enum Enums.Color
+JLib.Enums.Color = {
+    ["white"] = 1,
+    ["orange"] = 2,
+    ["magenta"] = 4,
+    ["lightBlue"] = 8,
+    ["yellow"] = 16,
+    ["lime"] = 32,
+    ["pink"] = 64,
+    ["gray"] = 128,
+    ["lightGray"] = 256,
+    ["cyan"] = 512,
+    ["purple"] = 1024,
+    ["blue"] = 2048,
+    ["brown"] = 4096,
+    ["green"] = 8192,
+    ["red"] = 16384,
+    ["black"] = 32768
+}
+
+---@type table<Enums.Color, string>
+JLib.Enums.Blit =
+{
+    [JLib.Enums.Color.white] = "0",
+    [JLib.Enums.Color.orange] = "1",
+    [JLib.Enums.Color.magenta] = "2",
+    [JLib.Enums.Color.lightBlue] = "3",
+    [JLib.Enums.Color.yellow] = "4",
+    [JLib.Enums.Color.lime] = "5",
+    [JLib.Enums.Color.pink] = "6",
+    [JLib.Enums.Color.gray] = "7",
+    [JLib.Enums.Color.lightGray] = "8",
+    [JLib.Enums.Color.cyan] = "9",
+    [JLib.Enums.Color.purple] = "a",
+    [JLib.Enums.Color.blue] = "b",
+    [JLib.Enums.Color.brown] = "c",
+    [JLib.Enums.Color.green] = "d",
+    [JLib.Enums.Color.red] = "e",
+    [JLib.Enums.Color.black] = "f",
+}
+
+---@type table<string, Enums.Color>
+JLib.Enums.BlitReverse =
+{
+    ["0"] = colors.white,
+    ["1"] = colors.orange,
+    ["2"] = colors.magenta,
+    ["3"] = colors.lightBlue,
+    ["4"] = colors.yellow,
+    ["5"] = colors.lime,
+    ["6"] = colors.pink,
+    ["7"] = colors.gray,
+    ["8"] = colors.lightGray,
+    ["9"] = colors.cyan,
+    ["a"] = colors.purple,
+    ["b"] = colors.blue,
+    ["c"] = colors.brown,
+    ["d"] = colors.green,
+    ["e"] = colors.red,
+    ["f"] = colors.black,
 }
