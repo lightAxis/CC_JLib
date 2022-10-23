@@ -1,4 +1,7 @@
 --- includes basic components
+require("CC_JLib.init")
+require("CC_JLIb.ProjTemplate.init")
+
 require("UI.Includes")
 require("EventRouter.Includes")
 
@@ -21,11 +24,11 @@ ProjTemplate.EventRouter:attachUIRunner(ProjTemplate.UIRunner)
 --- side must exist. NONE is terminal
 local screen_term = JLib.Screen:new(term, JLib.Enums.Side.NONE)
 local screen_left = JLib.Screen:new(peripheral.wrap("left"),
-                                    JLib.Enums.Side.left)
+    JLib.Enums.Side.left)
 
 ------------ SCENENS -----------
 
---- register Project SceneFile to other 
+--- register Project SceneFile to other
 local SCENENAME1 = require("Scenes.SCENENAME1")
 local SCENENAME2 = require("Scenes.SCENENAME2")
 
@@ -47,6 +50,7 @@ ProjTemplate.UIRunner:setIntialScene(JLib.Enums.Side.NONE)
 --- clear and readner initial scenes
 ProjTemplate.UIRunner:ClearScreens()
 ProjTemplate.UIRunner:RenderScreen()
+ProjTemplate.UIRunner:Reflect2Screen()
 
 --- run main EventLoop to start Proj
 ProjTemplate.EventRouter:main()
