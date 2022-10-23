@@ -7,11 +7,11 @@ if (environment == 0) then
     package.path = package.path .. ";D:/lua/CC_JLib/JLib/?.lua"
     -- package.path = package.path .. ";/home/jisuk500/asdf/CC_JLib/JLib/?.lua"
     package.path = package.path ..
-                       ";/home/jisuk500/.local/share/craftos-pc/computer/0/CC_JLib/JLib/?.lua"
+        ";/home/jisuk500/.local/share/craftos-pc/computer/0/CC_JLib/JLib/?.lua"
 
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
-        JLib.LibVariables.static.eENVIRONMENT.Lua
+    JLib.LibVariables.static.eENVIRONMENT.Lua
 
 elseif (environment == 1) then
     -- CC env
@@ -19,7 +19,7 @@ elseif (environment == 1) then
 
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
-        JLib.LibVariables.static.eENVIRONMENT.CC
+    JLib.LibVariables.static.eENVIRONMENT.CC
 
 elseif (environment == 2) then
     -- replit env
@@ -27,6 +27,6 @@ elseif (environment == 2) then
 
     require("LibGlobal.LibVariables")
     JLib.LibVariables.static.ENVIRONMENT =
-        JLib.LibVariables.static.eENVIRONMENT.Lua
+    JLib.LibVariables.static.eENVIRONMENT.Lua
 
 end

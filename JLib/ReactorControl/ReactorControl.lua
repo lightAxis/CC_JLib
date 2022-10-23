@@ -61,7 +61,7 @@ function ReactorControl:Control(dt)
     self._last_u = math.min(self._maximumThrottle, self._last_u)
 
     self._reactorProxy.setAllControlRodLevels(math.floor(
-                                                  (100 - self._last_u) + 0.5))
+        (100 - self._last_u) + 0.5))
 
     return r, y, self._last_u
 end

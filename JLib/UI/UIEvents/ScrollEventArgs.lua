@@ -3,9 +3,9 @@ local class = require("Class.middleclass")
 -- #includes
 require("UI.UIEvents.EventArgs")
 
--- public class ScrollEventArgs : JLib.UIEvent.EventArgs  
----  
----**require** : 
+-- public class ScrollEventArgs : JLib.UIEvent.EventArgs
+---
+---**require** :
 --- - Class.middleclass
 --- - UI.UIEvent
 ---@class ScrollEventArgs : EventArgs

@@ -5,14 +5,14 @@ require("DBs.BankDB.Message.MsgStruct.IMsgStruct")
 
 ---@class BankDB.MsgStruct.ACK_SEND : BankDB.IMsgStruct
 local ACK_SEND = class("BankDB.MsgStruct.ACK_SEND",
-                       JLib.BankDB.MsgStruct.IMsgStruct)
+    JLib.BankDB.MsgStruct.IMsgStruct)
 
 JLib = JLib or {}
 JLib.BankDB = JLib.BankDB or {}
 JLib.BankDB.MsgStruct = JLib.BankDB.MsgStruct or {}
 JLib.BankDB.MsgStruct.ACK_SEND = ACK_SEND
 
----@class BankDB.MsgStruct.ACK_SEND.eState
+---@enum BankDB.MsgStruct.ACK_SEND.eState
 JLib.BankDB.MsgStruct.ACK_SEND.eState = {
     ["NONE"] = -1,
     ["NO_ACCOUNT_TO_SEND"] = -2,
@@ -21,7 +21,7 @@ JLib.BankDB.MsgStruct.ACK_SEND.eState = {
     ["SUCCESS"] = 0
 }
 
----@class BankDB.MsgStruct.ACK_SEND.eStateReverse
+---@enum BankDB.MsgStruct.ACK_SEND.eStateReverse
 JLib.BankDB.MsgStruct.ACK_SEND.eStateReverse = {
     [-1] = "NONE",
     [-2] = "NO_ACCOUNT_TO_SEND",
@@ -41,7 +41,7 @@ end
 ---@class BankDB.MsgStruct.ACK_SEND : BankDB.IMsgStruct
 ---@field Success boolean
 ---@field State BankDB.MsgStruct.ACK_SEND.eState
----@field new fun(self:BankDB.MsgStruct.ACK_SEND, success?:boolean):BankDB.MsgStruct.ACK_SEND
+---@field new fun(self:BankDB.MsgStruct.ACK_SEND, success:boolean):BankDB.MsgStruct.ACK_SEND
 
 ---serialize this
 ---@return string

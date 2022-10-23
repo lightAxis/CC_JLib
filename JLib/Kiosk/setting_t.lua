@@ -1,4 +1,4 @@
-local class = require("middleclass")
+local class = require("Class.middleclass")
 
 ---@class Kiosk.setting_t
 local setting_t = class("Kiosk.setting_t")

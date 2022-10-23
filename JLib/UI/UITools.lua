@@ -4,9 +4,9 @@ local class = require("Class.middleclass")
 require("UI.Enums")
 require("MathLib.Vector2")
 
--- public class UITools   
----  
----**require** : 
+-- public class UITools
+---
+---**require** :
 --- - Class.middleclass
 --- - UI.Enums
 --- - MathLib.Vector2
@@ -29,10 +29,11 @@ function UITools:initialize() end
 ---@return number
 function UITools.Pos2Len(pmin, pmax) return pmax - pmin + 1 end
 
--- length to position 2 value, based on start 
+-- length to position 2 value, based on start
 ---@param startAt number
 ---@param len number
----@return number
+---@return number startAt
+---@return number endAt
 function UITools.Len2Pos_FromStart(startAt, len)
     return startAt, len + startAt - 1
 end
@@ -40,7 +41,8 @@ end
 -- length to position 2 value, based on end
 ---@param endAt number
 ---@param len number
----@return number
+---@return number startAt
+---@return number endAt
 function UITools.Len2Pos_FromEnd(endAt, len) return endAt - len + 1, endAt end
 
 -- calc horizontal Align positions
@@ -48,6 +50,7 @@ function UITools.Len2Pos_FromEnd(endAt, len) return endAt - len + 1, endAt end
 ---@param max number
 ---@param len number
 ---@param mode Enums.HorizontalAlignmentMode
+---@return number xPos
 function UITools.calcHorizontalAlignPos(min, max, len, mode)
     local x;
     local xlen = UITools.Pos2Len(min, max)
@@ -68,7 +71,7 @@ end
 ---@param max number
 ---@param len number
 ---@param mode Enums.VerticalAlignmentMode
----@return number y
+---@return number yPos
 function UITools.calcVerticalAlignPos(min, max, len, mode)
     local y;
     local ylen = UITools.Pos2Len(min, max)
@@ -123,7 +126,7 @@ end
 ---@return Vector2
 function UITools.transformGlobalPos2LocalPos(globalPos, localOrigin)
     return JLib.Vector2:new(globalPos.x - localOrigin.x + 1,
-                            globalPos.y - localOrigin.y + 1)
+        globalPos.y - localOrigin.y + 1)
 end
 
 ---transform local position to global position in UIElement
@@ -132,7 +135,7 @@ end
 ---@return Vector2
 function UITools.transformLocalPos2GlobalPos(localPos, localOrigin)
     return JLib.Vector2:new(localPos.x + localOrigin.x - 1,
-                            localPos.y + localOrigin.y - 1)
+        localPos.y + localOrigin.y - 1)
 end
 
 ---transform global index to local index in UIelement
@@ -186,8 +189,8 @@ function UITools.isInsideSquare_Raw(pos_x, pos_y, len_x, len_y, checkpos_x,
     return false
 end
 
--- get empth string to write 
----@param len string
+-- get empth string to write
+---@param len number
 ---@return string emptystring
 function UITools.getEmptyString(len)
     local r = ""
@@ -225,7 +228,7 @@ end
 
 ---constrain value in range.
 ---@param number number
----@param min number  
+---@param min number
 ---@param max number
 ---@return number
 function UITools.constrain(number, min, max)

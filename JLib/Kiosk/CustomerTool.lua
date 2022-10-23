@@ -1,4 +1,4 @@
-local class = require("middleclass")
+local class = require("Class.middleclass")
 
 ---@class Kiosk.CustomorTool
 local customerTool = class("Kiosk.CustomerTool")
@@ -14,4 +14,3 @@ end
 ---properties description
 ---@class Kiosk.CustomorTool
 ---@field new fun(self:Kiosk.CustomorTool):Kiosk.CustomorTool
-
