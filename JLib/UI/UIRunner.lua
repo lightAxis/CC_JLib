@@ -83,6 +83,11 @@ function UIRunner:PostRendering() self.FocusedElement:PostRendering() end
 ---@param _ nil
 function UIRunner:CharEventCallback(event, char, _, _)
     self.FocusedElement:triggerCharEvent(char)
+
+    self:ClearRenderHistories()
+    self:RenderScreen()
+    self:Reflect2Screen()
+    self:PostRendering()
 end
 
 ---mouse click event function for EventRouter
@@ -115,10 +120,10 @@ end
 ---key input event function for EventRouter
 ---@param event EventRouter.Events
 ---@param key Enums.Key
+---@param isShiftPressed boolean
 ---@param _ nil
----@param _ nil
-function UIRunner:KeyInputEventCallback(event, key, _, _)
-    self.FocusedElement:triggerKeyInputEvent(event, key)
+function UIRunner:KeyInputEventCallback(event, key, isShiftPressed, _)
+    self.FocusedElement:triggerKeyInputEvent(key)
 
     self:ClearRenderHistories()
     self:RenderScreen()
