@@ -1,0 +1,17 @@
+@startuml 
+
+!include ../common.plantuml!0
+
+package Enums{
+    !include Enums/Enums.plantuml!0
+}
+
+package UIEvent{
+    !include UIEvent/UIEvent.plantuml!0
+}
+
+!include UIElement.plantuml!0
+!include UIRunner.plantuml!0
+!include UITools.plantuml!0
+
+@enduml

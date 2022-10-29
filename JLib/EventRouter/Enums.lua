@@ -1,4 +1,4 @@
----@class EventRouter.Events
+---@enum EventRouter.Events
 local Events = {
     ["char"] = "char",
     ["key"] = "key",

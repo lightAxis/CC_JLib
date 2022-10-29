@@ -1,0 +1,8 @@
+@startuml common
+
+set NamespaceSeparator ::
+skinparam groupInheritance 2
+
+hide empty members
+
+@enduml

@@ -15,7 +15,7 @@ JLib.Vector3 = Vector3
 ---@param x number
 ---@param y number
 ---@param z number
----@return number|nil info
+---@return Vector3
 function Vector3:initialize(x, y, z)
     self.x = x
     self.y = y

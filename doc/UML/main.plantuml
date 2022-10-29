@@ -1,0 +1,45 @@
+@startuml UI_classDiagram__
+
+!include common.plantuml!0
+
+' TODO consider change naming convention,
+' public : func
+' protected : _func
+' private : __func
+
+package JLib{
+    package Class{
+        class middleclass
+    }
+
+    package LibGlobal
+    {
+        enum eEnvironment{
+            Lua
+            CC
+        }
+        class LibVariables<<static>>{
+            + ENVIRONMENT: eEnvironment
+        }
+        class StaticMethods<<static>>{
+            + string:split(delimeter:string): string
+        }
+    }
+
+    package MathLib{
+        !include MathLib/MathLib.plantuml!0
+    }
+    package EventRouter{
+        !include EventRouter/EventRouter.plantuml!0
+    }
+    package UI{
+        !include UI/UI.plantuml!0        
+    }
+}
+
+hide protected members
+hide private members
+
+
+
+@enduml

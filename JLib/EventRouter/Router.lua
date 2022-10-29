@@ -41,7 +41,7 @@ function Router:attachEventCallback(event, mthd)
 end
 
 ---attach rednet event callback method to router
----@param protocol EventRouter.Events
+---@param protocol string
 ---@param mthd fun(a:string, b:string, c:string, d:string)
 function Router:attachRednetCallback(protocol, mthd)
     self._rednetCallbacks[protocol] = self._rednetCallbacks[protocol] or {}

@@ -63,7 +63,8 @@ function UIElement:initialize(parent, screen, name, x, y, xlen, ylen, bg, fg)
 end
 
 -- [properties description]
-
+--- TODO change to protected, Pos, Children, Name, Visible
+--- TODO consider capsule Parent, Posrel, Len?
 ---@class UIElement
 ---@field _screen Screen
 ---@field Parent UIElement
@@ -137,6 +138,7 @@ end
 
 -- trigger bubble down click event to element
 ---@param button Enums.MouseButton
+---@param pos Vector2
 function UIElement:triggerClickEvent(button, pos)
     local e = JLib.UIEvent.ClickEventArgs:new(button, pos)
     self:_ClickEventBubbleDown(e)
@@ -193,7 +195,7 @@ function UIElement:_KeyInputBubbleDown(e)
 end
 
 ---char event function for UIElement
----@param char any
+---@param char string
 function UIElement:triggerCharEvent(char)
     local e = JLib.UIEvent.CharEventArgs:new(char)
     self:_CharBubbleDown(e)
