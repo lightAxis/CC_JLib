@@ -499,6 +499,10 @@ function TextArea:_updatePosEditCursorPos()
         relativePosEditCursorPos.y,
         self._VerticalOffset)
     local currentwrappedLine = self._TextSplitedWrapped[self._TextEditPos.y]
+    if (self._TextEditPos.x == nil) then error("aaaa") end
+    if (currentwrappedLine.align == nil) then error("asdf:" ..
+            tostring(#(self._TextSplitedWrapped)) .. ":" .. tostring(self._TextEditPos:toString()))
+    end
     relativePosEditCursorPos.x = JLib.UITools.transformLocalIndex2GlobalIndex(
         self._TextEditPos.x,
         currentwrappedLine.align)
@@ -568,8 +572,12 @@ function TextArea:_ClickEvent(e)
         if (JLib.UITools.isInsideSquare(self.Pos, self.Len, e.Pos) == true) then
             -- check this event is handled
             e.Handled = true
-            self:_setTextEdittingPosAndIndex(e.Pos)
-            self._isTextEditting = true
+            if (self._screen.IsMonitor) then
+                self._isTextEditting = false
+            else
+                self:_setTextEdittingPosAndIndex(e.Pos)
+                self._isTextEditting = true
+            end
         end
     end
 end
