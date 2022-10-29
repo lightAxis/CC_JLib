@@ -28,6 +28,8 @@ function Screen_CC:initialize(screenObj, side)
     end
     self._screen = screenObj
     self._side = side
+    self.IsMonitor = self._side ~= JLib.Enums.Side.NONE
+
     ---@type table<number, UIElement>
     self._renderHistory = {}
 
