@@ -9,6 +9,12 @@ local SCENE = class("ProjTemplate.SCENENAME1")
 function SCENE:initialize(attachedScreen, ProjTemplatespace)
     JLib.UIScene.initialize(self, attachedScreen, ProjTemplatespace)
 
+    local grid = JLib.Grid:new(attachedScreen:getSize())
+    grid:setHorizontalSetting({ "3", "10", "3", "*", "3" })
+    grid:setVerticalSetting({ "1", "10", "*", "5", "*" })
+    grid:updatePosLen()
+
+    ---@type Button
     local ButtonNext = JLib.Button:new(self.rootScreenCanvas,
         self.attachingScreen, "button1")
     ButtonNext:setText("Next Scene")
@@ -17,6 +23,7 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
         self:button_click()
     end
     self:ButtonStyle(ButtonNext)
+    ButtonNext.PosRel, ButtonNext.Len = grid:getPosLen(2, 4, 2, 1)
 
     ---@type ListBox
     local listbox = JLib.ListBox:new(self.rootScreenCanvas, self.attachingScreen, "listbox")
@@ -38,8 +45,7 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
         self:itemIndexChanged(obj)
     end
     listbox:Refresh()
-    listbox.PosRel = JLib.Vector2:new(2, 3)
-    listbox.Len = JLib.Vector2:new(10, 7)
+    listbox.PosRel, listbox.Len = grid:getPosLen(2, 2)
 
     ---@type TextBlock
     local textblock = JLib.TextBlock:new(self.rootScreenCanvas, self.attachingScreen, "tb1")
@@ -47,8 +53,7 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
     textblock:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
     textblock:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
     textblock:setIsTextEditable(true)
-    textblock.PosRel = JLib.Vector2:new(30, 2)
-    textblock.Len = JLib.Vector2:new(20, 15)
+    textblock.PosRel, textblock.Len = grid:getPosLen(4, 2)
     self.textblock1 = textblock
 
 end
