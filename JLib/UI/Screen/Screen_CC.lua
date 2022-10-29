@@ -198,7 +198,16 @@ function Screen_CC:isColor() return self._screen.isColor() end
 ---(Good for if you're making something to be compatible with both Turtles and Computers.)
 ---use only lua
 ---@return number, number
-function Screen_CC:getSize_Raw() return self._screen.getSize() end
+function Screen_CC:getSize_Raw()
+    local x, y = self._screen.getSize()
+
+    -- if link with monitor lost, keep draw with screenbuffer
+    if (x == nil) then
+        return self._ScreenSize.x, self._ScreenSize.y
+    else
+        return self._screen.getSize()
+    end
+end
 
 -- Returns two arguments containing the x and the y values stating the size of the screen.
 ---(Good for if you're making something to be compatible with both Turtles and Computers.)
