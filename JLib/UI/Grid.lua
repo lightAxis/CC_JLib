@@ -37,69 +37,22 @@ function Grid:updatePosLen()
     local horizontalLength = #(self.horizontalSettings)
     local verticalLength = #(self.verticalSettings)
 
-    local horisetting = {}
-    local horistarSum = 0
-    local horiLenSum = 0
-    local horistar = 0
-    for index, value in ipairs(self.horizontalSettings) do
-        horisetting[index] = {}
-        if string.match(value, "*") then
-            local starti, endi = string.find(value, "*")
-            local starNum = string.sub(value, 1, starti - 1)
-            if (starNum == "") then starNum = "1" end
-            horisetting[index].isFix = false
-            horisetting[index].num = tonumber(starNum)
-            horistarSum = horistarSum + horisetting[index].num
-        else
-            horisetting[index].isFix = true
-            horisetting[index].num = tonumber(value)
-            horiLenSum = horiLenSum + horisetting[index].num
-        end
-    end
-    horistar = (self.targetLen.x - horiLenSum) / horistarSum
-
-    for i, v in ipairs(self.horizontalSettings) do
-        if (horisetting[i].isFix) then
-            self._LensX[i] = horisetting[i].num
-        else
-            self._LensX[i] = math.floor((horisetting[i].num * horistar) + 0.5)
-        end
-    end
-
-    local versetting = {}
-    local verstarSum = 0
-    local verLenSum = 0
-    local verstar = 0
-    for index, value in ipairs(self.verticalSettings) do
-        versetting[index] = {}
-        if string.match(value, "*") then
-            local starti, endi = string.find(value, "*")
-            local starNum = string.sub(value, 1, starti - 1)
-            if (starNum == "") then starNum = "1" end
-            versetting[index].isFix = false
-            versetting[index].num = tonumber(starNum)
-            verstarSum = verstarSum + versetting[index].num
-        else
-            versetting[index].isFix = true
-            versetting[index].num = tonumber(value)
-            verLenSum = verLenSum + versetting[index].num
-        end
-    end
-    verstar = (self.targetLen.y - verLenSum) / verstarSum
-
-    for i, v in ipairs(self.verticalSettings) do
-        if (versetting[i].isFix) then
-            self._LensY[i] = versetting[i].num
-        else
-            self._LensY[i] = math.floor((versetting[i].num * verstar) + 0.5)
-        end
-    end
+    self._LensX = self:__getLens(self.targetLen.x, self.horizontalSettings)
+    self._LensY = self:__getLens(self.targetLen.y, self.verticalSettings)
 
     for i = 2, horizontalLength, 1 do
         self._LensX[i] = self._LensX[i - 1] + self._LensX[i]
     end
     for i = 2, verticalLength, 1 do
         self._LensY[i] = self._LensY[i - 1] + self._LensY[i]
+    end
+
+    for i, v in ipairs(self._LensX) do
+        self._LensX[i] = math.floor(v + 0.5)
+    end
+
+    for i, v in ipairs(self._LensY) do
+        self._LensY[i] = math.floor(v + 0.5)
     end
 
 end
@@ -173,4 +126,45 @@ function Grid:getPosLenWithMargin(col, row, colSpan, rowSpan, marginLeft,
     Pos = JLib.UITools.calcRelativeOffset(Pos, self.Offset)
 
     return Pos, Len
+end
+
+---get length segments array
+---@param len number
+---@param segStr table<number, string>
+function Grid:__getLens(len, segStr)
+    local temp_ts = {}
+    local starSum = 0
+    local LenSum = 0
+    local starUnitLen = 0
+    for index, value in ipairs(segStr) do
+        temp_ts[index] = {}
+        if string.match(value, "*") then
+            local starti, endi = string.find(value, "*")
+            local starNum = string.sub(value, 1, starti - 1)
+            if (starNum == "") then starNum = "1" end
+            temp_ts[index].isFix = false
+            temp_ts[index].num = tonumber(starNum)
+            if (temp_ts[index].num == nil) then error("segStr parse failed!") end
+            starSum = starSum + temp_ts[index].num
+        else
+            temp_ts[index].isFix = true
+            temp_ts[index].num = tonumber(value)
+            if (temp_ts[index].num == nil) then error("segStr parse failed!") end
+            LenSum = LenSum + temp_ts[index].num
+        end
+    end
+    if (len < LenSum) then error("segStr total static len is larger than targetLen!") end
+    starUnitLen = (len - LenSum) / starSum
+
+    local resultLens = {}
+    for i, v in ipairs(temp_ts) do
+        if (v.isFix) then
+            resultLens[i] = v.num
+        else
+            -- self._LensX[i] = math.floor((horisetting[i].num * horistar) + 0.5)
+            resultLens[i] = v.num * starUnitLen
+        end
+    end
+
+    return resultLens
 end
