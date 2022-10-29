@@ -6,8 +6,8 @@ require("UI.UIElement")
 require("UI.TextBlock")
 
 --- public class Button : TextBlock
----  
----**require** :  
+---
+---**require** :
 --- - Class.middleclass
 --- - JLib.UIElement
 ---@class Button : TextBlock
@@ -20,7 +20,7 @@ JLib.Button = Button
 ---constructor
 function Button:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
     JLib.TextBlock.initialize(self, parent, screen, name, text, PosRel, Len, bg,
-                              fg)
+        fg)
 
     self.IsToggleable = false
     self.IsButtonPressed = false
@@ -60,13 +60,13 @@ function Button:render()
     -- update global pos
     self:_updatePos()
 
-    if (self.IsButtonPressed == true) then
-        self:setBackgroundColor(self.BGPressed)
-        self:setTextColor(self.FGPressed)
-    else
-        self:setBackgroundColor(self.BGUnpressed)
-        self:setTextColor(self.FGUnpressed)
-    end
+    -- if (self.IsButtonPressed == true) then
+    --     self:setBackgroundColor(self.BGPressed)
+    --     self:setTextColor(self.FGPressed)
+    -- else
+    --     self:setBackgroundColor(self.BGUnpressed)
+    --     self:setTextColor(self.FGUnpressed)
+    -- end
 
     -- fill inside the button with background color
     self:_fillWithBG()
@@ -93,22 +93,22 @@ function Button:_ClickEvent(e)
     if (self.IsToggleable) then
         if (not (self.IsButtonPressed)) then
             self.IsButtonPressed = true
-            self.BGUnpressed = self.BG
-            self.FGUnpressed = self.FG
+            self.BG = self.BGPressed
+            self.FG = self.FGPressed
         else
             self.IsButtonPressed = false
+            self.BG = self.BGUnpressed
+            self.FG = self.FGUnpressed
         end
-        -- else
-        -- if(not(self._tempPressed)) then
-        --     self.BGUnpressed = self.BG
-        --     self.BG = self.BGPressed
-        --     self.IsButtonPressed = true
-        --     self._tempPressed = true
-        --     print(self.BGPressed.."d")
-        -- end
+    else
+        self.IsButtonPressed = true
+        self.BG = self.BGUnpressed
+        self.FG = self.FGUnpressed
     end
 
     self.ClickEvent(self)
+
+    e.Handled = true
 end
 
 -- ---overrided function from UIElement:_ScrollEvent
@@ -133,7 +133,7 @@ end
 -- function Button:FocusIn() end
 
 ---overrided function from UIElement:FocusOut()
--- function Button:FocusOut() 
+-- function Button:FocusOut()
 --     if(not(self.IsToggleable)) then
 --         if(self._tempPressed) then
 --             self.BG = self.BGUnpressed

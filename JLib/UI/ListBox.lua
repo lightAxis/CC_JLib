@@ -4,8 +4,8 @@ local class = require("Class.middleclass")
 require("UI.UIElement")
 require("UI.ListBoxItem")
 
---- public ListBox : UIElement  
----  
+--- public ListBox : UIElement
+---
 ---**require** :
 --- - Class.middleclass
 --- - UI.UIElement
@@ -237,17 +237,19 @@ end
 ---@param e ClickEventArgs
 function ListBox:_ClickEvent(e)
     local relClickPos = JLib.UITools
-                            .transformGlobalPos2LocalPos(e.Pos, self.Pos)
+        .transformGlobalPos2LocalPos(e.Pos, self.Pos)
 
     local clickedIndex = nil
     if ((1 <= relClickPos.y) and (relClickPos.y <= #(self._viewportItems))) then
         clickedIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
-                           relClickPos.y, self._Scroll)
+            relClickPos.y, self._Scroll)
     end
 
     if (clickedIndex == nil) then return nil end
 
     self:SelectItemAt(clickedIndex)
+
+    e.Handled = true
 end
 
 ---overrided function from UIElement:_ScrollEvent
