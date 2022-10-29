@@ -1,0 +1,38 @@
+@startuml
+
+class EventArgs{
+    - _Handled: boolean
+}
+
+class ClickEventArgs extends EventArgs{
+
+    + new(button: Enums.MouseButton, pos: Vector2)
+
+    + Button: Enums.MouseButton
+    + Pos: Vector2
+}
+
+class ScrollEventArgs extends EventArgs {
+
+    + new(direction: Enums.ScrollDirection, pos: Vector2)
+
+    + Direction: Enums.ScrollDirection
+    + Pos: Vector2
+}
+
+class KeyInputEventArgs extends EventArgs{
+
+    + new(key:Enums.Key, isShiftPressed: boolean)
+
+    + Key: Enums.Key
+    + IsShiftPressed: boolean
+}
+
+class CharEventArgs extends EventArgs{
+
+    + new(char: string): CharEventArgs
+
+    Char: string
+}
+
+@enduml

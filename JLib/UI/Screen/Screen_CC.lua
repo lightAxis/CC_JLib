@@ -177,14 +177,14 @@ function Screen_CC:getCursorPos_Raw() return self._screen.getCursorPos() end
 
 -- Sets the cursor's position.
 function Screen_CC:setCursorPos(pos)
-    self._CursorPos = pos
-    -- self:setCursorPos_Raw(pos.x, pos.y)
+    -- self._CursorPos = pos
+    self:setCursorPos_Raw(pos.x, pos.y)
 end
 
 -- Sets the cursor's position. use only lua
 function Screen_CC:setCursorPos_Raw(x, y)
     self._CursorPos = JLib.Vector2:new(x, y)
-    -- self._screen.setCursorPos(x, y)
+    self._screen.setCursorPos(x, y)
 end
 
 -- Disables the blinking or turns it on.

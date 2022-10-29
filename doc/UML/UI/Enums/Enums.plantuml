@@ -1,0 +1,14 @@
+@startuml
+
+enum VerticalAlignmentMod
+enum HorizontalAlignmentMode
+enum Side
+enum MouseButton
+enum ScrollDirection
+enum Key
+enum KeyReverse
+enum Color
+enum Blit
+enum BlitReverse
+
+@enduml

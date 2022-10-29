@@ -7,9 +7,9 @@ require("UI.UITools")
 require("MathLib.Vector2")
 require("LibGlobal.StaticMethods")
 
--- public class TextBlock : UIElement  
----  
----**require** :  
+-- public class TextBlock : UIElement
+---
+---**require** :
 --- - Class.middleclass
 --- - UI.UIElement
 --- - UI.Enums
@@ -76,7 +76,7 @@ end
 
 ---------[private classes]-----------
 
---- private class textSplitedNode   
+--- private class textSplitedNode
 --- **is is private class in TextArea.**
 ---@class TextArea.TextSplitedNode
 local TextSplitedNode = class("textSplitedNode")
@@ -139,7 +139,8 @@ end
 ---set vertical alignment mode of textblock
 ---@param align Enums.VerticalAlignmentMode
 function TextArea:setVerticalAlignment(align) self._VerticalAlignmentMode =
-    align end
+    align
+end
 
 ---set horizontal alignment mode of textblock
 ---@param align Enums.HorizontalAlignmentMode
@@ -203,7 +204,7 @@ function TextArea:_updateTextSplitedWrapped()
             while (#textline >= self.Len.x) do
                 textline_spliited = string.sub(textline, 1, self.Len.x)
                 local temp = WrappedNode:new(textline_anchor, textline_spliited,
-                                             nil, nil)
+                    nil, nil)
                 table.insert(v.wrappedNodes, temp)
                 table.insert(self._TextSplitedWrapped, temp)
                 temp.parent = v
@@ -215,13 +216,13 @@ function TextArea:_updateTextSplitedWrapped()
             if (textline ~= "") then
                 textline_spliited = textline
                 local temp = WrappedNode:new(textline_anchor, textline, nil,
-                --  JLib.UITools
-                --      .calcHorizontalAlignPos(1,
-                --                              self.Len
-                --                                  .x,
-                --                              #textline_spliited,
-                --                              self._HorizontalAlignmentMode),
-                                             nil)
+                    --  JLib.UITools
+                    --      .calcHorizontalAlignPos(1,
+                    --                              self.Len
+                    --                                  .x,
+                    --                              #textline_spliited,
+                    --                              self._HorizontalAlignmentMode),
+                    nil)
 
                 table.insert(v.wrappedNodes, temp)
                 table.insert(self._TextSplitedWrapped, temp)
@@ -262,9 +263,9 @@ function TextArea:_updateTextSplitedViewportLines()
     for index, value in ipairs(self._TextSplitedWrappedLines) do
         local forstring = JLib.UITools.getEmptyString(value.align - 1)
         local backstring = JLib.UITools.getEmptyString(
-                               self.Len.x - #forstring - #(value.text))
+            self.Len.x - #forstring - #(value.text))
         table.insert(self._TextSplitedViewportLines,
-                     forstring .. value.text .. backstring)
+            forstring .. value.text .. backstring)
     end
 
 end
@@ -273,8 +274,8 @@ end
 function TextArea:_updateTextSplitedWrapedLineHorizontal()
     for index, value in ipairs(self._TextSplitedWrappedLines) do
         value.align = JLib.UITools.calcHorizontalAlignPos(1, self.Len.x,
-                                                          #(value.text),
-                                                          self._HorizontalAlignmentMode)
+            #(value.text),
+            self._HorizontalAlignmentMode)
     end
 end
 
@@ -284,8 +285,8 @@ function TextArea:_updateVerticalAlignmentAnchor()
         self._VerticalOffset = 1
     else
         self._VerticalOffset = JLib.UITools.calcVerticalAlignPos(1, self.Len.y,
-                                                                 #(self._TextSplitedWrapped),
-                                                                 self._VerticalAlignmentMode)
+            #(self._TextSplitedWrapped),
+            self._VerticalAlignmentMode)
     end
 end
 
@@ -296,7 +297,7 @@ function TextArea:_printTextLines()
 
     local renderPos = self.Pos:Copy()
     renderPos.y = JLib.UITools.calcRelativeOffset_Raw(renderPos.y,
-                                                      self._VerticalOffset)
+        self._VerticalOffset)
     for index, value in ipairs(self._TextSplitedViewportLines) do
         self._screen:setCursorPos(renderPos)
         self._screen:write(value)
@@ -309,60 +310,60 @@ end
 function TextArea:_setTextEdittingPosAndIndex(clickedGlobalPos)
     -- get relative clicked pos in textarea element
     local TextClickedPos = JLib.UITools.transformGlobalPos2LocalPos(
-                               clickedGlobalPos, self.Pos)
+        clickedGlobalPos, self.Pos)
 
     -- decide where to snap pox.y value by available text vertical offset and vertical length
     local currentYMin, currentYMax = self._VerticalOffset, self._VerticalOffset
     if (#(self._TextSplitedWrapped) >= 1) then
         currentYMin, currentYMax = JLib.UITools.Len2Pos_FromStart(
-                                       self._VerticalOffset,
-                                       #(self._TextSplitedWrappedLines))
+            self._VerticalOffset,
+            #(self._TextSplitedWrappedLines))
     end
     currentYMax = math.min(self.Len.y, currentYMax)
 
     -- constrain y position to vertical content range
     TextClickedPos.y = JLib.UITools.constrain(TextClickedPos.y, currentYMin,
-                                              currentYMax)
+        currentYMax)
 
     -- get text viewport index using scroll and pos.y value
     local TextWrappedIndex = JLib.UITools.transformGlobalIndex2LocalIndex(
-                                 TextClickedPos.y, self._VerticalOffset)
+        TextClickedPos.y, self._VerticalOffset)
 
     TextWrappedIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
-                           TextWrappedIndex, self._scroll)
+        TextWrappedIndex, self._scroll)
 
     -- get current text viewport item by index
     local currentTextWrappedItem = self._TextSplitedWrapped[TextWrappedIndex]
 
     -- decide where to snap pos.x value by available text line length and align pos
     local currentLineXMin, currentLineXMax = currentTextWrappedItem.align,
-                                             currentTextWrappedItem.align
+        currentTextWrappedItem.align
     -- if text legnth is 0, Len2Pos_FromStart function does not fit becuase of \n char is missing
     if (#(currentTextWrappedItem.text) >= 1) then
         currentLineXMin, currentLineXMax =
-            JLib.UITools.Len2Pos_FromStart(currentTextWrappedItem.align,
-                                           #(currentTextWrappedItem.text))
+        JLib.UITools.Len2Pos_FromStart(currentTextWrappedItem.align,
+            #(currentTextWrappedItem.text))
     end
 
     -- constrain x position to line horizontal position range
     TextClickedPos.x = JLib.UITools.constrain(TextClickedPos.x, currentLineXMin,
-                                              currentLineXMax)
+        currentLineXMax)
 
     -- get x index in current text wrapped line
     local currentTextViewportLineIndex = JLib.UITools
-                                             .transformGlobalIndex2LocalIndex(
-                                             TextClickedPos.x,
-                                             currentTextWrappedItem.align)
+        .transformGlobalIndex2LocalIndex(
+            TextClickedPos.x,
+            currentTextWrappedItem.align)
 
     -- get x index in current text splited line
     local currentTextLineIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
-                                     currentTextViewportLineIndex,
-                                     currentTextWrappedItem.index)
+        currentTextViewportLineIndex,
+        currentTextWrappedItem.index)
 
     -- get final x index in whole text including \n char
     local currentTextIndex = JLib.UITools.transformLocalIndex2GlobalIndex(
-                                 currentTextLineIndex,
-                                 currentTextWrappedItem.parent.index)
+        currentTextLineIndex,
+        currentTextWrappedItem.parent.index)
 
     self._TextEditIndex = currentTextIndex
 end
@@ -378,7 +379,7 @@ function TextArea:_actionAtTextEditIndex(isBackspace, isDelete, char)
             return nil
         else
             self._Text = self._Text:sub(1, self._TextEditIndex - 2) ..
-                             self._Text:sub(self._TextEditIndex, #(self._Text))
+                self._Text:sub(self._TextEditIndex, #(self._Text))
             self._TextEditIndex = self._TextEditIndex - 1
         end
     elseif (isDelete) then
@@ -386,15 +387,15 @@ function TextArea:_actionAtTextEditIndex(isBackspace, isDelete, char)
             return nil
         else
             self._Text = self._Text:sub(1, self._TextEditIndex - 1) ..
-                             self._Text:sub(self._TextEditIndex + 1,
-                                            #(self._Text))
+                self._Text:sub(self._TextEditIndex + 1,
+                    #(self._Text))
             if (self._TextEditIndex > (#(self._Text) + 1)) then
                 self._TextEditIndex = #(self._Text) + 1
             end
         end
     else
         self._Text = self._Text:sub(1, self._TextEditIndex - 1) .. (char) ..
-                         self._Text:sub(self._TextEditIndex, #(self._Text))
+            self._Text:sub(self._TextEditIndex, #(self._Text))
         self._TextEditIndex = self._TextEditIndex + 1
     end
 
@@ -416,9 +417,9 @@ function TextArea:_setTextEditPos(TextEditIndex)
         if (value.index > TextEditIndex) then
             currentTextSplittedLine = self._TextSplited[index - 1]
             currentTextSplittedLineIndex = JLib.UITools
-                                               .transformGlobalIndex2LocalIndex(
-                                               TextEditIndex,
-                                               currentTextSplittedLine.index)
+                .transformGlobalIndex2LocalIndex(
+                    TextEditIndex,
+                    currentTextSplittedLine.index)
             isTextSplittedLastLine = false
             break
         end
@@ -426,9 +427,9 @@ function TextArea:_setTextEditPos(TextEditIndex)
     if (isTextSplittedLastLine) then
         currentTextSplittedLine = self._TextSplited[#(self._TextSplited)]
         currentTextSplittedLineIndex = JLib.UITools
-                                           .transformGlobalIndex2LocalIndex(
-                                           TextEditIndex,
-                                           currentTextSplittedLine.index)
+            .transformGlobalIndex2LocalIndex(
+                TextEditIndex,
+                currentTextSplittedLine.index)
     end
 
     ---@type TextArea.WrappedNode
@@ -439,11 +440,11 @@ function TextArea:_setTextEditPos(TextEditIndex)
     for index, value in ipairs(currentTextSplittedLine.wrappedNodes) do
         if (value.index > currentTextSplittedLineIndex) then
             currentTextViewportLine =
-                currentTextSplittedLine.wrappedNodes[index - 1]
+            currentTextSplittedLine.wrappedNodes[index - 1]
             currentTextViewportLineIndex = JLib.UITools
-                                               .transformGlobalIndex2LocalIndex(
-                                               currentTextSplittedLineIndex,
-                                               currentTextViewportLine.index)
+                .transformGlobalIndex2LocalIndex(
+                    currentTextSplittedLineIndex,
+                    currentTextViewportLine.index)
             isTextViewportLastLine = false
             break
         end
@@ -451,11 +452,11 @@ function TextArea:_setTextEditPos(TextEditIndex)
 
     if (isTextViewportLastLine) then
         currentTextViewportLine =
-            currentTextSplittedLine.wrappedNodes[#(currentTextSplittedLine.wrappedNodes)]
+        currentTextSplittedLine.wrappedNodes[#(currentTextSplittedLine.wrappedNodes)]
         currentTextViewportLineIndex = JLib.UITools
-                                           .transformGlobalIndex2LocalIndex(
-                                           currentTextSplittedLineIndex,
-                                           currentTextViewportLine.index)
+            .transformGlobalIndex2LocalIndex(
+                currentTextSplittedLineIndex,
+                currentTextViewportLine.index)
     end
 
     self._TextEditPos.x = currentTextViewportLineIndex
@@ -493,14 +494,14 @@ end
 function TextArea:_updatePosEditCursorPos()
     local relativePosEditCursorPos = JLib.Vector2:new(1, 1)
     relativePosEditCursorPos.y = JLib.UITools.transformGlobalIndex2LocalIndex(
-                                     self._TextEditPos.y, self._scroll)
+        self._TextEditPos.y, self._scroll)
     relativePosEditCursorPos.y = JLib.UITools.calcRelativeOffset_Raw(
-                                     relativePosEditCursorPos.y,
-                                     self._VerticalOffset)
+        relativePosEditCursorPos.y,
+        self._VerticalOffset)
     local currentwrappedLine = self._TextSplitedWrapped[self._TextEditPos.y]
     relativePosEditCursorPos.x = JLib.UITools.transformLocalIndex2GlobalIndex(
-                                     self._TextEditPos.x,
-                                     currentwrappedLine.align)
+        self._TextEditPos.x,
+        currentwrappedLine.align)
 
     self._TextEditCursorPos = relativePosEditCursorPos:Copy()
 end
@@ -530,7 +531,7 @@ function TextArea:render()
         self:_setTextEditPos(self._TextEditIndex)
         -- update scroll index to show TextEditPostion cursor in screen
         minScroll, maxScroll = self:_updateScrollByTextEditPos(minScroll,
-                                                               maxScroll)
+            maxScroll)
     end
 
     -- update text splited wraped lines only visible in screen
@@ -561,7 +562,7 @@ end
 ---@param e ClickEventArgs
 function TextArea:_ClickEvent(e)
 
-    -- if this text area is texteditable and clicked inside element, 
+    -- if this text area is texteditable and clicked inside element,
     -- start texteditting mode
     if (self.IsTextEditable == true) then
         if (JLib.UITools.isInsideSquare(self.Pos, self.Len, e.Pos) == true) then
@@ -580,7 +581,7 @@ function TextArea:_ScrollEvent(e) end
 ---overrided function from UIElement:_KeyInputEvent
 ---@param e KeyInputEventArgs
 function TextArea:_KeyInputEvent(e)
-
+    local kk = e.Key
     if (self._isTextEditting) then
         if (e.Key == JLib.Enums.Key.enter) then
             self:_actionAtTextEditIndex(false, false, "\n")
@@ -596,7 +597,7 @@ end
 ---overrided function from UIElement:_CharEvent
 ---@param e CharEventArgs
 function TextArea:_CharEvent(e)
-    -- if this textarea is text editable, input new char in here 
+    -- if this textarea is text editable, input new char in here
     if (self._isTextEditting == true) then
         e.Handled = true
         self:_actionAtTextEditIndex(false, false, e.Char)
@@ -607,7 +608,7 @@ end
 function TextArea:PostRendering()
     if (self.IsTextEditable and self._isTextEditting) then
         local textEditGlobalPos = JLib.UITools.calcRelativeOffset(self.Pos,
-                                                                  self._TextEditCursorPos)
+            self._TextEditCursorPos)
         self._screen:setTextColor(self.FG)
         self._screen:setCursorPos(textEditGlobalPos)
         self._screen:setCursorBlink(true)

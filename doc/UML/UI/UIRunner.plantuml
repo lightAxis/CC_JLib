@@ -1,0 +1,24 @@
+@startuml
+
+class UIRunner{
+
+    + new(initialFocusedElement:UIElement):UIRunner
+
+    + attachScene(scene:UIScene): void
+    + detachScene(scene:UIScene): void
+    + changeScene(scene:UIScene): void
+    + setIntialScene(side:Enums.Side): void
+    + ClearScreens(): void
+    + ClearRenderHistories(): void
+    + RenderScreen(): void
+    + Reflect2Screen(): void
+    + PostRendering(): void
+    + CharEventCallback(_, char:string, _, _): void
+    + MouseClickEventCallback(_, button:Enums.MouseButton, x:number, y:number): void
+    + KeyInputEventCallback(_, key:Enums.Key, _, _): void
+    + ScrollEventCallback(_, direction:Enums.ScrollDirection, x:number, y:number): void
+    + MonitorTouchEventCallback(_, side:Enums.Side, x:number, y:number): void
+
+}
+
+@enduml

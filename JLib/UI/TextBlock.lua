@@ -41,12 +41,16 @@ function TextBlock:initialize(parent, screen, name, text, PosRel, Len, bg, fg)
     JLib.UIElement.initialize(self, parent, screen, name, PosRel_.x, PosRel_.y,
                               Len_.x, Len_.y, bg_, fg_)
 
+
+    ---@type Border
     self._Border = JLib.Border:new(self, screen, name .. "/Border")
     self._Border.BorderThickness = 0
 
+    ---@type Margin
     self._Margin = JLib.Margin:new(self._Border, screen, name .. "/Margin")
     self._Margin:setMarginAll(0)
 
+    ---@type TextArea
     self._TextArea = JLib.TextArea:new(self._Margin, screen,
                                        name .. "/TextArea", text or "")
     self._TextArea.BG = self.BG
@@ -120,7 +124,7 @@ end
 function TextBlock:setText(text) self._TextArea:setText(text) end
 
 ---@return string text
-function TextBlock:getText() return self._TextArea._Text end
+function TextBlock:getText() return self._TextArea:getText() end
 
 ---@param color Enums.Color
 function TextBlock:setTextColor(color)
