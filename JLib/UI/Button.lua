@@ -60,13 +60,13 @@ function Button:render()
     -- update global pos
     self:_updatePos()
 
-    if (self.IsButtonPressed == true) then
-        self:setBackgroundColor(self.BGPressed)
-        self:setTextColor(self.FGPressed)
-    else
-        self:setBackgroundColor(self.BGUnpressed)
-        self:setTextColor(self.FGUnpressed)
-    end
+    -- if (self.IsButtonPressed == true) then
+    --     self:setBackgroundColor(self.BGPressed)
+    --     self:setTextColor(self.FGPressed)
+    -- else
+    --     self:setBackgroundColor(self.BGUnpressed)
+    --     self:setTextColor(self.FGUnpressed)
+    -- end
 
     -- fill inside the button with background color
     self:_fillWithBG()
@@ -102,6 +102,8 @@ function Button:_ClickEvent(e)
         end
     else
         self.IsButtonPressed = true
+        self.BG = self.BGUnpressed
+        self.FG = self.FGUnpressed
     end
 
     self.ClickEvent(self)
