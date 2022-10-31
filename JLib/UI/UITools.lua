@@ -232,7 +232,7 @@ end
 ---@param max number
 ---@return number
 function UITools.constrain(number, min, max)
-    if (number < min) then return min end
-    if (max < number) then return max end
+    if (number <= min) then return min end
+    if (max <= number) then return max end
     return number
 end
