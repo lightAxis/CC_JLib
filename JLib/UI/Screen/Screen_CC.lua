@@ -105,6 +105,8 @@ function Screen_CC:write(text)
             strLenOffset = strLenOffset + 1
         end
     end
+
+    self._CursorPos.x = x_max_ + 1
     -- self._screen.write(text)
 end
 
@@ -145,6 +147,8 @@ function Screen_CC:bilt(text, fg, bg)
         strLenOffset = strLenOffset + 1
     end
     -- self._screen.bilt(text, fg, bg)
+
+    self._CursorPos.x = x_max_ + 1
 end
 
 -- Clears the entire screen.
