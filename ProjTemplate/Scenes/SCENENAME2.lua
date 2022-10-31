@@ -35,7 +35,7 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
 
     ---@type TextBlock
     local textblock = JLib.TextBlock:new(self.rootScreenCanvas, self.attachingScreen, "textblock")
-    textblock:setText("toggle test!")
+    textblock:setText("toggle test!\ninit")
     textblock:setBorderColor(JLib.Enums.Color.blue)
     textblock:setBorderThickness(1)
     textblock:setMarginAll(2)
@@ -45,6 +45,16 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
     textblock:setTextColor(JLib.Enums.Color.white)
     textblock.PosRel, textblock.Len = grid:getPosLen(2, 2, 5, 1)
     self.testTextBlock = textblock
+
+    ---@type TextBlock
+    local textblock2 = JLib.TextBlock:new(self.rootScreenCanvas, self.attachingScreen, "textblock2")
+    textblock2:setText("This is transparent background!! This is transparent background!! This is transparent background!! ")
+    textblock2:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
+    textblock2:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.top)
+    textblock2:setBackgroundColor(JLib.Enums.Color.None)
+    textblock2:setTextColor(JLib.Enums.Color.purple)
+    textblock2.PosRel, textblock2.Len = grid:getPosLen(5, 1, 1, 4)
+    self.textblock2 = textblock2
 
 
 end
@@ -85,13 +95,14 @@ function SCENE:togglebuttonClickEvent()
         self.testTextBlock:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.left)
         self.testTextBlock:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.top)
         self.testTextBlock:setBackgroundColor(JLib.Enums.Color.brown)
+        self.testTextBlock:setBackgroundColor(JLib.Enums.Color.None)
         self.testTextBlock:setTextColor(JLib.Enums.Color.cyan)
     else
         self.testTextBlock:setText("toggle test!")
         self.testTextBlock:setBorderColor(JLib.Enums.Color.blue)
         self.testTextBlock:setBorderThickness(1)
         self.testTextBlock:setMarginAll(1)
-        self.testTextBlock:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.right)
+        self.testTextBlock:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.left)
         self.testTextBlock:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.bottom)
         self.testTextBlock:setBackgroundColor(JLib.Enums.Color.gray)
         self.testTextBlock:setTextColor(JLib.Enums.Color.white)
