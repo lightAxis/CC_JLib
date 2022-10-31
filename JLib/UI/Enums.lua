@@ -59,6 +59,12 @@ JLib.Enums.ScrollDirection = {
     ["down"] = 1
 }
 
+---@enum Enums.Direction
+JLib.Enums.Direction = {
+    ["vertical"] = "vertical",
+    ["horizontal"] = "horizontal"
+}
+
 ---@enum Enums.Key
 JLib.Enums.Key = {
     ["a"] = 30,
@@ -319,7 +325,8 @@ JLib.Enums.Color = {
     ["brown"] = 4096,
     ["green"] = 8192,
     ["red"] = 16384,
-    ["black"] = 32768
+    ["black"] = 32768,
+    ["None"] = -1,
 }
 
 ---@type table<Enums.Color, string>
@@ -341,6 +348,7 @@ JLib.Enums.Blit =
     [JLib.Enums.Color.green] = "d",
     [JLib.Enums.Color.red] = "e",
     [JLib.Enums.Color.black] = "f",
+    [JLib.Enums.Color.None] = "z",
 }
 
 ---@type table<string, Enums.Color>
@@ -362,4 +370,5 @@ JLib.Enums.BlitReverse =
     ["d"] = JLib.Enums.Color.green,
     ["e"] = JLib.Enums.Color.red,
     ["f"] = JLib.Enums.Color.black,
+    ["z"] = JLib.Enums.Color.None,
 }

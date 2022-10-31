@@ -88,11 +88,22 @@ function Screen_CC:write(text)
     local BGStr = JLib.Enums.Blit[self._BG]
     local FGStr = JLib.Enums.Blit[self._FG]
 
-    for x = x_min_, x_max_, 1 do
-        self._screenBuffer[x][y].Text = text:sub(strLenOffset, strLenOffset)
-        self._screenBuffer[x][y].BG = BGStr
-        self._screenBuffer[x][y].FG = FGStr
-        strLenOffset = strLenOffset + 1
+    if (BGStr == JLib.Enums.Blit[JLib.Enums.Color.None]) then
+        -- if transparent
+        for x = x_min_, x_max_, 1 do
+            self._screenBuffer[x][y].Text = text:sub(strLenOffset, strLenOffset)
+            -- self._screenBuffer[x][y].BG = BGStr
+            self._screenBuffer[x][y].FG = FGStr
+            strLenOffset = strLenOffset + 1
+        end
+    else
+        -- if not transparent
+        for x = x_min_, x_max_, 1 do
+            self._screenBuffer[x][y].Text = text:sub(strLenOffset, strLenOffset)
+            self._screenBuffer[x][y].BG = BGStr
+            self._screenBuffer[x][y].FG = FGStr
+            strLenOffset = strLenOffset + 1
+        end
     end
     -- self._screen.write(text)
 end
@@ -126,7 +137,10 @@ function Screen_CC:bilt(text, fg, bg)
     local strLenOffset = x_min - x_min_ + 1
     for x = x_min_, x_max_, 1 do
         self._screenBuffer[x][y].Text = text:sub(strLenOffset, 1)
-        self._screenBuffer[x][y].BG = fg:sub(strLenOffset, 1)
+        -- not transparent bg
+        if (fg:sub(strLenOffset, 1) ~= JLib.Enums.Blit[JLib.Enums.Color.None]) then
+            self._screenBuffer[x][y].BG = fg:sub(strLenOffset, 1)
+        end
         self._screenBuffer[x][y].FG = bg:sub(strLenOffset, 1)
         strLenOffset = strLenOffset + 1
     end
@@ -138,6 +152,11 @@ function Screen_CC:clear()
 
     local FGStr = JLib.Enums.Blit[self._FG]
     local BGStr = JLib.Enums.Blit[self._BG]
+    -- avoid transparent clear
+    if (BGStr == JLib.Enums.Blit[JLib.Enums.Color.None]) then
+        BGStr = JLib.Enums.Blit[JLib.Enums.Color.black]
+    end
+
     for x = 1, self._ScreenSize.x, 1 do
         for y = 1, self._ScreenSize.y, 1 do
             self._screenBuffer[x][y].Text = " "
@@ -157,6 +176,11 @@ function Screen_CC:clearLine()
 
     local FGStr = JLib.Enums.Blit[self._FG]
     local BGStr = JLib.Enums.Blit[self._BG]
+
+    -- avoid transparent bg
+    if BGStr == JLib.Enums.Blit[JLib.Enums.Color.None] then
+        BGStr = JLib.Enums.Blit[JLib.Enums.Color.black]
+    end
 
     for x = 1, self._ScreenSize.x, 1 do
         self._screenBuffer[x][y].Text = " "
@@ -184,15 +208,20 @@ function Screen_CC:setCursorPos(pos)
 end
 
 -- Sets the cursor's position. use only lua
+-- change the real monitor cursor pos
 function Screen_CC:setCursorPos_Raw(x, y)
     self._CursorPos = JLib.Vector2:new(x, y)
     self._screen.setCursorPos(x, y)
 end
 
 -- Disables the blinking or turns it on.
-function Screen_CC:setCursorBlink(bool) self._screen.setCursorBlink(bool) end
+-- change the real monitor cursor blink
+function Screen_CC:setCursorBlink(bool)
+    self._screen.setCursorBlink(bool)
+end
 
 -- Returns whether the terminal supports color.
+-- get from real monitor
 ---@return boolean
 function Screen_CC:isColor() return self._screen.isColor() end
 
@@ -213,6 +242,7 @@ end
 
 -- Returns two arguments containing the x and the y values stating the size of the screen.
 ---(Good for if you're making something to be compatible with both Turtles and Computers.)
+--- get size from real monitor
 ---@return Vector2
 function Screen_CC:getSize()
     local x, y = self:getSize_Raw()
@@ -228,7 +258,7 @@ end
 
 -- Returns the current text color of the terminal. Requires version 1.74 or newer.
 ---@return Enums.Color
-function Screen_CC:getTextColor() return self._screen.getTextColor() end
+function Screen_CC:getTextColor() return self._FG end
 
 -- Sets the background color of the terminal. Limited functionality without an Advanced Computer / Turtle / Monitor.
 ---@param color Enums.Color
@@ -245,6 +275,7 @@ function Screen_CC:getBackgroundColor()
 end
 
 -- Sets the text scale. Available only to monitor objects.
+-- set the real monitor text scale and update the screen size immediately
 ---@param scale number
 function Screen_CC:setTextScale(scale)
     self._screen.setTextScale(scale)
