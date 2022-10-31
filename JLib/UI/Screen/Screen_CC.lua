@@ -91,10 +91,13 @@ function Screen_CC:write(text)
     if (BGStr == JLib.Enums.Blit[JLib.Enums.Color.None]) then
         -- if transparent
         for x = x_min_, x_max_, 1 do
-            self._screenBuffer[x][y].Text = text:sub(strLenOffset, strLenOffset)
-            -- self._screenBuffer[x][y].BG = BGStr
-            self._screenBuffer[x][y].FG = FGStr
+            local curChar = text:sub(strLenOffset, strLenOffset)
+            if curChar ~= " " then
+                self._screenBuffer[x][y].Text = curChar
+                self._screenBuffer[x][y].FG = FGStr
+            end
             strLenOffset = strLenOffset + 1
+
         end
     else
         -- if not transparent
