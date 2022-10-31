@@ -18,9 +18,16 @@ function SCENE:initialize(attachedScreen, ProjTemplatespace)
     local button2 = JLib.Button:new(self.rootScreenCanvas, self.attachingScreen,
         "button2")
     button2:setText("prev scene")
-    button2.ClickEvent = function() self:buttonClickEvent() end
+    button2.ClickEvent = function() self:buttonClickEvent_prev() end
     self:setButton(button2)
     button2.PosRel, button2.Len = grid:getPosLen(4, 4)
+
+    ---@type Button
+    local button3 = JLib.Button:new(self.rootScreenCanvas, self.attachingScreen, "button3")
+    button3:setText("next scene")
+    button3.ClickEvent = function() self:buttonClickEvent_next() end
+    self:setButton(button3)
+    button3.PosRel, button3.Len = grid:getPosLen(6, 4)
 
     ---@type Button
     local toggleButton = JLib.Button:new(self.rootScreenCanvas, self.attachingScreen, "togglebutton")
@@ -72,17 +79,23 @@ function SCENE:other_functions() end
 ---set button style
 ---@param button Button
 function SCENE:setButton(button)
-    button.PosRel = JLib.Vector2:new(20, 1)
-    button.Len = JLib.Vector2:new(15, 5)
     button:setTextVerticalAlignment(JLib.Enums.VerticalAlignmentMode.center)
     button:setTextHorizontalAlignment(JLib.Enums.HorizontalAlignmentMode.center)
 end
 
-function SCENE:buttonClickEvent()
+function SCENE:buttonClickEvent_prev()
     if (self.attachingScreen:getScreenSide() ~= JLib.Enums.Side.NONE) then
         self.PROJ.UIRunner:changeScene(self.PROJ.SCENENAME1_t)
     else
         self.PROJ.UIRunner:changeScene(self.PROJ.SCENENAME1)
+    end
+end
+
+function SCENE:buttonClickEvent_next()
+    if (self.attachingScreen:getScreenSide() ~= JLib.Enums.Side.NONE) then
+        self.PROJ.UIRunner:changeScene(self.PROJ.SCENENAME3_t)
+    else
+        self.PROJ.UIRunner:changeScene(self.PROJ.SCENENAME3)
     end
 end
 
