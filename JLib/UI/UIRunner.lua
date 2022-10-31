@@ -84,6 +84,7 @@ function UIRunner:PostRendering() self.FocusedElement:PostRendering() end
 function UIRunner:CharEventCallback(event, char, _, _)
     self.FocusedElement:triggerCharEvent(char)
 
+    self:ClearScreens()
     self:ClearRenderHistories()
     self:RenderScreen()
     self:Reflect2Screen()
@@ -111,6 +112,7 @@ function UIRunner:MouseClickEventCallback(event, button, x, y)
         self.FocusedElement = clickedElement
     end
 
+    self:ClearScreens()
     self:ClearRenderHistories()
     self:RenderScreen()
     self:Reflect2Screen()
@@ -125,6 +127,7 @@ end
 function UIRunner:KeyInputEventCallback(event, key, isShiftPressed, _)
     self.FocusedElement:triggerKeyInputEvent(key)
 
+    self:ClearScreens()
     self:ClearRenderHistories()
     self:RenderScreen()
     self:Reflect2Screen()
@@ -143,6 +146,7 @@ function UIRunner:ScrollEventCallback(event, direction, x, y)
     local scrolledElement = focusedScreen:getUIAtPos(pos)
     scrolledElement:triggerScrollEvent(direction, pos)
 
+    self:ClearScreens()
     self:ClearRenderHistories()
     self:RenderScreen()
     self:Reflect2Screen()
@@ -164,6 +168,7 @@ function UIRunner:MonitorTouchEventCallback(event, side, x, y)
     end
     touchedElement:triggerClickEvent(JLib.Enums.MouseButton.left, pos)
 
+    self:ClearScreens()
     self:ClearRenderHistories()
     self:RenderScreen()
     self:Reflect2Screen()

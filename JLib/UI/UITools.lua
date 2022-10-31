@@ -194,7 +194,7 @@ end
 ---@return string emptystring
 function UITools.getEmptyString(len)
     local r = ""
-    for i = 1, len, 1 do r = r .. " " end
+    r = string.format("%" .. tostring(len) .. "s", r)
     return r
 end
 
@@ -232,7 +232,7 @@ end
 ---@param max number
 ---@return number
 function UITools.constrain(number, min, max)
-    if (number < min) then return min end
-    if (max < number) then return max end
+    if (number <= min) then return min end
+    if (max <= number) then return max end
     return number
 end

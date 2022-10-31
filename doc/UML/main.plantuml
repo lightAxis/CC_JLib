@@ -1,11 +1,12 @@
-@startuml UI_classDiagram__
+@startuml ClassDiagram
 
-!include common.plantuml!0
+set NamespaceSeparator ::
 
-' TODO consider change naming convention,
-' public : func
-' protected : _func
-' private : __func
+' skinparam linetype polyline
+' skinparam linetype ortho
+skinparam groupInheritance 2
+
+hide empty members
 
 package JLib{
     package Class{
@@ -14,10 +15,8 @@ package JLib{
 
     package LibGlobal
     {
-        enum eEnvironment{
-            Lua
-            CC
-        }
+        enum eEnvironment
+
         class LibVariables<<static>>{
             + ENVIRONMENT: eEnvironment
         }
@@ -27,18 +26,164 @@ package JLib{
     }
 
     package MathLib{
-        !include MathLib/MathLib.plantuml!0
+        class Vector2
+        class Vector3
     }
     package EventRouter{
-        !include EventRouter/EventRouter.plantuml!0
+        class Router
+        enum Events
     }
+
     package UI{
-        !include UI/UI.plantuml!0        
+        package UIEvent{
+            class EventArgs
+            class ClickEventArgs extends EventArgs
+            class ScrollEventArgs extends EventArgs
+            class KeyInputEventArgs extends EventArgs
+            class CharEventArgs extends EventArgs
+        }
+
+        package Enums{
+            enum VerticalAlignmentMod
+            enum HorizontalAlignmentMode
+            enum Side
+            enum MouseButton
+            enum ScrollDirection
+            enum Key
+            enum KeyReverse
+            enum Color
+            enum Blit
+            enum BlitReverse
+
+        }
+
+
+        class UIRunner{
+            + FocusedElement : UIElement
+            + Scens : List<Enums.Side, Screen>
+            + attachScene()
+            + detachScene()
+            + RenderScreen()
+            + Reflect2Screen()
+        }
+        class UIScene{
+            + attachingScreen:Screen
+            + rootScreenCanvas:ScreenCanvas
+        }
+        class UITools <<tool>>
+        class Screen{
+            + getUIAtPos()
+            + write()
+            + blit()
+            + render()
+            + reflec2Screen()
+        }
+
+        package UIElementGroup{
+            class UIElement{
+                + Parent : UIElement
+                - _screen : Screen
+                + addChild()
+                + isPositionOver():boolean
+                + triggerClickEvent()
+                + triggerScrollEvent()
+                + triggerKeyInputEvent()
+                + triggerCharEvent()
+
+                + {abstract} render()
+                + {abstract} PostRendering()
+                + {abstract} FocusIn()
+                + {abstract} FocusOut()
+                
+                # {abstract} _ClickEvent()
+                # {abstract} _ScrollEvent()
+                # {abstract} _KeyInputEvent()
+                # {abstract} _CharEvent()
+                
+                
+            }
+            class Grid
+            class Border{
+                + BorderThickness
+                + BorderColor
+            }
+            class Button{
+                + IsToggleable
+                + IsButtonPressed
+                + BGPressed
+                + FGPressed
+            }
+            class ListBox{
+                + setItemTemplate()
+                + setItemSource()
+                + setScroll()
+                + Refresh()
+                - _ItemSource: List<any>
+                - _Items: List<ListboxItem>
+            }
+            class ListBoxItem{
+                + obj: any
+                + _IsSelected
+            }
+            class Margin{
+                + MarginLeft
+                + MarginRight
+                + MarginTop
+                + MarginBottom
+            }
+            class ScreenCanvas{
+                - _updateLengthFromScreen()
+            }
+            class TextArea{
+                + setText()
+                + setScroll()
+                + IsTextEditable
+                + setVerticalAlignment()
+                + setHorizontalAlignment()
+            }
+            class TextBlock
+        }
+
     }
 }
 
-hide protected members
-hide private members
+MathLib ...> Class : <<constrcutor>>
+
+EventRouter ...> Class : <<constrcutor>>
+EventRouter ...> UIRunner : <<parameter>>
+
+UI ...> Class : <<constrcutor>>
+UI ...> MathLib :: <<create, local, parameter>>
+
+UIRunner "1" o--->  UIElement : Run UIEvents >
+UIRunner "1..*" o--->  UIScene :  Render&Parse UIElement > 
+UIRunner ...> Enums : <<parameter>>
+UIRunner ..left..> UIEvent : <<parameter>>
+
+UIScene "1" o--->  Screen : Render&Parse UIElement >
+UIScene "1" *--->  ScreenCanvas : Generate UIElementTree >
+
+UIElementGroup ...> UIEvent : <<parameter>>
+UIElementGroup ...> Enums : <<parameter>>
+UIElementGroup "1" o--up--> Screen : Draw >
+
+UIElement <|-right- ScreenCanvas
+UIElement <|-- ListBoxItem
+UIElement <|-- Margin
+UIElement <|-- Border
+UIElement <|-- TextArea
+UIElement <|-- TextBlock
+UIElement <|-- ListBox
+
+TextBlock "1" *--> Border
+TextBlock "1" *--> Margin
+TextBlock "1" *--> TextArea
+TextBlock <|-- Button
+
+ListBox "0..*" *--> ListBoxItem
+
+ListBoxItem "1" *--> TextArea
+
 
 
 

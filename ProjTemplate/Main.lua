@@ -31,12 +31,15 @@ local screen_left = JLib.Screen:new(peripheral.wrap("left"),
 --- register Project SceneFile to other
 local SCENENAME1 = require("Scenes.SCENENAME1")
 local SCENENAME2 = require("Scenes.SCENENAME2")
+local SCENENAME3 = require("Scenes.SCENENAME3")
 
 --- register Project Scene Instance to Project global namespace
 ProjTemplate.SCENENAME1 = SCENENAME1:new(screen_term, ProjTemplate)
 ProjTemplate.SCENENAME2 = SCENENAME2:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME3 = SCENENAME3:new(screen_term, ProjTemplate)
 ProjTemplate.SCENENAME1_t = SCENENAME1:new(screen_left, ProjTemplate)
 ProjTemplate.SCENENAME2_t = SCENENAME2:new(screen_left, ProjTemplate)
+ProjTemplate.SCENENAME3_t = SCENENAME3:new(screen_left, ProjTemplate)
 
 --- register each screen sides initialize Scene
 ProjTemplate.UIRunner:attachScene(ProjTemplate.SCENENAME1)
