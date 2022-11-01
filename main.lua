@@ -1,39 +1,68 @@
+--- includes basic components
 require("init")
-
+require("ProjTemplate.init")
 require("UI.Includes")
+require("EventRouter.Includes")
 
-local screen = JLib.Screen:new({}, JLib.Enums.Side.top)
----@type ScreenCanvas
-local screenCanvas = JLib.ScreenCanvas:new(nil, screen, "screenCanvas")
+--- make project global namespace
+---@class ProjTemplate
+local ProjTemplate = {}
 
-local listbox = JLib.ListBox:new(screenCanvas, screen, "listbox")
+--- initialize EventRouter
+--- this routes to UI Event and rednet event to other functions
+ProjTemplate.EventRouter = JLib.EventRouter.Router:new()
 
-local fuu = function(k, v) return { ["a"] = k, ["b"] = v } end
+--- initialize UIRunner
+--- this runs Scene UI intercation system from EventRouter
+ProjTemplate.UIRunner = JLib.UIRunner:new()
+--- attach UIRunner to EventRouter
+ProjTemplate.EventRouter:attachUIRunner(ProjTemplate.UIRunner)
 
-local testTable1 = { 1, 2, 3, 4, 5, 6, 7, 8, 9, 0 }
-local testTable2 = { "a", "b", "c", "d", "e", "f", "g", "h", "i", "j", "k" }
-local source = {}
+--- initialize Screen objects to use,
+--- can terminal or monitor
+--- side must exist. NONE is terminal
+local screen_term = JLib.Screen:new(term, JLib.Enums.Side.NONE)
+local screen_left = JLib.Screen:new(peripheral.wrap("left"),
+    JLib.Enums.Side.left)
 
-for index, value in ipairs(testTable1) do
-    table.insert(source, fuu(testTable1[index], testTable2[index]))
-end
+------------ SCENENS -----------
 
-listbox:setItemSource(source)
+--- register Project SceneFile to other
+local SCENENAME1 = require("Scenes.SCENENAME1")
+local SCENENAME2 = require("Scenes.SCENENAME2")
+local SCENENAME3 = require("Scenes.SCENENAME3")
+local SCENENAME1_L = require("Scenes.SCENENAME1_L")
+local SCENENAME2_L = require("Scenes.SCENENAME2_L")
+local SCENENAME3_L = require("Scenes.SCENENAME3_L")
 
-local itemTemplate = function(obj)
-    local text = tostring(obj.a) .. "/" .. obj.b
-    return text
-end
+--- register Project Scene Instance to Project global namespace
+ProjTemplate.SCENENAME1_L = SCENENAME1_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME2_L = SCENENAME2_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME3_L = SCENENAME3_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME1 = SCENENAME1:new(screen_term, ProjTemplate, ProjTemplate.SCENENAME1_L)
+ProjTemplate.SCENENAME2 = SCENENAME2:new(screen_term, ProjTemplate, ProjTemplate.SCENENAME2_L)
+ProjTemplate.SCENENAME3 = SCENENAME3:new(screen_term, ProjTemplate, ProjTemplate.SCENENAME3_L)
 
-listbox:setItemTemplate(itemTemplate)
+ProjTemplate.SCENENAME1_t_L = SCENENAME1_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME2_t_L = SCENENAME2_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME3_t_L = SCENENAME3_L:new(screen_term, ProjTemplate)
+ProjTemplate.SCENENAME1_t = SCENENAME1:new(screen_left, ProjTemplate, ProjTemplate.SCENENAME1_t_L)
+ProjTemplate.SCENENAME2_t = SCENENAME2:new(screen_left, ProjTemplate, ProjTemplate.SCENENAME2_t_L)
+ProjTemplate.SCENENAME3_t = SCENENAME3:new(screen_left, ProjTemplate, ProjTemplate.SCENENAME3_t_L)
 
-listbox:Refresh()
+--- register each screen sides initialize Scene
+ProjTemplate.UIRunner:attachScene(ProjTemplate.SCENENAME1)
+ProjTemplate.UIRunner:attachScene(ProjTemplate.SCENENAME1_t)
 
-listbox.PosRel = JLib.Vector2:new(2, 3)
+--- set initial scene to start interact
+ProjTemplate.UIRunner:setIntialScene(JLib.Enums.Side.NONE)
 
-listbox.Len = JLib.Vector2:new(5, 5)
+-----------------------------------
 
-listbox:setScroll(2)
+--- clear and readner initial scenes
+ProjTemplate.UIRunner:ClearScreens()
+ProjTemplate.UIRunner:RenderScreen()
+ProjTemplate.UIRunner:Reflect2Screen()
 
-screenCanvas:render()
-screenCanvas:Reflect2Screen()
+--- run main EventLoop to start Proj
+ProjTemplate.EventRouter:main()
