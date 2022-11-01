@@ -9,6 +9,7 @@ require("UI.UITools")
 require("UI.UIEvent")
 require("UI.UIRunner")
 require("UI.UIScene")
+require("UI.UILayout")
 require("UI.Enums")
 require("UI.Screen")
 

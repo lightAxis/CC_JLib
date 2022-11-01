@@ -9,20 +9,17 @@ JLib = JLib or {}
 JLib.UIScene = UIScene
 
 ---constructor
----@param attachedScreen Screen
----@param projNamespace any
-function UIScene:initialize(attachedScreen, projNamespace)
-    self.attachingScreen = attachedScreen
+---@param projNamespace table
+---@param UILayout UILayout
+function UIScene:initialize(projNamespace, UILayout)
     self.PROJ = projNamespace
-    ---@type ScreenCanvas
-    self.rootScreenCanvas = JLib.ScreenCanvas:new(nil, attachedScreen,
-        "rootScreenCanvas")
+    self.Layout = UILayout
 
 end
 
 ---properties description
 ---@class UIScene
----@field attachingScreen Screen
 ---@field PROJ table
----@field rootScreenCanvas ScreenCanvas
----@field new fun(self:UIScene, attachedScreen:Screen, projNamespace:table):UIScene
+---@field Layout UILayout
+--@field Layout UILayout
+---@field new fun(self:UIScene, projNamespace:table, UILayout:UILayout):UIScene
