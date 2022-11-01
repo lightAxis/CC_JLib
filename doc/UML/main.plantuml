@@ -68,7 +68,17 @@ package JLib{
         }
         class UIScene{
             + attachingScreen:Screen
-            + rootScreenCanvas:ScreenCanvas
+            + PROJ: ProjectNamespace
+            + Layout : UILayout
+            __event handlers__
+            + event() ....
+        }
+        class UILayout{
+            + attachingScreen:Screen
+            + PROJ: ProjectNamespace
+            + rootScreenCanvas: ScreenCanvas
+            __UIElement Tree__
+            + UIelements ...
         }
         class UITools <<tool>>
         class Screen{
@@ -77,7 +87,11 @@ package JLib{
             + blit()
             + render()
             + reflec2Screen()
+            - _screen : Native CC term or monitor object
+            - _ScreenBuffer : array
         }
+        class Term
+        class Monitor
 
         package UIElementGroup{
             class UIElement{
@@ -142,6 +156,11 @@ package JLib{
                 + setHorizontalAlignment()
             }
             class TextBlock
+            class ProgressBar{
+                + setValue()
+                + setDirection()
+                + setBarBG()
+            }
         }
 
     }
@@ -156,12 +175,15 @@ UI ...> Class : <<constrcutor>>
 UI ...> MathLib :: <<create, local, parameter>>
 
 UIRunner "1" o--->  UIElement : Run UIEvents >
-UIRunner "1..*" o--->  UIScene :  Render&Parse UIElement > 
+UIRunner "1..*" o--->  UIScene :  Interact&Render > 
 UIRunner ...> Enums : <<parameter>>
 UIRunner ..left..> UIEvent : <<parameter>>
 
-UIScene "1" o--->  Screen : Render&Parse UIElement >
-UIScene "1" *--->  ScreenCanvas : Generate UIElementTree >
+
+UIScene "1" *---> UILayout : MakeUp Layout & UIElementTree >
+
+UILayout "1" o--->  Screen : Render&Parse UIElement >
+UILayout "1" *---> ScreenCanvas : Composite UIElementTree root >
 
 UIElementGroup ...> UIEvent : <<parameter>>
 UIElementGroup ...> Enums : <<parameter>>
@@ -172,8 +194,9 @@ UIElement <|-- ListBoxItem
 UIElement <|-- Margin
 UIElement <|-- Border
 UIElement <|-- TextArea
-UIElement <|-- TextBlock
-UIElement <|-- ListBox
+UIElement <|--- TextBlock
+UIElement <|--- ListBox
+UIElement <|-- ProgressBar
 
 TextBlock "1" *--> Border
 TextBlock "1" *--> Margin
@@ -184,6 +207,8 @@ ListBox "0..*" *--> ListBoxItem
 
 ListBoxItem "1" *--> TextArea
 
+Screen "0..1" o--> Term
+Screen "0..1" o--> Monitor
 
 
 
